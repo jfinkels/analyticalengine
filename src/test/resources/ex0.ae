@@ -1,0 +1,9 @@
+A write in rows
+A write numbers as 9
+N120 10000
+N121 3
+/
+L120
+L121
+S122'
+P

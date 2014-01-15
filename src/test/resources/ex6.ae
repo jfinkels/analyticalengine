@@ -1,0 +1,118 @@
+    Extract square root by Newton's method
+
+    x² = N
+
+    x[k+1] = (N / x[k] + x[k]) / 2
+
+    V0  N (Input), x (Output)
+    V1  0.5
+    V2  x[k]
+    V3  scratch
+    V4  0
+    V5  x[k-1]
+    V6  largest positive number
+
+    Since multiplication is much faster than division, we
+    substitute a multiplication by fixed point 0.5 for the
+    division by 2.
+
+    Input, calculations, and output are in fixed point with
+    20 decimal places.
+
+    Load V0 with the number whose root we wish to extract:
+
+N000 200000000000000000000
+
+      12345678901234567890
+N001  50000000000000000000
+N004 0
+N006 9999999999999999999999999999999999999999
+
+    Make sure argument is non-negative
+
++
+L004
+L000
+CF?1
+CF+3
+P
+B
+H Cannot take square root of negative number (on printer)
+
+    Calculate initial guess as N / 2
+
+÷
+L000
+<20
+L001
+S002'
+
+    Cycle here to perform iterations of Newton's
+    method until the result converges to the
+    square root.
+
+    Save current term for convergence test
+
++
+L002
+L004
+S005
+
+    Compute N/x[k]
+
+÷
+L000
+<20
+L002
+S003'
+
+    Add x[k] to yield N/x[k] + x[k]
+
++
+L003
+L002
+S003
+
+    Divide by two (actually multiply by 1/2) to
+    obtain next x[k+1]
+
+×
+L003
+L001
+>20
+S002
+
+    Diagnostic: print current sum                *****
+
+ P
+
+    Subtract x[k] to test for convergence
+
+-
+L002
+L005
+S005
+
+    Cause a run-up if the convergence difference is zero
+
++
+L004
+L005
+CF?2
+L006
+L005
+
+    Continue iterating if we haven't yet converged
+
+CB?51
+
+    Store final result in V0
+
++
+L002
+L004
+S000
+
+    Print the result
+
+P

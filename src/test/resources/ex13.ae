@@ -1,0 +1,10 @@
+A set decimal places to 10
+A write numbers with decimal point
+N001 12.0
+N002 7.0
+/
+L001
+<
+L002
+S003'
+P

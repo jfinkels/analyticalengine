@@ -1,0 +1,57 @@
+
+    Print multiples of Pi (sans errata) as printed by
+    Major-General H. P. Babbage's Mill and Printing
+    Apparatus in 1910.  The machine was started with an
+    incorrect value for Pi--this computation uses that
+    value (8 instead of 9 in the 14th decimal place) so
+    as to reproduce the output of Babbage's machine.
+    In addition, the printing mechanism of Babbage's
+    machine made errors on single digits of the multiples
+    8, 9, and 11; those errors will not be present in the
+    output from these cards.
+
+    V000    Starting value (Pi with an error in 14th decimal place)
+    V001    Multiple being computed
+    V002    1 to increment multiple
+    V003    Current multiple
+    V004    Cycle limit
+
+     03141592653589793238462643383    Actual value of Pi
+
+N000 03141592653589783238462643383
+N001 1
+N002 1
+N003 0
+N004 24
+
+A write annotation             MULTIPLES OF PI
+A write new line
+
+A write in columns
+
+(?
+
+A write numbers as 99999
+
++
+L001
+P
+
++
+L000
+L003
+S003
+
+A write numbers as   99999999999999999999999999999
+P
+
+L001
+L002
+S001
+
+A write new line
+
+-
+L001
+L004
+)
