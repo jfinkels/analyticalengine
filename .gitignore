@@ -1,10 +1,13 @@
 *~
 
+# Eclipse configuration files
 .classpath
 .settings
 .project
 .eclipse/
 
+# Compiled class files and target directory
+target/
 *.class
 
 # Mobile Tools for Java (J2ME)
