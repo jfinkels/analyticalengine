@@ -1,4 +1,7 @@
-package analyticalengine;
+package analyticalengine.io;
+
+import analyticalengine.AnnunciatorPanel;
+import analyticalengine.Attendant;
 
 /*
  * 
@@ -8,7 +11,7 @@ package analyticalengine;
  * Punching Apparatuses.
  */
 
-abstract class OutputApparatus {
+public abstract class OutputApparatus {
     AnnunciatorPanel panel;
     Attendant attendant;
 
@@ -17,7 +20,7 @@ abstract class OutputApparatus {
      * may occur in the middle of the string.
      */
 
-    abstract void Output(String s);
+    public abstract void Output(String s);
 
     /*
      * Provide references to the annunciator panel and attendant for Apparatus

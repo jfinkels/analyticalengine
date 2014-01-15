@@ -1,5 +1,6 @@
 package analyticalengine;
 
+
 // A single Card
 
 public class Card {
@@ -13,6 +14,10 @@ public class Card {
         source = si;
     }
 
+    public String text() {
+        return text;
+    }
+    
     public String toString() {
         String s = "";
 

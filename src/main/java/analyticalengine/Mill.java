@@ -3,6 +3,8 @@ package analyticalengine;
 import java.math.BigInteger;
 import java.util.Vector;
 
+import analyticalengine.io.OutputApparatus;
+
 // The Mill
 
 class Mill {

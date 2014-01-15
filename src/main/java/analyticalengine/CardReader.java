@@ -2,17 +2,8 @@ package analyticalengine;
 
 import java.util.Vector;
 
-// Card Source Descriptors (non-period: for debugging)
+import analyticalengine.io.OutputApparatus;
 
-class CardSource {
-    String sourceName; // Source of card (usually file name)
-    int startIndex; // First index from this source
-
-    public CardSource(String sn, int si) {
-        sourceName = sn;
-        startIndex = si;
-    }
-}
 
 // The Card Reader
 
@@ -75,7 +66,7 @@ class CardReader {
 
         for (i = 0; i < ncards; i++) {
             if (verbatim) {
-                apparatus.Output(((Card) cards.elementAt(i)).text);
+                apparatus.Output(((Card) cards.elementAt(i)).text());
             } else {
                 apparatus.Output(cards.elementAt(i).toString() + "\n");
             }

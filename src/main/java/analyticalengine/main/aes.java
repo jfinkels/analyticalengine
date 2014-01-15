@@ -1,8 +1,8 @@
 package analyticalengine.main;
 
 import analyticalengine.AnnunciatorPanel;
-import analyticalengine.CurveDrawingApparatus;
 import analyticalengine.analyticalEngine;
+import analyticalengine.io.CurveDrawingApparatus;
 
 /*
  * 

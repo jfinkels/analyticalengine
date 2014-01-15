@@ -1,4 +1,4 @@
-package analyticalengine;
+package analyticalengine.io;
 
 /*
  * 
@@ -8,11 +8,11 @@ package analyticalengine;
  * prints the cards on standard output.
  */
 
-class CardPunchingApparatus extends OutputApparatus {
+public class CardPunchingApparatus extends OutputApparatus {
 
     // Punch a card
 
-    void Output(String s) {
+    public void Output(String s) {
         System.out.println(s);
     }
 }

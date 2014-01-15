@@ -3,6 +3,10 @@ package analyticalengine;
 import java.math.BigInteger;
 import java.util.StringTokenizer;
 
+import analyticalengine.io.CardPunchingApparatus;
+import analyticalengine.io.CurveDrawingApparatus;
+import analyticalengine.io.PrintingApparatus;
+
 // The Analytical Engine
 
 public class analyticalEngine {

@@ -14,7 +14,7 @@ import java.util.Vector;
 
 import analyticalengine.AnnunciatorPanel;
 import analyticalengine.Attendant;
-import analyticalengine.CurveDrawingApparatus;
+import analyticalengine.io.CurveDrawingApparatus;
 
 class WebCurvePlot extends Canvas {
     /**

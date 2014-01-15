@@ -36,9 +36,9 @@ import java.util.Vector;
 
 import analyticalengine.AnnunciatorPanel;
 import analyticalengine.Card;
-import analyticalengine.CurveDrawingApparatus;
-import analyticalengine.PrintingApparatus;
 import analyticalengine.analyticalEngine;
+import analyticalengine.io.CurveDrawingApparatus;
+import analyticalengine.io.PrintingApparatus;
 
 // Utilities
 

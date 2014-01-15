@@ -1,7 +1,6 @@
 package analyticalengine;
 
 // The Human Attendant
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -13,6 +12,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+import analyticalengine.io.OutputApparatus;
 
 public class Attendant {
     public final static CardSource Source = new CardSource("Attendant", -1);

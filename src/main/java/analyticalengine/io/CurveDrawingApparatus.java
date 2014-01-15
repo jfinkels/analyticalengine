@@ -1,4 +1,4 @@
-package analyticalengine;
+package analyticalengine.io;
 
 /*
  * The Curve Drawing Apparatus
@@ -9,6 +9,9 @@ package analyticalengine;
 import java.awt.Color;
 import java.math.BigInteger;
 
+import analyticalengine.AnnunciatorPanel;
+import analyticalengine.Attendant;
+
 public class CurveDrawingApparatus {
     protected AnnunciatorPanel panel;
     protected Attendant attendant;
@@ -17,7 +20,7 @@ public class CurveDrawingApparatus {
     protected BigInteger py = BigInteger.ZERO;
     Color penColour = Color.black;
 
-    protected CurveDrawingApparatus(AnnunciatorPanel p, Attendant a) {
+    public CurveDrawingApparatus(AnnunciatorPanel p, Attendant a) {
         setPanelAndAttendant(p, a);
     }
 
