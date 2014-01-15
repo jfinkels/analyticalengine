@@ -13,6 +13,7 @@ package analyticalengine;
  * superclass by panels which display the current state in various ways.
  */
 
+import java.math.BigInteger;
 import java.util.Vector;
 
 public class AnnunciatorPanel {
@@ -21,10 +22,10 @@ public class AnnunciatorPanel {
 
     // Changes of state in one of the Mill's axes
 
-    public void changeIngress(int which, BigInt v) {
+    public void changeIngress(int which, BigInteger v) {
     }
 
-    public void changeEgress(int which, BigInt v) {
+    public void changeEgress(int which, BigInteger v) {
     }
 
     // Change in the run up lever
@@ -62,7 +63,7 @@ public class AnnunciatorPanel {
 
     // Change to a column in the Store
 
-    public void changeStoreColumn(int which, Vector<BigInt> v) {
+    public void changeStoreColumn(int which, Vector<BigInteger> v) {
     }
 
     // CARD READER NOTIFICATIONS

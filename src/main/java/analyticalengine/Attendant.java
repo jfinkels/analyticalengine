@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.StringTokenizer;
@@ -651,11 +652,11 @@ public class Attendant {
                                                 .digit(dpart
                                                         .charAt(decimalPlace),
                                                         10) >= 5)) {
-                                    dpart = BigInt
-                                            .valueOf(
+                                    dpart = new BigInteger
+                                            (
                                                     dpart.substring(0,
-                                                            decimalPlace))
-                                            .add(BigInt.ONE).toString();
+                                                            decimalPlace), 10)
+                                            .add(BigInteger.ONE).toString();
                                 } else {
                                     dpart = dpart.substring(0, decimalPlace);
                                 }
@@ -765,9 +766,9 @@ public class Attendant {
         numberPicture = pic;
     }
 
-    public static String editToPicture(BigInt v) {
+    public static String editToPicture(BigInteger v) {
         String s;
-        boolean negative = v.test() < 0, sign = false;
+        boolean negative = v.signum() == -1, sign = false;
 
         if (numberPicture != null) {
             s = v.abs().toString();

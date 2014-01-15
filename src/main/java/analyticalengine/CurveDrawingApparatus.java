@@ -7,13 +7,14 @@ package analyticalengine;
  */
 
 import java.awt.Color;
+import java.math.BigInteger;
 
 public class CurveDrawingApparatus {
     protected AnnunciatorPanel panel;
     protected Attendant attendant;
     boolean initdone = false;
-    protected BigInt px = BigInt.ZERO;
-    protected BigInt py = BigInt.ZERO;
+    protected BigInteger px = BigInteger.ZERO;
+    protected BigInteger py = BigInteger.ZERO;
     Color penColour = Color.black;
 
     protected CurveDrawingApparatus(AnnunciatorPanel p, Attendant a) {
@@ -37,11 +38,11 @@ public class CurveDrawingApparatus {
     public synchronized void dispose() {
     }
 
-    public void setX(BigInt x) {
+    public void setX(BigInteger x) {
         px = x;
     }
 
-    public void setY(BigInt y) {
+    public void setY(BigInteger y) {
         py = y;
     }
 

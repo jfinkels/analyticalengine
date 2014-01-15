@@ -1,11 +1,12 @@
 package analyticalengine;
 
+import java.math.BigInteger;
 import java.util.Vector;
 
 // The Store
 
 class Store {
-    private Vector<BigInt> rack; // Rack of variable columns
+    private Vector<BigInteger> rack; // Rack of variable columns
     AnnunciatorPanel panel;
     Attendant attendant;
     private boolean trace = false;
@@ -16,7 +17,7 @@ class Store {
         reset();
     }
 
-    public void set(int which, BigInt v) {
+    public void set(int which, BigInteger v) {
         rack.setElementAt(v, which);
         panel.changeStoreColumn(which, rack);
         if (trace) {
@@ -25,16 +26,16 @@ class Store {
     }
 
     public void set(int which, long v) {
-        set(which, new BigInt(v));
+        set(which, BigInteger.valueOf(v));
     }
 
-    public BigInt get(int which) {
-        BigInt v;
+    public BigInteger get(int which) {
+        BigInteger v;
 
         if (rack.elementAt(which) == null) {
             set(which, 0);
         }
-        v = (BigInt) rack.elementAt(which);
+        v = (BigInteger) rack.elementAt(which);
         if (trace) {
             attendant.traceLog("Store: Mill <= V" + which + "(" + v + ")");
         }
@@ -42,7 +43,7 @@ class Store {
     }
 
     public void reset() {
-        rack = new Vector<BigInt>(1000);
+        rack = new Vector<BigInteger>(1000);
         rack.setSize(1000);
         panel.changeStoreColumn(-1, rack);
     }

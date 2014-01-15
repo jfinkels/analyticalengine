@@ -1,13 +1,14 @@
 package analyticalengine;
 
+import java.math.BigInteger;
 import java.util.Vector;
 
 // The Mill
 
 class Mill {
-    private BigInt[] ingress = new BigInt[3];
-    private BigInt[] egress = new BigInt[2];
-    private BigInt currentAxis = ingress[0];
+    private BigInteger[] ingress = new BigInteger[3];
+    private BigInteger[] egress = new BigInteger[2];
+    private BigInteger currentAxis = ingress[0];
     private final static int OP_NONE = 0, OP_ADD = 1, OP_SUBTRACT = 2,
             OP_MULTIPLY = 3, OP_DIVIDE = 4;
 
@@ -17,10 +18,9 @@ class Mill {
     private AnnunciatorPanel panel = null;
     private Attendant attendant = null;
 
-    private final static BigInt K10e50 = BigInt
-            .valueOf("100000000000000000000000000000000000000000000000000"),
-            Km10e50 = K10e50.negate(), K10 = new BigInt(10);
-    private Vector<BigInt> shiftFactor;
+    private final static BigInteger K10e50 = new BigInteger("100000000000000000000000000000000000000000000000000"),
+            Km10e50 = K10e50.negate(), K10 = BigInteger.valueOf(10);
+    private Vector<BigInteger> shiftFactor;
 
     public Mill(AnnunciatorPanel p, Attendant a) {
         // int i;
@@ -28,7 +28,7 @@ class Mill {
         panel = p;
         attendant = a;
         reset();
-        shiftFactor = new Vector<BigInt>(101);
+        shiftFactor = new Vector<BigInteger>(101);
         shiftFactor.setSize(101);
     }
 
@@ -61,24 +61,24 @@ class Mill {
 
     // Set ingress axis
 
-    private void setIngress(int which, BigInt v) {
+    private void setIngress(int which, BigInteger v) {
         ingress[which] = v;
         panel.changeIngress(which, ingress[which]);
     }
 
     private void setIngress(int which, long v) {
-        setIngress(which, new BigInt(v));
+        setIngress(which, BigInteger.valueOf(v));
     }
 
     // Set egress axis
 
-    private void setEgress(int which, BigInt v) {
+    private void setEgress(int which, BigInteger v) {
         egress[which] = v;
         panel.changeEgress(which, egress[which]);
     }
 
     private void setEgress(int which, long v) {
-        setEgress(which, new BigInt(v));
+        setEgress(which, BigInteger.valueOf(v));
     }
 
     // Reset the mill
@@ -94,7 +94,7 @@ class Mill {
         for (i = 0; i < 2; i++) {
             setEgress(i, 0);
         }
-        currentAxis = BigInt.ZERO;
+        currentAxis = BigInteger.ZERO;
         index = 0;
         run_up = false;
         panel.changeRunUp(run_up);
@@ -136,7 +136,7 @@ class Mill {
         panel.changeOperation(currentOperationString());
     }
 
-    public void transferIn(BigInt v, boolean upper) {
+    public void transferIn(BigInteger v, boolean upper) {
         if (upper) {
             setIngress(2, currentAxis = v);
         } else {
@@ -152,16 +152,16 @@ class Mill {
         }
     }
 
-    public void transferIn(BigInt v) {
+    public void transferIn(BigInteger v) {
         transferIn(v, false);
     }
 
     public void transferIn(long v) {
-        transferIn(new BigInt(v));
+        transferIn(BigInteger.valueOf(v));
     }
 
-    public BigInt transferOut(boolean prime) {
-        BigInt b = egress[prime
+    public BigInteger transferOut(boolean prime) {
+        BigInteger b = egress[prime
                                ? 1
                                    : 0];
 
@@ -169,12 +169,12 @@ class Mill {
         return b;
     }
 
-    public BigInt transferOut() {
+    public BigInteger transferOut() {
         return transferOut(false);
     }
 
     public void crank() {
-        BigInt result = null, tresult = null;
+        BigInteger result = null, tresult = null;
         // int i;
 
         run_up = false; // Reset run up lever
@@ -186,10 +186,10 @@ class Mill {
              * lever if that has occurred. The result is then taken modulo
              * 10^50.
              */
-            if (result.compare(K10e50) >= 0) {
+            if (result.compareTo(K10e50) >= 0) {
                 run_up = true;
                 result = result.subtract(K10e50);
-            } else if (ingress[0].test() >= 0 && result.test() < 0) {
+            } else if (ingress[0].signum() >= 0 && result.signum() < 0) {
                 /*
                  * Run up gets set when the result of a addition changes the
                  * sign of the first argument. Note that since the same lever
@@ -213,10 +213,10 @@ class Mill {
              * Check for passage through negative infinity (borrow) and set run
              * up and trim value as a result.
              */
-            if (result.compare(Km10e50) <= 0) {
+            if (result.compareTo(Km10e50) <= 0) {
                 run_up = true;
                 result = result.add(K10e50).negate();
-            } else if (ingress[0].test() >= 0 && result.test() < 0) {
+            } else if (ingress[0].signum() >= 0 && result.signum() < 0) {
                 /*
                  * Run up gets set when the result of a subtraction changes the
                  * sign of the first argument. Note that since the same lever
@@ -243,8 +243,8 @@ class Mill {
              * Check for product longer than one column and set the primed
              * egress axis to the upper part.
              */
-            if (result.abs().compare(K10e50) > 0) {
-                BigInt qr[] = BigInt.divide(result, K10e50);
+            if (result.abs().compareTo(K10e50) > 0) {
+                BigInteger qr[] = result.divideAndRemainder(K10e50);
                 setEgress(1, qr[0]);
                 result = qr[1];
             } else {
@@ -259,21 +259,21 @@ class Mill {
             break;
 
         case OP_DIVIDE:
-            BigInt dividend = ingress[0];
-            BigInt[] qr;
+            BigInteger dividend = ingress[0];
+            BigInteger[] qr;
 
-            if (ingress[2].test() != 0) {
+            if (ingress[2].signum() != 0) {
                 dividend = dividend.add(ingress[2].multiply(K10e50));
             }
-            if (ingress[1].test() == 0) {
-                setEgress(1, result = BigInt.ZERO);
+            if (ingress[1].signum() == 0) {
+                setEgress(1, result = BigInteger.ZERO);
                 run_up = true;
                 break;
             }
-            qr = BigInt.divide(dividend, ingress[1]);
-            if (qr[0].abs().compare(K10e50) > 0) {
+            qr = dividend.divideAndRemainder(ingress[1]);
+            if (qr[0].abs().compareTo(K10e50) > 0) {
                 // Overflow if quotient more than 50 digits
-                setEgress(1, result = BigInt.ZERO);
+                setEgress(1, result = BigInteger.ZERO);
                 run_up = true;
                 break;
             }
@@ -333,7 +333,7 @@ class Mill {
 
     public void shiftAxes(int count) {
         boolean right = count < 0;
-        BigInt sf = BigInt.ONE, value;
+        BigInteger sf = BigInteger.ONE, value;
 
         /*
          * Assemble the value from the axes. For a right shift, used to
@@ -345,12 +345,12 @@ class Mill {
         if (right) {
             count = -count;
             value = egress[0];
-            if (egress[1].test() != 0) {
+            if (egress[1].signum() != 0) {
                 value = value.add(egress[1].multiply(K10e50));
             }
         } else {
             value = ingress[0];
-            if (ingress[2].test() != 0) {
+            if (ingress[2].signum() != 0) {
                 value = value.add(ingress[2].multiply(K10e50));
             }
         }
@@ -362,7 +362,7 @@ class Mill {
         if (shiftFactor.elementAt(count) == null) {
             int j;
 
-            sf = BigInt.ONE;
+            sf = BigInteger.ONE;
             for (j = 0; j < count; j++) {
                 sf = sf.multiply(K10);
             }
@@ -373,19 +373,19 @@ class Mill {
          * Perform the shift and put the result back where we got it.
          */
 
-        sf = (BigInt) shiftFactor.elementAt(count);
+        sf = (BigInteger) shiftFactor.elementAt(count);
         if (right) {
-            BigInt[] qr;
+            BigInteger[] qr;
             // BigInt sfo2;
 
-            qr = BigInt.divide(value, sf);
+            qr = value.divideAndRemainder(sf);
             // sfo2 = BigInt.quotient(sf, new BigInt(2));
             if (trace) {
                 attendant.traceLog("Mill:  " + value + " > " + count + " = "
                         + qr[0]);
             }
-            if (qr[0].compare(K10e50) != 0) {
-                qr = BigInt.divide(qr[0], K10e50);
+            if (qr[0].compareTo(K10e50) != 0) {
+                qr = qr[0].divideAndRemainder(K10e50);
                 setEgress(1, qr[0]);
                 setEgress(0, qr[1]);
             } else {
@@ -394,15 +394,15 @@ class Mill {
             }
             currentAxis = egress[0];
         } else {
-            BigInt pr = value.multiply(sf);
-            BigInt[] pq;
+            BigInteger pr = value.multiply(sf);
+            BigInteger[] pq;
 
             if (trace) {
                 attendant.traceLog("Mill:  " + value + " < " + count + " = "
                         + pr);
             }
-            if (pr.compare(K10e50) != 0) {
-                pq = BigInt.divide(pr, K10e50);
+            if (pr.compareTo(K10e50) != 0) {
+                pq = pr.divideAndRemainder(K10e50);
                 setIngress(2, pq[0]);
                 setIngress(0, pq[1]);
             } else {
@@ -418,7 +418,7 @@ class Mill {
         attendant.writeEndOfItem(apparatus);
     }
 
-    public BigInt outAxis() {
+    public BigInteger outAxis() {
         return currentAxis;
     }
 }

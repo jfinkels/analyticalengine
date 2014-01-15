@@ -8,12 +8,12 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Polygon;
+import java.math.BigInteger;
 import java.util.Enumeration;
 import java.util.Vector;
 
 import analyticalengine.AnnunciatorPanel;
 import analyticalengine.Attendant;
-import analyticalengine.BigInt;
 import analyticalengine.CurveDrawingApparatus;
 
 class curvePlot extends Canvas {
@@ -25,9 +25,9 @@ class curvePlot extends Canvas {
     Attendant attendant;
     Polygon p = null;
     Dimension s;
-    private final static BigInt K10e25 = BigInt
-            .valueOf("10000000000000000000000000"), Kround = BigInt
-            .valueOf("5000000000000000000000000");
+    private final static BigInteger K10e25 = new BigInteger
+            ("10000000000000000000000000"), Kround = new BigInteger
+            ("5000000000000000000000000");
     Vector<Polygon> pvect = new Vector<Polygon>();
     boolean isPenDown = true;
     Color penColour = Color.black;
@@ -40,11 +40,11 @@ class curvePlot extends Canvas {
         attendant = a;
     }
 
-    private static final int scaleNum(BigInt v, int scale) {
+    private static final int scaleNum(BigInteger v, int scale) {
         // System.out.println("Scale in: " + v + " scale = " + scale);
-        v = BigInt.add(v.multiply(scale / 2), Kround.multiply(v.test()));
+        v = v.multiply(BigInteger.valueOf(scale / 2)).add(Kround.multiply(BigInteger.valueOf(v.signum())));
         // System.out.println(v);
-        v = BigInt.quotient(v, K10e25);
+        v = v.divide(K10e25);
         // System.out.println(v);
         // System.out.println("Pixel: " + (v.intValue() + (scale / 2)));
         return v.intValue() + (scale / 2);
@@ -69,7 +69,7 @@ class curvePlot extends Canvas {
         }
     }
 
-    public void addPoint(BigInt px, BigInt py) {
+    public void addPoint(BigInteger px, BigInteger py) {
         int ax, ay;
 
         s = getSize();

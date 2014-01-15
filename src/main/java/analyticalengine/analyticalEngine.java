@@ -1,12 +1,13 @@
 package analyticalengine;
 
+import java.math.BigInteger;
 import java.util.StringTokenizer;
 
 // The Analytical Engine
 
 public class analyticalEngine {
-    private final static BigInt K10e50 = BigInt
-            .valueOf("100000000000000000000000000000000000000000000000000");
+    private final static BigInteger K10e50 = new BigInteger(
+            "100000000000000000000000000000000000000000000000000");
 
     AnnunciatorPanel panel = null;
     CardReader cardReader = null;
@@ -179,7 +180,7 @@ public class analyticalEngine {
                                                    : card.charAt(0);
             boolean prime = false;
             int n = 0, cl = 0;
-            BigInt v = BigInt.ZERO;
+            BigInteger v = BigInteger.ZERO;
 
             cardAvailable = true;
             if (trace) {
@@ -259,7 +260,7 @@ public class analyticalEngine {
 
                 case 'Z':
                     mill.transferIn(store.get(n), prime);
-                    store.set(n, BigInt.ZERO);
+                    store.set(n, BigInteger.ZERO);
                     break;
 
                 case 'S':
@@ -282,11 +283,11 @@ public class analyticalEngine {
                         if (vn.charAt(0) == '+') {
                             vn = vn.substring(1);
                         }
-                        v = BigInt.valueOf(vn);
+                        v = new BigInteger(vn, 10);
                     } catch (NumberFormatException ne) {
                     }
                 }
-                if (n < 0 || n > 999 || v.abs().compare(K10e50) >= 0) {
+                if (n < 0 || n > 999 || v.abs().compareTo(K10e50) >= 0) {
                     errorHalt("Bad number card", currentCard);
                     break;
                 }

@@ -29,12 +29,12 @@ import java.awt.MediaTracker;
 import java.awt.Panel;
 import java.awt.TextArea;
 import java.awt.TextField;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Vector;
 
 import analyticalengine.AnnunciatorPanel;
-import analyticalengine.BigInt;
 import analyticalengine.Card;
 import analyticalengine.CurveDrawingApparatus;
 import analyticalengine.PrintingApparatus;
@@ -45,7 +45,7 @@ import analyticalengine.analyticalEngine;
 class Util {
     static final String sppad = "                                                             ";
 
-    static final public String padNum(BigInt n, int places) {
+    static final public String padNum(BigInteger n, int places) {
         String s = n.toString();
 
         if (s.length() < places) {
@@ -54,7 +54,7 @@ class Util {
         return s;
     }
 
-    static final public String padNum(BigInt n) {
+    static final public String padNum(BigInteger n) {
         return padNum(n, 51);
     }
 }
@@ -135,8 +135,8 @@ class millDisplay extends Canvas {
     Font textFont;
     FontMetrics textFontM;
     Graphics gee;
-    BigInt[] ingress = new BigInt[3];
-    BigInt[] egress = new BigInt[2];
+    BigInteger[] ingress = new BigInteger[3];
+    BigInteger[] egress = new BigInteger[2];
     String operation;
     boolean running, run_up;
 
@@ -157,9 +157,9 @@ class millDisplay extends Canvas {
 
     // biz -- Return 0 if a BigInt is not defined
 
-    private String biz(BigInt x) {
-        BigInt b = x == null
-                            ? BigInt.ZERO
+    private String biz(BigInteger x) {
+        BigInteger b = x == null
+                            ? BigInteger.ZERO
                                 : x;
 
         return Util.padNum(b);
@@ -195,12 +195,12 @@ class millDisplay extends Canvas {
                 (textFontM.getHeight() + textFontM.getLeading()) * 6);
     }
 
-    public void changeIngress(int which, BigInt v) {
+    public void changeIngress(int which, BigInteger v) {
         ingress[which] = v;
         repaint();
     }
 
-    public void changeEgress(int which, BigInt v) {
+    public void changeEgress(int which, BigInteger v) {
         egress[which] = v;
         repaint();
     }
@@ -238,7 +238,7 @@ class storeDisplay extends Canvas {
     FontMetrics textFontM;
     Graphics gee;
     int lastChange = -1;
-    Vector<BigInt> storeVector = null;
+    Vector<BigInteger> storeVector = null;
     String[] cannedStrings = new String[1000];
 
     // Constructor
@@ -269,7 +269,7 @@ class storeDisplay extends Canvas {
 
             for (i = 0; i < storeVector.size(); i++) {
                 String s = Integer.toString(i), t;
-                BigInt b = (BigInt) storeVector.elementAt(i);
+                BigInteger b = (BigInteger) storeVector.elementAt(i);
 
                 if (b != null) {
                     while (s.length() < 3) {
@@ -300,7 +300,7 @@ class storeDisplay extends Canvas {
 
     // Change to a column in the Store
 
-    public void changeStoreColumn(int which, Vector<BigInt> v) {
+    public void changeStoreColumn(int which, Vector<BigInteger> v) {
         lastChange = which;
         storeVector = v;
         if (which == -1) {
@@ -569,13 +569,13 @@ class AnimatedAnnunciatorPanel extends AnnunciatorPanel {
         }
     }
 
-    public void changeIngress(int which, BigInt v) {
+    public void changeIngress(int which, BigInteger v) {
         if (millD != null && watch) {
             millD.changeIngress(which, v);
         }
     }
 
-    public void changeEgress(int which, BigInt v) {
+    public void changeEgress(int which, BigInteger v) {
         if (millD != null && watch) {
             millD.changeEgress(which, v);
         }
@@ -620,7 +620,7 @@ class AnimatedAnnunciatorPanel extends AnnunciatorPanel {
 
     // Change to a column in the Store
 
-    public void changeStoreColumn(int which, Vector<BigInt> v) {
+    public void changeStoreColumn(int which, Vector<BigInteger> v) {
         if (storeD != null && watch) {
             storeD.changeStoreColumn(which, v);
         }
