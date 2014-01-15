@@ -5,6 +5,7 @@
 .settings
 .project
 .eclipse/
+.checkstyle
 
 # Compiled class files and target directory
 target/
