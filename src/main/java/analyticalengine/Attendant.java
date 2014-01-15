@@ -42,7 +42,7 @@ public class Attendant {
 
     //  Read line from input card stream
 
-    private String readLine(LineNumberInputStream is, String fileName) {
+    private String readLine(InputStream is, String fileName) {
         StringBuffer s = new StringBuffer(80);
         int i = -1;
 
@@ -99,12 +99,12 @@ public class Attendant {
     //  Add cards from an input stream to the chain
 
     public boolean addStream(InputStream istream, String description) {
-        LineNumberInputStream s;
+        InputStream s;
         String card;
 
         CardSource cs = new CardSource(description, ncards);
 
-        s = new LineNumberInputStream(istream);
+        s = new BufferedInputStream(istream);
         while (!errorDetected && (card = readLine(s, description)) != null) {
             boolean shortform;
             int offset;
@@ -263,10 +263,10 @@ public class Attendant {
             panel.attendantLogMessage("I could not find the file of cards named " + fileName + "\n");
             errorDetected = true;
         } else {
-            LineNumberInputStream s;
+            InputStream s;
             String card;
 
-            s = new LineNumberInputStream(istream);
+            s = new BufferedInputStream(istream);
             while (!errorDetected && (card = readLine(s, fileName)) != null) {
                 result.append(card + "\n");
             }
@@ -277,7 +277,7 @@ public class Attendant {
     //  Add cards supplied in a String
 
     public boolean addString(String theCards) {
-        errorDetected |= addStream(new StringBufferInputStream(theCards), "Cards");
+        errorDetected |= addStream(new ByteArrayInputStream(theCards.getBytes()), "Cards");
         return errorDetected;
     }
 

@@ -93,7 +93,7 @@ System.out.println("graphicalLabel: Not found " + imageSource);
     //  Paint the image into the canvas
 
     public void paint(Graphics g) {
-        Dimension size = size();
+        Dimension size = getSize();
 
         g.drawImage(img, (size.width - img.getWidth(null)) / 2, vpad, null);
     }
@@ -147,7 +147,7 @@ class millDisplay extends Canvas {
     //  PAINT  --  Paint the component window
     
     public void paint(Graphics g) {
-        Dimension size = size();
+        Dimension size = getSize();
 
         gee = g;
         g.setColor(Color.lightGray);
@@ -314,7 +314,7 @@ class cardReaderDisplay extends Canvas {
     //  PAINT  --  Paint the component window
     
     public void paint(Graphics g) {
-        Dimension size = size();
+        Dimension size = getSize();
         int nl = size.height / theight;
         int l = Math.max(currentCard - (nl / 2), 0), i,
             ncards = cardChain.size();
@@ -509,7 +509,7 @@ class AnimatedAnnunciatorPanel extends AnnunciatorPanel {
     }
 
     public void attendantLogMessage(String s) {
-        attendantD.appendText(s);
+        attendantD.append(s);
     }
 
     private void watchMan() {
@@ -527,7 +527,7 @@ class AnimatedAnnunciatorPanel extends AnnunciatorPanel {
     }
 
     public void setPanelShowing(boolean t) {
-        annunciatorD.show(t);
+        annunciatorD.setVisible(t);
         watchMan();
     }
 
@@ -579,7 +579,7 @@ class AnimatedAnnunciatorPanel extends AnnunciatorPanel {
         }
         if (!running) {
             if (message != null && (message = message.trim()).length() > 0) {
-                attendantD.appendText("Halt: " + message + "\n");
+                attendantD.append("Halt: " + message + "\n");
             }
         }
     }                                  
@@ -615,8 +615,8 @@ class AnimatedPrintingApparatus extends PrintingApparatus {
 
     //  Print a string
 
-    void Output(String s) {
-        printer.appendText(s);
+    public void Output(String s) {
+        printer.append(s);
     }
 }
 

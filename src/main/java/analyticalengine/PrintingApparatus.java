@@ -12,7 +12,7 @@ public class PrintingApparatus extends OutputApparatus {
 
     //  Print a string
 
-    void Output(String s) {
+    public void Output(String s) {
         System.out.print(s);
     }
 }

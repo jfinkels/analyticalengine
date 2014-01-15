@@ -12,7 +12,11 @@ import analyticalengine.BigInt;
 import analyticalengine.CurveDrawingApparatus;
 
 class WebCurvePlot extends Canvas {
-    AnnunciatorPanel panel;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	AnnunciatorPanel panel;
     Attendant attendant;
     Polygon p = null;
     Dimension s;
@@ -63,7 +67,7 @@ class WebCurvePlot extends Canvas {
     public void addPoint(BigInt px, BigInt py) {
         int ax, ay;
 
-        s = size();
+        s = getSize();
         ax = scaleNum(px, s.width);
         ay = s.height - scaleNum(py, s.height);
         if (isPenDown) {
@@ -98,9 +102,9 @@ class WebFrameCurveDrawingApparatus extends CurveDrawingApparatus {
         if (f == null) {
             f = new Frame("Curve Drawing Apparatus");
             f.add("Center", cp = new WebCurvePlot(panel, attendant));
-            cp.resize(400, 400);
+            cp.setSize(400, 400);
             f.pack();
-            f.show();
+            f.setVisible(true);
         }
         return super.initialised();
     }

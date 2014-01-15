@@ -67,7 +67,7 @@ class curvePlot extends Canvas {
     public void addPoint(BigInt px, BigInt py) {
         int ax, ay;
 
-        s = size();
+        s = getSize();
         ax = scaleNum(px, s.width);
         ay = s.height - scaleNum(py, s.height);
         if (isPenDown) {
@@ -102,9 +102,9 @@ class frameCurveDrawingApparatus extends CurveDrawingApparatus {
         if (f == null) {
             f = new Frame("Curve Drawing Apparatus");
             f.add("Center", cp = new curvePlot(panel, attendant));
-            cp.resize(400, 400);
+            cp.setSize(400, 400);
             f.pack();
-            f.show();
+            f.setVisible(true);
         }
         return super.initialised();
     }
