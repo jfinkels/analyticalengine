@@ -1,6 +1,6 @@
 package analyticalengine;
 
-import java.util.*;
+import java.util.Vector;
 
 //  The Mill
 

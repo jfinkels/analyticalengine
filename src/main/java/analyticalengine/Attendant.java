@@ -2,9 +2,16 @@ package analyticalengine;
 
 //  The Human Attendant
 
-import java.io.*;
-import java.util.*;
-import java.net.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 public class Attendant {
     public final static CardSource Source = new CardSource("Attendant", -1);

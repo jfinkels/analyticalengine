@@ -3,8 +3,14 @@ package analyticalengine.main.applet;
 //  Web Applet Curve Drawing Apparatus
 
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Polygon;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import analyticalengine.AnnunciatorPanel;
 import analyticalengine.Attendant;

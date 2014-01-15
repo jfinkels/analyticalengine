@@ -9,10 +9,31 @@ package analyticalengine.main.applet;
 */
 
 
-import java.applet.*;
-import java.awt.*;
-import java.util.*;
-import java.net.*;
+import java.applet.Applet;
+import java.applet.AudioClip;
+import java.awt.Button;
+import java.awt.Canvas;
+import java.awt.Checkbox;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Event;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Label;
+import java.awt.MediaTracker;
+import java.awt.Panel;
+import java.awt.TextArea;
+import java.awt.TextField;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Vector;
 
 import analyticalengine.AnnunciatorPanel;
 import analyticalengine.BigInt;
