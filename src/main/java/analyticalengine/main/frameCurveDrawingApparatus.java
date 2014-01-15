@@ -1,7 +1,6 @@
 package analyticalengine.main;
 
-//  Frame (stand-alone application window) Curve Drawing Apparatus
-
+// Frame (stand-alone application window) Curve Drawing Apparatus
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -21,20 +20,20 @@ class curvePlot extends Canvas {
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	AnnunciatorPanel panel;
+    private static final long serialVersionUID = 1L;
+    AnnunciatorPanel panel;
     Attendant attendant;
     Polygon p = null;
     Dimension s;
-    private final static BigInt
-        K10e25 = BigInt.valueOf("10000000000000000000000000"),
-        Kround = BigInt.valueOf( "5000000000000000000000000");
+    private final static BigInt K10e25 = BigInt
+            .valueOf("10000000000000000000000000"), Kround = BigInt
+            .valueOf("5000000000000000000000000");
     Vector<Polygon> pvect = new Vector<Polygon>();
     boolean isPenDown = true;
     Color penColour = Color.black;
     int ax, ay;
 
-    //  Constructor
+    // Constructor
 
     curvePlot(AnnunciatorPanel p, Attendant a) {
         panel = p;
@@ -42,12 +41,12 @@ class curvePlot extends Canvas {
     }
 
     private static final int scaleNum(BigInt v, int scale) {
-//System.out.println("Scale in: " + v + " scale = " + scale);
+        // System.out.println("Scale in: " + v + " scale = " + scale);
         v = BigInt.add(v.multiply(scale / 2), Kround.multiply(v.test()));
-//System.out.println(v);
+        // System.out.println(v);
         v = BigInt.quotient(v, K10e25);
-//System.out.println(v);
-//System.out.println("Pixel: " + (v.intValue() + (scale / 2)));
+        // System.out.println(v);
+        // System.out.println("Pixel: " + (v.intValue() + (scale / 2)));
         return v.intValue() + (scale / 2);
     }
 
@@ -118,7 +117,7 @@ class frameCurveDrawingApparatus extends CurveDrawingApparatus {
     public void moveTo() {
         if (initialised()) {
             cp.penUp();
-//          cp.addPoint(px, py);
+            // cp.addPoint(px, py);
         }
     }
 

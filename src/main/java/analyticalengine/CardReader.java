@@ -2,11 +2,11 @@ package analyticalengine;
 
 import java.util.Vector;
 
-//  Card Source Descriptors (non-period: for debugging)
+// Card Source Descriptors (non-period: for debugging)
 
 class CardSource {
-    String sourceName;                // Source of card (usually file name)
-    int startIndex;                   // First index from this source
+    String sourceName; // Source of card (usually file name)
+    int startIndex; // First index from this source
 
     public CardSource(String sn, int si) {
         sourceName = sn;
@@ -14,18 +14,18 @@ class CardSource {
     }
 }
 
-//  The Card Reader
+// The Card Reader
 
 class CardReader {
     private AnnunciatorPanel panel;
-    //private Attendant attendant;
-    private Vector<Card> cards = null;      // No cards initially mounted
+    // private Attendant attendant;
+    private Vector<Card> cards = null; // No cards initially mounted
     private int ncards = 0;
-    private int nextCardNumber = 0;   // Next card to read
+    private int nextCardNumber = 0; // Next card to read
 
     CardReader(AnnunciatorPanel p, Attendant a) {
         panel = p;
-        //attendant = a;
+        // attendant = a;
         reset();
     }
 
@@ -39,7 +39,7 @@ class CardReader {
         nextCardNumber = 0;
         if (ncards > 0) {
             panel.changeCardReaderCard((Card) cards.elementAt(nextCardNumber),
-                                       nextCardNumber);
+                    nextCardNumber);
         }
     }
 
@@ -82,7 +82,7 @@ class CardReader {
         }
     }
 
-    //  Mount a chain of cards in the reader
+    // Mount a chain of cards in the reader
 
     public void mountCards(Vector<Card> cardChain) {
         if (cardChain != null) {

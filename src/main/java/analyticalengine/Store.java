@@ -2,10 +2,10 @@ package analyticalengine;
 
 import java.util.Vector;
 
-//  The Store
+// The Store
 
 class Store {
-    private Vector<BigInt> rack;              // Rack of variable columns
+    private Vector<BigInt> rack; // Rack of variable columns
     AnnunciatorPanel panel;
     Attendant attendant;
     private boolean trace = false;
