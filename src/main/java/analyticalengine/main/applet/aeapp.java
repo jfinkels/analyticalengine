@@ -45,7 +45,7 @@ import analyticalengine.io.PrintingApparatus;
 class Util {
     static final String sppad = "                                                             ";
 
-    static final public String padNum(BigInteger n, int places) {
+    public static final String padNum(BigInteger n, int places) {
         String s = n.toString();
 
         if (s.length() < places) {
@@ -54,7 +54,7 @@ class Util {
         return s;
     }
 
-    static final public String padNum(BigInteger n) {
+    public static final String padNum(BigInteger n) {
         return padNum(n, 51);
     }
 }
@@ -690,7 +690,7 @@ public class aeapp extends Applet implements Runnable {
     private static final long serialVersionUID = 1L;
     static String appName = "aeapp";
     static String Version = "Version 1.0";
-    final static int Mode_constant = 3;
+    static final int Mode_constant = 3;
 
     /*
      * If you have a default path for library items, specify it in the

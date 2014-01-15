@@ -16,7 +16,7 @@ import java.util.Vector;
 import analyticalengine.io.OutputApparatus;
 
 public class Attendant {
-    public final static CardSource Source = new CardSource("Attendant", -1);
+    public static final CardSource Source = new CardSource("Attendant", -1);
     private static boolean addComments, writeDown = true;
     private static String numberPicture = null;
     private AnnunciatorPanel panel;
@@ -93,7 +93,7 @@ public class Attendant {
 
     // Determine if a library name is valid
 
-    static private String libValid = "abcdefghijklmnopqrstuvwxyz-_0123456789";
+    private static String libValid = "abcdefghijklmnopqrstuvwxyz-_0123456789";
 
     private boolean isLibraryNameValid(String s) {
         int i;
@@ -653,11 +653,9 @@ public class Attendant {
                                                 .digit(dpart
                                                         .charAt(decimalPlace),
                                                         10) >= 5)) {
-                                    dpart = new BigInteger
-                                            (
-                                                    dpart.substring(0,
-                                                            decimalPlace), 10)
-                                            .add(BigInteger.ONE).toString();
+                                    dpart = new BigInteger(dpart.substring(0,
+                                            decimalPlace), 10).add(
+                                            BigInteger.ONE).toString();
                                 } else {
                                     dpart = dpart.substring(0, decimalPlace);
                                 }

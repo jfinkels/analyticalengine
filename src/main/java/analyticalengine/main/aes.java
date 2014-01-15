@@ -46,7 +46,7 @@ public class aes {
         up("  -u    Print this message");
     }
 
-    public static void main(String argv[]) {
+    public static void main(String[] argv) {
         AnnunciatorPanel panel = new AnnunciatorPanel();
         analyticalEngine e = new analyticalEngine(panel);
         int i;

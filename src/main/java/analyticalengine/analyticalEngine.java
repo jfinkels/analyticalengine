@@ -10,7 +10,7 @@ import analyticalengine.io.PrintingApparatus;
 // The Analytical Engine
 
 public class analyticalEngine {
-    private final static BigInteger K10e50 = new BigInteger(
+    private static final BigInteger K10e50 = new BigInteger(
             "100000000000000000000000000000000000000000000000000");
 
     AnnunciatorPanel panel = null;
@@ -300,7 +300,7 @@ public class analyticalEngine {
 
             // Combinatorial cards
 
-            case 'C': {
+            case 'C':
                 int howMany;
                 boolean withinChain = true;
 
@@ -334,7 +334,6 @@ public class analyticalEngine {
                         break;
                     }
                 }
-            }
                 break;
 
             // Control cards

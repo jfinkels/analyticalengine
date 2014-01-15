@@ -25,7 +25,7 @@ class WebCurvePlot extends Canvas {
     Attendant attendant;
     Polygon p = null;
     Dimension s;
-    private final static BigInteger // 1234567890123456789012345678901234567890
+    private static final BigInteger // 1234567890123456789012345678901234567890
             K10e25 = new BigInteger("10000000000000000000000000"),
             Kround = new BigInteger("5000000000000000000000000");
     Vector<Polygon> pvect = new Vector<Polygon>();

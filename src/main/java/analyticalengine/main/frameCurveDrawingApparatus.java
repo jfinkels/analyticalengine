@@ -25,9 +25,9 @@ class curvePlot extends Canvas {
     Attendant attendant;
     Polygon p = null;
     Dimension s;
-    private final static BigInteger K10e25 = new BigInteger
-            ("10000000000000000000000000"), Kround = new BigInteger
-            ("5000000000000000000000000");
+    private static final BigInteger K10e25 = new BigInteger(
+            "10000000000000000000000000"), Kround = new BigInteger(
+            "5000000000000000000000000");
     Vector<Polygon> pvect = new Vector<Polygon>();
     boolean isPenDown = true;
     Color penColour = Color.black;
@@ -42,7 +42,8 @@ class curvePlot extends Canvas {
 
     private static final int scaleNum(BigInteger v, int scale) {
         // System.out.println("Scale in: " + v + " scale = " + scale);
-        v = v.multiply(BigInteger.valueOf(scale / 2)).add(Kround.multiply(BigInteger.valueOf(v.signum())));
+        v = v.multiply(BigInteger.valueOf(scale / 2)).add(
+                Kround.multiply(BigInteger.valueOf(v.signum())));
         // System.out.println(v);
         v = v.divide(K10e25);
         // System.out.println(v);

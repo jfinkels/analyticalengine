@@ -11,7 +11,7 @@ class Mill {
     private BigInteger[] ingress = new BigInteger[3];
     private BigInteger[] egress = new BigInteger[2];
     private BigInteger currentAxis = ingress[0];
-    private final static int OP_NONE = 0, OP_ADD = 1, OP_SUBTRACT = 2,
+    private static final int OP_NONE = 0, OP_ADD = 1, OP_SUBTRACT = 2,
             OP_MULTIPLY = 3, OP_DIVIDE = 4;
 
     private int operation = OP_NONE, opargs;
@@ -20,7 +20,7 @@ class Mill {
     private AnnunciatorPanel panel = null;
     private Attendant attendant = null;
 
-    private final static BigInteger K10e50 = new BigInteger("100000000000000000000000000000000000000000000000000"),
+    private static final BigInteger K10e50 = new BigInteger("100000000000000000000000000000000000000000000000000"),
             Km10e50 = K10e50.negate(), K10 = BigInteger.valueOf(10);
     private Vector<BigInteger> shiftFactor;
 
@@ -246,7 +246,7 @@ class Mill {
              * egress axis to the upper part.
              */
             if (result.abs().compareTo(K10e50) > 0) {
-                BigInteger qr[] = result.divideAndRemainder(K10e50);
+                BigInteger[] qr = result.divideAndRemainder(K10e50);
                 setEgress(1, qr[0]);
                 result = qr[1];
             } else {
