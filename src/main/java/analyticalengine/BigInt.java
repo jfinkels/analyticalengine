@@ -1,3 +1,4 @@
+package analyticalengine;
 /*
 
 Copyright (c) 1996 Massachusetts Institute of Technology
@@ -84,7 +85,7 @@ native methods would win every time.
 @author Stephen Adams
 */
 
-final class BigInt extends Number {
+public final class BigInt extends Number {
 
     static final int BITS = 30;   // assumed to be at least 22 in constructor.
     //static final int BITS = 4;  // useful for testing

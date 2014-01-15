@@ -1,8 +1,15 @@
+package analyticalengine.main.applet;
 
 //  Web Applet Curve Drawing Apparatus
 
+
 import java.awt.*;
 import java.util.*;
+
+import analyticalengine.AnnunciatorPanel;
+import analyticalengine.Attendant;
+import analyticalengine.BigInt;
+import analyticalengine.CurveDrawingApparatus;
 
 class WebCurvePlot extends Canvas {
     AnnunciatorPanel panel;
@@ -12,7 +19,7 @@ class WebCurvePlot extends Canvas {
     private final static BigInt //1234567890123456789012345678901234567890
         K10e25 = BigInt.valueOf("10000000000000000000000000"),
         Kround = BigInt.valueOf( "5000000000000000000000000");
-    Vector pvect = new Vector();
+    Vector<Polygon> pvect = new Vector<Polygon>();
     boolean isPenDown = true;
     Color penColour = Color.black;
     int ax, ay;
@@ -26,7 +33,7 @@ class WebCurvePlot extends Canvas {
 
     private static final int scaleNum(BigInt v, int scale) {
 //System.out.println("Scale in: " + v + " scale = " + scale);
-        v = v.add(v.multiply(scale / 2), Kround.multiply(v.test()));
+        v = BigInt.add(v.multiply(scale / 2), Kround.multiply(v.test()));
 //System.out.println(v);
         v = BigInt.quotient(v, K10e25);
 //System.out.println(v);
@@ -35,7 +42,7 @@ class WebCurvePlot extends Canvas {
     }
 
     public void paint(Graphics g) {
-        Enumeration e = pvect.elements();
+        Enumeration<Polygon> e = pvect.elements();
 
         g.setColor(penColour);
         while (e.hasMoreElements()) {
@@ -87,7 +94,7 @@ class WebFrameCurveDrawingApparatus extends CurveDrawingApparatus {
         super();
     }
 
-    boolean initialised() {
+    protected boolean initialised() {
         if (f == null) {
             f = new Frame("Curve Drawing Apparatus");
             f.add("Center", cp = new WebCurvePlot(panel, attendant));

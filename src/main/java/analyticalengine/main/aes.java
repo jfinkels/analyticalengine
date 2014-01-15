@@ -1,3 +1,10 @@
+package analyticalengine.main;
+import analyticalengine.AnnunciatorPanel;
+import analyticalengine.CurveDrawingApparatus;
+import analyticalengine.analyticalEngine;
+
+
+
 /*
 
                      Analytical Engine Simulator

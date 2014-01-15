@@ -1,3 +1,4 @@
+package analyticalengine;
 /*
     The Curve Drawing Apparatus
 
@@ -6,20 +7,23 @@
 
 */
 
+
 import java.awt.Color;
 
-class CurveDrawingApparatus {
-    AnnunciatorPanel panel;
-    Attendant attendant;
+
+public class CurveDrawingApparatus {
+    protected AnnunciatorPanel panel;
+    protected Attendant attendant;
     boolean initdone = false;
-    BigInt px = BigInt.ZERO, py = BigInt.ZERO;
+    protected BigInt px = BigInt.ZERO;
+	protected BigInt py = BigInt.ZERO;
     Color penColour = Color.black;
 
-    CurveDrawingApparatus(AnnunciatorPanel p, Attendant a) {
+    protected CurveDrawingApparatus(AnnunciatorPanel p, Attendant a) {
         setPanelAndAttendant(p, a);
     }
 
-    CurveDrawingApparatus() {
+    protected CurveDrawingApparatus() {
         panel = null;
         attendant = null;
     }
@@ -29,7 +33,7 @@ class CurveDrawingApparatus {
         attendant = a;
     }
 
-    boolean initialised() {
+    protected boolean initialised() {
         return initdone = true;
     }
 

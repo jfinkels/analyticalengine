@@ -1,3 +1,4 @@
+package analyticalengine;
 /*
 
     The Printing Apparatus
@@ -7,7 +8,7 @@
 
 */
 
-class PrintingApparatus extends OutputApparatus {
+public class PrintingApparatus extends OutputApparatus {
 
     //  Print a string
 

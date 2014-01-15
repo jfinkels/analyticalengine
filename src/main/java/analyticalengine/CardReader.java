@@ -1,27 +1,6 @@
+package analyticalengine;
 
 import java.util.*;
-
-//  A single Card
-
-class Card {
-    String text;                      // Contents of card
-    int index;                        // Index in chain of cards
-    CardSource source;                // Index in list of sources
-
-    public Card(String s, int i, CardSource si) {
-        text = s;
-        index = i;
-        source = si;
-    }
-
-    public String toString() {
-        String s = "";
-
-        s += (index + 1) + ". (" + source.sourceName + ":" +
-                ((index - source.startIndex) + 1) + ") " + text;
-        return s;
-    }
-}
 
 //  Card Source Descriptors (non-period: for debugging)
 
@@ -40,7 +19,7 @@ class CardSource {
 class CardReader {
     private AnnunciatorPanel panel;
     private Attendant attendant;
-    private Vector cards = null;      // No cards initially mounted
+    private Vector<Card> cards = null;      // No cards initially mounted
     private int ncards = 0;
     private int nextCardNumber = 0;   // Next card to read
 
@@ -105,7 +84,7 @@ class CardReader {
 
     //  Mount a chain of cards in the reader
 
-    public void mountCards(Vector cardChain) {
+    public void mountCards(Vector<Card> cardChain) {
         if (cardChain != null) {
             reset();
         }

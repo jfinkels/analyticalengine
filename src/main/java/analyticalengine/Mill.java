@@ -1,3 +1,4 @@
+package analyticalengine;
 
 import java.util.*;
 
@@ -24,7 +25,7 @@ class Mill {
         BigInt.valueOf("100000000000000000000000000000000000000000000000000"),
         Km10e50 = K10e50.negate(),
         K10 = new BigInt(10);
-    private Vector shiftFactor;
+    private Vector<BigInt> shiftFactor;
 
     public Mill(AnnunciatorPanel p, Attendant a) {
         int i;
@@ -32,7 +33,7 @@ class Mill {
         panel = p;
         attendant = a;
         reset();
-        shiftFactor = new Vector(101);
+        shiftFactor = new Vector<BigInt>(101);
         shiftFactor.setSize(101);
     }
 

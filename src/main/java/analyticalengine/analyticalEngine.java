@@ -1,8 +1,10 @@
+package analyticalengine;
 import java.util.*;
+
 
 //  The Analytical Engine
 
-class analyticalEngine {
+public class analyticalEngine {
     private final static BigInt K10e50 =
         BigInt.valueOf("100000000000000000000000000000000000000000000000000");
 
@@ -19,7 +21,7 @@ class analyticalEngine {
 
     //  Constructor
 
-    analyticalEngine(AnnunciatorPanel p) {
+    public analyticalEngine(AnnunciatorPanel p) {
         panel = p;
         attendant = new Attendant(panel);
         mill = new Mill(panel, attendant);
@@ -45,7 +47,7 @@ class analyticalEngine {
 
     //  setTrace  --  Set trace mode
 
-    void setTrace(boolean t) {
+    public void setTrace(boolean t) {
         trace = t;
         mill.setTrace(t);
         store.setTrace(t);
@@ -60,7 +62,7 @@ class analyticalEngine {
             we're handed the CurveDrawingApparatus we call
             setPanelAndAttendant to supply them.  */
 
-    void setCurveDrawingApparatus(CurveDrawingApparatus c) {
+    public void setCurveDrawingApparatus(CurveDrawingApparatus c) {
         c.setPanelAndAttendant(panel, attendant);
         curvedraw = c;
     }
@@ -74,7 +76,7 @@ class analyticalEngine {
 
     /*  setPrinter --  Specify custom printer  */
 
-    void setPrinter(PrintingApparatus c) {
+    public void setPrinter(PrintingApparatus c) {
         c.setPanelAndAttendant(panel, attendant);
         printer = c;
         attendant.setAnnotation(printer);
@@ -82,27 +84,27 @@ class analyticalEngine {
 
     //  setLibraryTemplate  --  Set attendant library template (null if none)
 
-    void setLibraryTemplate(String s) {
+    public void setLibraryTemplate(String s) {
         attendant.setLibraryTemplate(s);
     }
 
     /*  allowFileInclusion  --  Control whether the attendant permits
                                 cards to be included from local files.  */
 
-    void allowFileInclusion(boolean permit) {
+    public void allowFileInclusion(boolean permit) {
         attendant.setFileInclusion(permit);
     }
 
     //  loadNewCards  --  Prepare to load a new chain of cards
 
-    void loadNewCards() {
+    public void loadNewCards() {
         errorDetected = false;
         attendant.newCardChain();
     }
 
     //  loadCardsFromFile  --  Load cards into from file into card chain
 
-    void loadCardsFromFile(String fileName) {
+    public void loadCardsFromFile(String fileName) {
         errorDetected |= attendant.addFile(fileName);
     }
 
@@ -110,25 +112,25 @@ class analyticalEngine {
                                  cards in the string are delimited by
                                  the new line character.  */
 
-    void loadCardsFromString(String theCards) {
+    public void loadCardsFromString(String theCards) {
         errorDetected |= attendant.addString(theCards);
     }
 
     //  scrutinise  --  Ask attendant to prepare and mount cards
 
-    void scrutinise(boolean comments) {
+    public void scrutinise(boolean comments) {
         errorDetected |= attendant.mountCards(cardReader, comments);
     }
 
     //  obtainCardString  --  Obtain cards from analyst's file or URL
 
-    String obtainCardString(String fileOrURL) {
+    public String obtainCardString(String fileOrURL) {
         return attendant.obtainCardString(fileOrURL);
     }
 
     //  dumpCards  --  Dump listing of cards
 
-    void dumpCards(boolean punched) {
+    public void dumpCards(boolean punched) {
         if (punched) {
             cardReader.listAll(punch, true);
         } else {
@@ -153,7 +155,7 @@ class analyticalEngine {
 
     //  commence  --  Set up to run new chain of cards
 
-    void commence() {
+    public void commence() {
         store.reset();
         mill.reset();
         cardReader.firstCard();
@@ -161,7 +163,7 @@ class analyticalEngine {
 
     //  processCard  --  Process the next card
 
-    boolean processCard() {
+    public boolean processCard() {
         boolean cardAvailable = false, halted = false;
         Card currentCard;
 
@@ -390,7 +392,7 @@ class analyticalEngine {
 
     //  run  --  Run until halted by error, halt card, or end of chain
 
-    void run() {
+    public void run() {
         panel.changeMillRunning(running = true);
 
         while (running && processCard()) {

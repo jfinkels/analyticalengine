@@ -1,3 +1,4 @@
+package analyticalengine.main.applet;
 /*
 
                             by John Walker
@@ -7,10 +8,18 @@
 
 */
 
+
 import java.applet.*;
 import java.awt.*;
 import java.util.*;
 import java.net.*;
+
+import analyticalengine.AnnunciatorPanel;
+import analyticalengine.BigInt;
+import analyticalengine.Card;
+import analyticalengine.CurveDrawingApparatus;
+import analyticalengine.PrintingApparatus;
+import analyticalengine.analyticalEngine;
 
 //  Utilities
 
@@ -194,7 +203,7 @@ class storeDisplay extends Canvas {
     FontMetrics textFontM;
     Graphics gee;
     int lastChange = -1;
-    Vector storeVector = null;
+    Vector<BigInt> storeVector = null;
     String [] cannedStrings = new String[1000];
 
     //  Constructor
@@ -256,7 +265,7 @@ class storeDisplay extends Canvas {
 
     //  Change to a column in the Store
 
-    public void changeStoreColumn(int which, Vector v) {
+    public void changeStoreColumn(int which, Vector<BigInt> v) {
         lastChange = which;
         storeVector = v;
         if (which == -1) {
@@ -273,7 +282,7 @@ class storeDisplay extends Canvas {
 class cardReaderDisplay extends Canvas {
     Font textFont;
     FontMetrics textFontM;
-    Vector cardChain = null;
+    Vector<Card> cardChain = null;
     int currentCard = 0, theight;
     static final int NLINES = 6;
 
@@ -319,7 +328,7 @@ class cardReaderDisplay extends Canvas {
                              (textFontM.getHeight() + textFontM.getLeading()) * NLINES);
     }
 
-    public void newCardChain(Vector v) {
+    public void newCardChain(Vector<Card> v) {
         cardChain = v;
         newCard(0);
     }
@@ -492,7 +501,7 @@ class AnimatedAnnunciatorPanel extends AnnunciatorPanel {
         watchMan();
     }
 
-    public void mountCardReaderChain(Vector v) {
+    public void mountCardReaderChain(Vector<Card> v) {
         if (cardD != null) {
             cardD.newCardChain(v);
         }
@@ -555,7 +564,7 @@ class AnimatedAnnunciatorPanel extends AnnunciatorPanel {
 
     //  Change to a column in the Store
 
-    public void changeStoreColumn(int which, Vector v) {
+    public void changeStoreColumn(int which, Vector<BigInt> v) {
         if (storeD != null && watch) {
             storeD.changeStoreColumn(which, v);
         }
@@ -673,7 +682,7 @@ public class aeapp extends Applet implements Runnable {
                         while (running && e.processCard() && !e.error()) {
                             if (animating) {
                                 try {
-                                    animator.sleep(500);
+                                    Thread.sleep(500);
                                 } catch (InterruptedException e) {
                                     return;
                                 }
@@ -682,7 +691,7 @@ public class aeapp extends Applet implements Runnable {
                                 if (snooze > 50) {
                                     snooze = 0;
                                     try {
-                                        animator.sleep(10);
+                                        Thread.sleep(10);
                                     } catch (InterruptedException e) {
                                         return;
                                     }
@@ -696,7 +705,7 @@ public class aeapp extends Applet implements Runnable {
                 }
             }
             try {
-                animator.sleep(250);
+                Thread.sleep(250);
             } catch (InterruptedException e) {
                 return;
             }

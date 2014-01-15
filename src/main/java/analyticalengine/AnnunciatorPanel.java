@@ -1,3 +1,4 @@
+package analyticalengine;
 /*
 
                           Annunciator Panel
@@ -15,7 +16,7 @@
 
 import java.util.*;
 
-class AnnunciatorPanel {
+public class AnnunciatorPanel {
 
     //                    MILL NOTIFICATIONS
 
@@ -61,7 +62,7 @@ class AnnunciatorPanel {
 
     //  Change to a column in the Store
 
-    public void changeStoreColumn(int which, Vector v) {
+    public void changeStoreColumn(int which, Vector<BigInt> v) {
     }
 
     //                CARD READER NOTIFICATIONS
@@ -71,7 +72,7 @@ class AnnunciatorPanel {
         null argument.  Note that the card reader is reset
         before the first card chain is mounted.  */
 
-    public void mountCardReaderChain(Vector v) {
+    public void mountCardReaderChain(Vector<Card> v) {
     }
 
     //  Turn to a new card

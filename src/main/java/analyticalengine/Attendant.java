@@ -1,3 +1,4 @@
+package analyticalengine;
 
 //  The Human Attendant
 
@@ -5,12 +6,12 @@ import java.io.*;
 import java.util.*;
 import java.net.*;
 
-class Attendant {
+public class Attendant {
     public final static CardSource Source = new CardSource("Attendant", -1);
     private static boolean addComments, writeDown = true;
     private static String numberPicture = null;
     private AnnunciatorPanel panel;
-    public Vector cardChain = null;
+    public Vector<Card> cardChain = null;
     private int ncards = 0;
     private boolean errorDetected = false;
     private String libraryTemplate = null;
@@ -283,7 +284,7 @@ class Attendant {
     //  Begin a new chain of cards
 
     public void newCardChain() {
-        cardChain = new Vector(100, 100);
+        cardChain = new Vector<Card>(100, 100);
         ncards = 0;
         errorDetected = false;
     }
@@ -358,7 +359,7 @@ class Attendant {
 
     */
 
-    private boolean translateCycle(Vector cards, int start) {
+    private boolean translateCycle(Vector<Card> cards, int start) {
         Card c = (Card) cards.elementAt(start);
         String s = c.text;
         char which = s.charAt(0);
@@ -453,7 +454,7 @@ class Attendant {
         return true;
     }
 
-    private void translateCombinatorics(Vector cards) {
+    private void translateCombinatorics(Vector<Card> cards) {
         int i;
 
         for (i = 0; i < cards.size(); i++) {
@@ -465,7 +466,7 @@ class Attendant {
 
     /*  Perform any requested fixed-point expansions.  */
 
-    private void translateFixedPoint(Vector cards, boolean comments) {
+    private void translateFixedPoint(Vector<Card> cards, boolean comments) {
         int i;
         int decimalPlace = -1;
 
@@ -609,7 +610,7 @@ class Attendant {
         }
     }
 
-    private void examineCards(Vector cards, boolean comments) {
+    private void examineCards(Vector<Card> cards, boolean comments) {
         int i;
 
         addComments = comments;

@@ -1,10 +1,11 @@
+package analyticalengine;
 
 import java.util.*;
 
 //  The Store
 
 class Store {
-    private Vector rack;              // Rack of variable columns
+    private Vector<BigInt> rack;              // Rack of variable columns
     AnnunciatorPanel panel;
     Attendant attendant;
     private boolean trace = false;
@@ -41,7 +42,7 @@ class Store {
     }
 
     public void reset() {
-        rack = new Vector(1000);
+        rack = new Vector<BigInt>(1000);
         rack.setSize(1000);
         panel.changeStoreColumn(-1, rack);
     }
