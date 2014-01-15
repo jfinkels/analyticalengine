@@ -54,10 +54,10 @@ class Mill {
                 s = "-";
                 break;
             case OP_MULTIPLY:
-                s = "×";
+                s = "Ã—";
                 break;
             case OP_DIVIDE:
-                s = "÷";
+                s = "Ã·";
                 break;
         }
         return s;
@@ -120,14 +120,14 @@ class Mill {
                 opargs = 2;
                 break;
 
-            case '×':
+            case 'Ã—':
             case '*':
             case 'x':
                 operation = OP_MULTIPLY;
                 opargs = 2;
                 break;
 
-            case '÷':
+            case 'Ã·':
             case '/':
                 operation = OP_DIVIDE;
                 opargs = 2;
@@ -244,7 +244,7 @@ class Mill {
                     setEgress(1, 0);
                 }
                 if (trace) {
-                    attendant.traceLog("Mill:  " + ingress[0] + " × " +
+                    attendant.traceLog("Mill:  " + ingress[0] + " Ã— " +
                         ingress[1] + " = " + tresult + (run_up ? " Run up" : ""));
                 }
                 break;
@@ -306,7 +306,7 @@ class Mill {
         right 10 decimal places, and store the scaled product in V10,
         one would write:
 
-             ×
+             Ã—
              L011
              L012
              >10
@@ -322,7 +322,7 @@ class Mill {
         quantity left 10 digits before dividing by the divisor in
         V13, we use:
 
-            ÷
+            Ã·
             L011
             L012'
             <10

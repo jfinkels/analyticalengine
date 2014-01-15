@@ -197,8 +197,8 @@ class analyticalEngine {
 
                 case '+':
                 case '-':
-                case '×': case '*': case 'x':
-                case '÷': case '/':
+                case 'Ã—': case '*': case 'x':
+                case 'Ã·': case '/':
                     mill.setOperation(operation);
                     break;
 
