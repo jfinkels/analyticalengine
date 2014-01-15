@@ -87,7 +87,11 @@ native methods would win every time.
 
 public final class BigInt extends Number {
 
-    static final int BITS = 30;   // assumed to be at least 22 in constructor.
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	static final int BITS = 30;   // assumed to be at least 22 in constructor.
     //static final int BITS = 4;  // useful for testing
     static final int RADIX = (1<<BITS);
     static final int MASK = (1<<BITS)-1;

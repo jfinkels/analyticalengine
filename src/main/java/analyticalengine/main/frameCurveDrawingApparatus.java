@@ -12,7 +12,11 @@ import analyticalengine.BigInt;
 import analyticalengine.CurveDrawingApparatus;
 
 class curvePlot extends Canvas {
-    AnnunciatorPanel panel;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	AnnunciatorPanel panel;
     Attendant attendant;
     Polygon p = null;
     Dimension s;

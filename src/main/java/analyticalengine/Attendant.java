@@ -563,17 +563,17 @@ public class Attendant {
                                 "places to use in a prior \"A set decimal places\"\ninstruction.");
                             return;
                         } else {
-                            String dpart = nspec.substring(dp + 1),
-                                   dpnew = "";
-                            int j, places = 0;
-                            char ch;
-
-                            for (j = 0; j < dpart.length(); j++) {
-                                if (Character.isDigit(ch = dpart.charAt(j))) {
-                                    dpnew += ch;
-                                    places++;
-                                }
-                            }
+                            String dpart = nspec.substring(dp + 1);
+//                                   dpnew = "";
+//                            int j, places = 0;
+//                            char ch;
+//
+//                            for (j = 0; j < dpart.length(); j++) {
+//                                if (Character.isDigit(ch = dpart.charAt(j))) {
+//                                    dpnew += ch;
+//                                    places++;
+//                                }
+//                            }
 
                             /* Now adjust the decimal part to the given number
                                of decimal places by trimming excess digits and

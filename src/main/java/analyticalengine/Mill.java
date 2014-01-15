@@ -28,7 +28,7 @@ class Mill {
     private Vector<BigInt> shiftFactor;
 
     public Mill(AnnunciatorPanel p, Attendant a) {
-        int i;
+        //int i;
 
         panel = p;
         attendant = a;
@@ -178,7 +178,7 @@ class Mill {
 
     public void crank() {
         BigInt result = null, tresult = null;
-        int i;
+        //int i;
 
         run_up = false;               // Reset run up lever
         switch (operation) {
@@ -376,10 +376,10 @@ class Mill {
         sf = (BigInt) shiftFactor.elementAt(count);
         if (right) {
             BigInt[] qr;
-            BigInt sfo2;
+            //BigInt sfo2;
 
             qr = BigInt.divide(value, sf);
-            sfo2 = BigInt.quotient(sf, new BigInt(2));
+            //sfo2 = BigInt.quotient(sf, new BigInt(2));
             if (trace) {
                 attendant.traceLog("Mill:  " + value + " > " + count +
                     " = " + qr[0]);

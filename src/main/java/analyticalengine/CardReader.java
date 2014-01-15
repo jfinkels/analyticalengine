@@ -18,14 +18,14 @@ class CardSource {
 
 class CardReader {
     private AnnunciatorPanel panel;
-    private Attendant attendant;
+    //private Attendant attendant;
     private Vector<Card> cards = null;      // No cards initially mounted
     private int ncards = 0;
     private int nextCardNumber = 0;   // Next card to read
 
     CardReader(AnnunciatorPanel p, Attendant a) {
         panel = p;
-        attendant = a;
+        //attendant = a;
         reset();
     }
 

@@ -43,7 +43,11 @@ class Util {
 //  Graphical label component
 
 class graphicalLabel extends Canvas {
-    String alternateText = null;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	String alternateText = null;
     Image img = null;
     int hpad = 0, vpad = 0;
 
@@ -105,7 +109,11 @@ System.out.println("graphicalLabel: Not found " + imageSource);
 //  Mill display component
 
 class millDisplay extends Canvas {
-    Font textFont;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	Font textFont;
     FontMetrics textFontM;
     Graphics gee;
     BigInt[] ingress = new BigInt[3];
@@ -199,7 +207,11 @@ class millDisplay extends Canvas {
 //  Store display component
 
 class storeDisplay extends Canvas {
-    Font textFont, textFontB;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	Font textFont, textFontB;
     FontMetrics textFontM;
     Graphics gee;
     int lastChange = -1;
@@ -225,7 +237,7 @@ class storeDisplay extends Canvas {
     //  PAINT  --  Paint the component window
     
     public void paint(Graphics g) {
-        Dimension size = size();
+        //Dimension size = size();
         int i, j = 0;
 
         gee = g;
@@ -280,7 +292,11 @@ class storeDisplay extends Canvas {
 //  Card reader display
 
 class cardReaderDisplay extends Canvas {
-    Font textFont;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	Font textFont;
     FontMetrics textFontM;
     Vector<Card> cardChain = null;
     int currentCard = 0, theight;
@@ -348,7 +364,11 @@ class cardReaderDisplay extends Canvas {
 */
 
 class annunciatorDisplay extends Frame {
-    Component mdc, crc, sdc;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	Component mdc, crc, sdc;
 
     //  Constructor
 
@@ -357,7 +377,7 @@ class annunciatorDisplay extends Frame {
 
         GridBagLayout gribble = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
-        Label lbl;
+        //Label lbl;
         graphicalLabel glbl;
         int cy = 0;
 
@@ -432,7 +452,12 @@ class printerDisplay extends TextArea {
 
     //  Constructor
 
-    printerDisplay() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	printerDisplay() {
         super(8, 80);
         setFont(new Font("Courier", Font.PLAIN, 12));
     }
@@ -445,7 +470,12 @@ class attendantDisplay extends TextArea {
 
     //  Constructor
 
-    attendantDisplay() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	attendantDisplay() {
         super(6, 80);
     }
 }
@@ -603,7 +633,11 @@ class AnimatedPrintingApparatus extends PrintingApparatus {
 */
 
 class loadPanel extends Panel {
-    Component tf, button;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	Component tf, button;
     aeapp a;
 
     loadPanel(aeapp xa, Component xtf, Component xbutton) {
@@ -626,7 +660,11 @@ class loadPanel extends Panel {
 //      The Analytical Engine Animator Applet
 
 public class aeapp extends Applet implements Runnable {
-    static String appName = "aeapp";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	static String appName = "aeapp";
     static String Version = "Version 1.0";
     final static int Mode_constant = 3;
 
@@ -731,7 +769,7 @@ public class aeapp extends Applet implements Runnable {
             { "Trace", "y/n", "Trace calculation?  Default n" },
         };
         String[][] merged = new String[info.length][3];
-        int i;
+        //int i;
 
         System.arraycopy(info, 0, merged, 0, info.length);
         return merged;
@@ -793,8 +831,9 @@ public class aeapp extends Applet implements Runnable {
     //  INIT  --  Applet is loaded--create our objects and display them
 
     public void init() {
-        int i, cy = 0;
-        String s;
+        //int i, cy = 0;
+    	int cy = 0;
+        //String s;
         GridBagLayout gribble = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
         Label lbl;
@@ -1130,10 +1169,10 @@ public class aeapp extends Applet implements Runnable {
 
     //  BOMB  --  Show error message and abort
 
-    private void bomb(String err) {
-        add(new Label(appName + " applet error:\n"));
-        add(new Label(err));
-        showStatus(appName + " applet error: " + err);
-        error = true;
-    }
+//    private void bomb(String err) {
+//        add(new Label(appName + " applet error:\n"));
+//        add(new Label(err));
+//        showStatus(appName + " applet error: " + err);
+//        error = true;
+//    }
 }
