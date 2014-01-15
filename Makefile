@@ -9,6 +9,7 @@ EXAMPLEDIR = $(WEBREL)/Examples
 
 #OPTIMISE = -O
 OPTIMISE = -g
+FLAGS=-Xlint:all
 
 #   Object file component definitions
 
@@ -117,6 +118,6 @@ webrel: all
 
 
 .java.class:
-	javac $(OPTIMISE) -classpath $(CLASSPATH) $*.java
+	javac $(FLAGS) $(OPTIMISE) -classpath $(CLASSPATH) $*.java
 
 .SUFFIXES:  .java .class
