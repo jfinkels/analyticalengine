@@ -9,6 +9,7 @@
 
 # Compiled class files and target directory
 target/
+bin/
 *.class
 
 # Mobile Tools for Java (J2ME)
