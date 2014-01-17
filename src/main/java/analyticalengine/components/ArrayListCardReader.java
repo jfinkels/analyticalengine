@@ -13,8 +13,11 @@ public class ArrayListCardReader implements CardReader {
     private int currentCard = -1;
     
     @Override
-    public Card readAndAdvance() {
-        this.advance(1);
+    public Card readAndAdvance() throws Halt{
+        if (this.currentCard + 1 == this.cards.size()) {
+            throw new Halt("Reached end of card chain.");
+        }
+        this.currentCard += 1;
         return this.cards.get(this.currentCard);
     }
 
@@ -31,7 +34,7 @@ public class ArrayListCardReader implements CardReader {
     }
 
     @Override
-    public void advance(int n) {
+    public void advance(int n) throws IndexOutOfBoundsException {
         if (this.currentCard + n >= this.cards.size()) {
             throw new IndexOutOfBoundsException("No more cards to read.");
         }
@@ -39,9 +42,11 @@ public class ArrayListCardReader implements CardReader {
     }
 
     @Override
-    public void reverse(int n) {
-        // TODO Auto-generated method stub
-
+    public void reverse(int n) throws IndexOutOfBoundsException {
+        if (this.currentCard - n < -1) {
+            throw new IndexOutOfBoundsException("Cannot reverse beyond beginning.");
+        }
+        this.currentCard -= n;
     }
 
     @Override
