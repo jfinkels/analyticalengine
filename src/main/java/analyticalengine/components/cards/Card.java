@@ -17,4 +17,8 @@ public class Card {
     public CardType type() {
         return this.type;
     }
+
+    public String argument(int i) throws IndexOutOfBoundsException {
+        return this.arguments[i];
+    }
 }
