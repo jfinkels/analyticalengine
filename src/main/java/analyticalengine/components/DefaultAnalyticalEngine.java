@@ -5,7 +5,7 @@ import java.util.List;
 
 import analyticalengine.components.cards.Card;
 
-class DefaultAnalyticalEngine implements AnalyticalEngine {
+public class DefaultAnalyticalEngine implements AnalyticalEngine {
     private Attendant attendant = null;
     private Mill mill = null;
     private Store store = null;
