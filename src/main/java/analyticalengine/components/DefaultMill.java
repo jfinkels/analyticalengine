@@ -166,11 +166,7 @@ public class DefaultMill implements Mill {
         this.currentAxis = (this.currentAxis + 1) % 2;
         // Once enough arguments have been transferred in, implicitly execute
         // the requested operation.
-        //
-        // TODO remove the first part of this condition, all operators have 2
-        // arguments
-        if (this.currentAxis == this.currentOperation.numArguments()
-                || this.currentAxis == 0) {
+        if (this.currentAxis == 0) {
             this.execute();
         }
     }

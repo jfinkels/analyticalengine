@@ -1,14 +1,12 @@
 package analyticalengine.components;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import analyticalengine.components.cards.Card;
+import analyticalengine.components.cards.CardChain;
+import analyticalengine.newio.ArrayListCardChain;
 
 public class ArrayListCardReader implements CardReader {
 
-    private List<Card> cards = new ArrayList<Card>();
+    private CardChain cards = new ArrayListCardChain();
     // always points to the index of the card before the next card to read
     private int currentCard = -1;
 
@@ -20,15 +18,15 @@ public class ArrayListCardReader implements CardReader {
         this.currentCard += n;
     }
 
-    @Override
-    public List<Card> cards() {
-        return Collections.unmodifiableList(this.cards);
-    }
+//    @Override
+//    public CardChain cards() {
+//        return Collections.unmodifiableList(this.cards);
+//    }
 
     @Override
-    public void mountCards(List<Card> cards) {
+    public void mountCards(CardChain cards) {
         // mount a copy of the cards
-        Collections.copy(this.cards, cards);
+        this.cards = cards.shallowCopy();
     }
 
     @Override

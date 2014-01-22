@@ -201,7 +201,6 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case INCLUDELIB:
         case WRITEDECIMAL:
         case WRITEPICTURE:
-
             // TODO these should all be removed by attendant before loading
             // cards
             throw new Error("Attendant failed to remove block card", card);

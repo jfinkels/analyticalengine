@@ -1,11 +1,11 @@
 package analyticalengine.newmain;
 
 import java.io.IOException;
-import java.util.List;
 
 import analyticalengine.components.AnalyticalEngine;
 import analyticalengine.components.ArrayListCardReader;
 import analyticalengine.components.Attendant;
+import analyticalengine.components.BadCard;
 import analyticalengine.components.CardReader;
 import analyticalengine.components.CurvePrinter;
 import analyticalengine.components.DefaultAnalyticalEngine;
@@ -16,7 +16,7 @@ import analyticalengine.components.Mill;
 import analyticalengine.components.Printer;
 import analyticalengine.components.Store;
 import analyticalengine.components.StringPrinter;
-import analyticalengine.components.cards.Card;
+import analyticalengine.components.cards.CardChain;
 import analyticalengine.components.gui.AWTCurvePrinter;
 
 public class Main {
@@ -38,7 +38,7 @@ public class Main {
         engine.setPrinter(printer);
         engine.setStore(store);
 
-        List<Card> cards = null;
+        CardChain cards = null;
         try {
             // TODO real argument parsing
             cards = analyticalengine.newio.CardReader.fromFilename(args[1]);
@@ -46,7 +46,12 @@ public class Main {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        attendant.loadProgram(cards);
+        try {
+            attendant.loadProgram(cards);
+        } catch (BadCard e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         engine.run();
     }
 }
