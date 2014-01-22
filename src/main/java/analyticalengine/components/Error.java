@@ -1,10 +1,19 @@
 package analyticalengine.components;
 
-public class Error extends Halt {
+import analyticalengine.components.cards.Card;
 
-    public Error(String string) {
-        super(string);
-        // TODO Auto-generated constructor stub
+public class Error extends CardException {
+
+    public Error(String message) {
+        super(message);
+    }
+
+    public Error(String message, Exception cause) {
+        super(message, cause);
+    }
+
+    public Error(String message, Card cause) {
+        super(message, cause);
     }
 
 }

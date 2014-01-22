@@ -6,10 +6,17 @@ import java.util.HashMap;
 
 public class HashMapStore implements Store {
 
+    public static final int MAX_ADDRESS = 1000;
+    
+    @Override
+    public int maxAddress() {
+        return MAX_ADDRESS;
+    }
+    
     private Map<Long, BigInteger> rack = new HashMap<Long, BigInteger>();
     
     @Override
-    public void set(long address, BigInteger value) {
+    public void put(long address, BigInteger value) {
         this.rack.put(address, value);
     }
 

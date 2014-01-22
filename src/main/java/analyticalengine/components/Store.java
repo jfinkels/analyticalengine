@@ -8,6 +8,7 @@ import java.math.BigInteger;
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  */
 public interface Store {
+    int maxAddress();
     /**
      * Stores {@code value} in the memory location specified by {@code address}
      * .
@@ -17,7 +18,7 @@ public interface Store {
      * @param value
      *            A value to store in {@code address}.
      */
-    void set(long address, BigInteger value);
+    void put(long address, BigInteger value);
 
     /**
      * Retrieves and returns the value stored at {@code address}.

@@ -7,21 +7,31 @@ public class DefaultMill implements Mill {
     public static final BigInteger MIN = MAX.negate();
     private Operation currentOperation = null;
 
+    @Override
+    public BigInteger maxValue() {
+        return MAX;
+    }
+    
+    @Override
+    public BigInteger minValue() {
+        return MIN;
+    }
+    
     private int currentAxis = 0;
     private BigInteger[] ingressAxes = new BigInteger[3];
     private BigInteger[] egressAxes = new BigInteger[2];
     private boolean runUp;
 
-    @Override
-    public void transferIn(BigInteger value) {
-        this.transferIn(value, false);
-    }
+    // @Override
+    // public void transferIn(BigInteger value) {
+    // this.transferIn(value, false);
+    // }
 
     @Override
     public BigInteger transferOut() {
         return this.transferOut(false);
     }
-    
+
     @Override
     public BigInteger transferOut(boolean prime) {
         if (prime) {
@@ -35,7 +45,8 @@ public class DefaultMill implements Mill {
         return this.runUp;
     }
 
-    // at the end of this method, the egress axes have been set as a side effect
+    // at the end of this method, the egress axes have been set as a side
+    // effect
     private void execute() {
         this.runUp = false;
         this.currentAxis = 0;
@@ -136,6 +147,7 @@ public class DefaultMill implements Mill {
     @Override
     public void setOperation(Operation operation) {
         this.currentOperation = operation;
+        this.currentAxis = 0;
     }
 
     @Override
@@ -166,12 +178,20 @@ public class DefaultMill implements Mill {
     @Override
     public void leftShift(int shift) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void rightShift(int shift) {
         // TODO Auto-generated method stub
-        
+
+    }
+
+    // TODO set this after each operation, each shift, and each transfer
+    private BigInteger mostRecentValue = null;
+    
+    @Override
+    public BigInteger mostRecentValue() {
+        return this.mostRecentValue;
     }
 }

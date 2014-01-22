@@ -1,14 +1,19 @@
 package analyticalengine.components;
 
-public class Halt extends Exception {
+import analyticalengine.components.cards.Card;
+
+public class Halt extends CardException {
 
     public Halt(String string) {
         super(string);
     }
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+    public Halt(String message, Exception cause) {
+        super(message, cause);
+    }
+
+    public Halt(String message, Card cause) {
+        super(message, cause);
+    }
 
 }

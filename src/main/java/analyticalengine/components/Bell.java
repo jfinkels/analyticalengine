@@ -1,5 +1,11 @@
 package analyticalengine.components;
 
-public class Bell extends Exception {
+import analyticalengine.components.cards.Card;
+
+public class Bell extends CardException {
+
+    public Bell(String string, Card card) {
+        super(string, card);
+    }
 
 }
