@@ -18,7 +18,7 @@ public class CardReader {
     }
 
     public static List<Card> fromFile(File input)
-            throws FileNotFoundException, IOException {
+            throws FileNotFoundException, IOException, UnknownCard {
         List<Card> cards = new ArrayList<Card>();
         try (BufferedReader reader = new BufferedReader(new FileReader(input))) {
             String currentLine = reader.readLine();
@@ -30,15 +30,17 @@ public class CardReader {
         return cards;
     }
 
-    public static List<Card> fromPath(Path path) throws IOException {
+    public static List<Card> fromPath(Path path) throws IOException,
+            UnknownCard {
         return fromFile(path.toFile());
     }
 
-    public static List<Card> fromString(String input) {
+    public static List<Card> fromString(String input) throws UnknownCard {
         return fromString(input, System.lineSeparator());
     }
 
-    public static List<Card> fromString(String input, String lineSeparator) {
+    public static List<Card> fromString(String input, String lineSeparator)
+            throws UnknownCard {
         List<Card> cards = new ArrayList<Card>();
         for (String line : input.split(lineSeparator)) {
             cards.add(CardParser.toCard(line));

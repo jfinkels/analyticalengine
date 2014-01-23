@@ -21,6 +21,7 @@ import analyticalengine.components.Store;
 import analyticalengine.components.StringPrinter;
 import analyticalengine.components.cards.Card;
 import analyticalengine.components.gui.AWTCurvePrinter;
+import analyticalengine.newio.UnknownCard;
 
 public class Main {
 //    static void usage() {
@@ -62,13 +63,22 @@ public class Main {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } catch (UnknownCard e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         // Second, instruct the attendant to load the card chain into the
         // machine.
         try {
             attendant.loadProgram(cards);
-        } catch (BadCard | IOException e) {
+        } catch (BadCard e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (UnknownCard e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

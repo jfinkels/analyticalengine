@@ -9,12 +9,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import analyticalengine.components.cards.Card;
 import analyticalengine.components.cards.CardType;
+import analyticalengine.newio.UnknownCard;
 
 public class DefaultAttendant implements Attendant {
+
+    private static final boolean isCycleEnd(CardType type) {
+        return type == CardType.BACKEND || type == CardType.ALTERNATION
+                || type == CardType.FORWARDEND;
+    }
+
+    private static final boolean isCycleStart(CardType type) {
+        return type == CardType.BACKSTART || type == CardType.CBACKSTART
+                || type == CardType.FORWARDSTART
+                || type == CardType.CFORWARDSTART;
+    }
 
     private static List<Card> strippedComments(List<Card> cards) {
         List<Card> result = new ArrayList<Card>();
@@ -26,141 +37,11 @@ public class DefaultAttendant implements Attendant {
         return result;
     }
 
-    private static final boolean isCycleStart(CardType type) {
-        return type == CardType.BACKSTART || type == CardType.CBACKSTART
-                || type == CardType.FORWARDSTART
-                || type == CardType.CFORWARDSTART;
-    }
-
-    private static final boolean isCycleEnd(CardType type) {
-        return type == CardType.BACKEND || type == CardType.ALTERNATION
-                || type == CardType.FORWARDEND;
-    }
-
-    private void translateCombinatorics(List<Card> cards) throws BadCard {
-        for (int i = 0; i < cards.size(); i++) {
-            if (isCycleStart(cards.get(i).type())) {
-                this.translateCycle(cards, i);
-            }
-        }
-    }
-
-    private void translateCycle(List<Card> cards, int start) throws BadCard {
-        Card c = cards.get(start);
-        boolean depends = false;
-        int i;
-
-        depends = (c.type() == CardType.CBACKSTART || c.type() == CardType.CFORWARDSTART);
-        if (this.stripComments) {
-            cards.remove(start);
-            start--;
-        } else {
-            cards.remove(start);
-            cards.add(start,
-                    Card.commentCard(". " + c + " Translated by attendant"));
-        }
-
-        /*
-         * Search for the end of this cycle. If a sub-cycle is detected,
-         * recurse to translate it.
-         */
-
-        for (i = start + 1; i < cards.size(); i++) {
-            Card u = cards.get(i);
-
-            if (isCycleStart(u.type())) {
-                translateCycle(cards, i);
-            }
-            if (isCycleEnd(u.type())) {
-                boolean isElse = u.type() == CardType.ALTERNATION;
-
-                if (((c.type() == CardType.CBACKSTART || c.type() == CardType.BACKSTART) && u
-                        .type() != CardType.BACKEND)
-                        || ((c.type() == CardType.CFORWARDSTART || c.type() == CardType.FORWARDSTART) && (u
-                                .type() != CardType.FORWARDEND || u.type() != CardType.ALTERNATION))) {
-                    throw new BadCard("End of cycle does not match " + c
-                            + " beginning on card " + start, u);
-                }
-                cards.remove(i);
-                if (!this.stripComments) {
-                    cards.remove(i);
-                    cards.add(
-                            start,
-                            Card.commentCard(". " + u
-                                    + " Translated by attendant"));
-                }
-                if (c.type() == CardType.BACKSTART) {
-                    // It's a loop
-                    CardType newType = depends
-                                              ? CardType.CBACKWARD
-                                                  : CardType.BACKWARD;
-                    String[] newArgs = { Integer.toString(i - start) };
-                    cards.add(i, new Card(newType, newArgs));
-                } else {
-                    // It's a forward skip, possibly with an else clause
-                    CardType newType = depends
-                                              ? CardType.CFORWARD
-                                                  : CardType.FORWARD;
-                    String[] newArgs = { Integer
-                            .toString(((isElse
-                                              ? (this.stripComments
-                                                                   ? 0
-                                                                       : 1)
-                                                  : (this.stripComments
-                                                                       ? -1
-                                                                           : 0)) + Math
-                                    .abs(i - start))) };
-                    cards.add(start + 1, new Card(newType, newArgs));
-
-                    // Translate else branch of conditional, if present
-                    if (isElse) {
-                        int j;
-
-                        for (j = i + 1; j < cards.size(); j++) {
-                            u = cards.get(j);
-
-                            if (isCycleStart(u.type())) {
-                                translateCycle(cards, j);
-                            }
-                            if (isCycleEnd(u.type())) {
-                                if (u.type() != CardType.FORWARDEND
-                                        || u.type() != CardType.ALTERNATION) {
-                                    throw new BadCard(
-                                            "End of else cycle does not match "
-                                                    + c
-                                                    + " beginning on card "
-                                                    + i, u);
-                                }
-                                cards.remove(j);
-                                if (!this.stripComments) {
-                                    cards.add(j, Card.commentCard(u
-                                            + " Translated by attendant"));
-                                }
-                                CardType newType2 = CardType.FORWARD;
-                                String[] newArgs2 = { Integer.toString(Math
-                                        .abs(j - i)
-                                        - (this.stripComments
-                                                             ? 1
-                                                                 : 1)) };
-                                cards.add(i + (this.stripComments
-                                                                 ? 1
-                                                                     : 2),
-                                        new Card(newType2, newArgs2));
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        throw new BadCard("No matching end of cycle.", c);
-    }
-
     private CardReader cardReader = null;
 
     private String formatString = null;
 
-    private List<Path> libraryPaths;
+    private List<Path> libraryPaths = Collections.emptyList();
 
     private String report = "";
 
@@ -462,12 +343,13 @@ public class DefaultAttendant implements Attendant {
     }
 
     @Override
-    public void loadProgram(List<Card> cards) throws BadCard, IOException {
+    public void loadProgram(List<Card> cards) throws BadCard, IOException,
+            UnknownCard {
         // Note: "A write numbers as ..." cards remain in the card chain.
         cards = this.transcludeLibraryCards(cards);
         cards = strippedComments(cards);
         cards = this.expandDecimal(cards);
-        // TODO this method should return a new list like the others do 
+        // TODO this method should return a new list like the others do
         translateCombinatorics(cards);
         this.cardReader.mountCards(cards);
     }
@@ -509,7 +391,7 @@ public class DefaultAttendant implements Attendant {
     }
 
     private List<Card> transcludeLibraryCards(List<Card> cards)
-            throws BadCard, IOException {
+            throws BadCard, IOException, UnknownCard {
         List<Card> result = new ArrayList<Card>();
         for (Card card : cards) {
             /*
@@ -574,6 +456,125 @@ public class DefaultAttendant implements Attendant {
         }
 
         return result;
+    }
+
+    private void translateCombinatorics(List<Card> cards) throws BadCard {
+        for (int i = 0; i < cards.size(); i++) {
+            if (isCycleStart(cards.get(i).type())) {
+                this.translateCycle(cards, i);
+            }
+        }
+    }
+
+    private void translateCycle(List<Card> cards, int start) throws BadCard {
+        Card c = cards.get(start);
+        boolean depends = false;
+        int i;
+
+        depends = (c.type() == CardType.CBACKSTART || c.type() == CardType.CFORWARDSTART);
+        if (this.stripComments) {
+            cards.remove(start);
+            start--;
+        } else {
+            cards.remove(start);
+            cards.add(start,
+                    Card.commentCard(". " + c + " Translated by attendant"));
+        }
+
+        /*
+         * Search for the end of this cycle. If a sub-cycle is detected,
+         * recurse to translate it.
+         */
+
+        for (i = start + 1; i < cards.size(); i++) {
+            Card u = cards.get(i);
+
+            if (isCycleStart(u.type())) {
+                translateCycle(cards, i);
+            }
+            if (isCycleEnd(u.type())) {
+                boolean isElse = u.type() == CardType.ALTERNATION;
+
+                if (((c.type() == CardType.CBACKSTART || c.type() == CardType.BACKSTART) && u
+                        .type() != CardType.BACKEND)
+                        || ((c.type() == CardType.CFORWARDSTART || c.type() == CardType.FORWARDSTART) && (u
+                                .type() != CardType.FORWARDEND || u.type() != CardType.ALTERNATION))) {
+                    throw new BadCard("End of cycle does not match " + c
+                            + " beginning on card " + start, u);
+                }
+                cards.remove(i);
+                if (!this.stripComments) {
+                    cards.remove(i);
+                    cards.add(
+                            start,
+                            Card.commentCard(". " + u
+                                    + " Translated by attendant"));
+                }
+                if (c.type() == CardType.BACKSTART) {
+                    // It's a loop
+                    CardType newType = depends
+                                              ? CardType.CBACKWARD
+                                                  : CardType.BACKWARD;
+                    String[] newArgs = { Integer.toString(i - start) };
+                    cards.add(i, new Card(newType, newArgs));
+                } else {
+                    // It's a forward skip, possibly with an else clause
+                    CardType newType = depends
+                                              ? CardType.CFORWARD
+                                                  : CardType.FORWARD;
+                    String[] newArgs = { Integer
+                            .toString(((isElse
+                                              ? (this.stripComments
+                                                                   ? 0
+                                                                       : 1)
+                                                  : (this.stripComments
+                                                                       ? -1
+                                                                           : 0)) + Math
+                                    .abs(i - start))) };
+                    cards.add(start + 1, new Card(newType, newArgs));
+
+                    // Translate else branch of conditional, if present
+                    if (isElse) {
+                        int j;
+
+                        for (j = i + 1; j < cards.size(); j++) {
+                            u = cards.get(j);
+
+                            if (isCycleStart(u.type())) {
+                                translateCycle(cards, j);
+                            }
+                            if (isCycleEnd(u.type())) {
+                                if (u.type() != CardType.FORWARDEND
+                                        || u.type() != CardType.ALTERNATION) {
+                                    throw new BadCard(
+                                            "End of else cycle does not match "
+                                                    + c
+                                                    + " beginning on card "
+                                                    + i, u);
+                                }
+                                cards.remove(j);
+                                if (!this.stripComments) {
+                                    cards.add(j, Card.commentCard(u
+                                            + " Translated by attendant"));
+                                }
+                                CardType newType2 = CardType.FORWARD;
+                                String[] newArgs2 = { Integer.toString(Math
+                                        .abs(j - i)
+                                        - (this.stripComments
+                                                             ? 1
+                                                                 : 1)) };
+                                cards.add(i + (this.stripComments
+                                                                 ? 1
+                                                                     : 2),
+                                        new Card(newType2, newArgs2));
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        throw new BadCard("No matching end of cycle.", c);
     }
 
     @Override

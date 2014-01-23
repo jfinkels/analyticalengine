@@ -5,10 +5,11 @@ import java.nio.file.Path;
 import java.util.List;
 
 import analyticalengine.components.cards.Card;
+import analyticalengine.newio.UnknownCard;
 
 
 public interface Attendant {
-    void loadProgram(List<Card> cards) throws BadCard, IOException;
+    void loadProgram(List<Card> cards) throws BadCard, IOException, UnknownCard;
 
     void setStripComments(boolean stripComments);
     
