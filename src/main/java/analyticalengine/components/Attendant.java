@@ -1,9 +1,14 @@
 package analyticalengine.components;
 
-import analyticalengine.components.cards.CardChain;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
+
+import analyticalengine.components.cards.Card;
+
 
 public interface Attendant {
-    void loadProgram(CardChain cards) throws BadCard;
+    void loadProgram(List<Card> cards) throws BadCard, IOException;
 
     void setStripComments(boolean stripComments);
     
@@ -22,4 +27,6 @@ public interface Attendant {
     void setCardReader(CardReader reader);
 
     void reset();
+
+    void setLibraryPaths(List<Path> paths);
 }

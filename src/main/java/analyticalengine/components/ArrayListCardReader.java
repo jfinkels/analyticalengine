@@ -1,18 +1,20 @@
 package analyticalengine.components;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import analyticalengine.components.cards.Card;
-import analyticalengine.components.cards.CardChain;
-import analyticalengine.newio.ArrayListCardChain;
 
 public class ArrayListCardReader implements CardReader {
 
-    private CardChain cards = new ArrayListCardChain();
+    private List<Card> cardChain = new ArrayList<Card>();
     // always points to the index of the card before the next card to read
     private int currentCard = -1;
 
     @Override
     public void advance(int n) throws IndexOutOfBoundsException {
-        if (this.currentCard + n >= this.cards.size()) {
+        if (this.currentCard + n >= this.cardChain.size()) {
             throw new IndexOutOfBoundsException("No more cards to read.");
         }
         this.currentCard += n;
@@ -24,18 +26,17 @@ public class ArrayListCardReader implements CardReader {
 //    }
 
     @Override
-    public void mountCards(CardChain cards) {
-        // mount a copy of the cards
-        this.cards = cards.shallowCopy();
+    public void mountCards(List<Card> cardChain) {
+        Collections.copy(this.cardChain, cardChain);
     }
 
     @Override
     public Card readAndAdvance() throws Halt {
-        if (this.currentCard + 1 == this.cards.size()) {
+        if (this.currentCard + 1 == this.cardChain.size()) {
             throw new Halt("Reached end of card chain.");
         }
         this.currentCard += 1;
-        return this.cards.get(this.currentCard);
+        return this.cardChain.get(this.currentCard);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class ArrayListCardReader implements CardReader {
     @Override
     public void unmountCards() {
         this.currentCard = -1;
-        this.cards.clear();
+        this.cardChain.clear();
     }
 
 }

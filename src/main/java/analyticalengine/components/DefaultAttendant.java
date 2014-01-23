@@ -1,27 +1,23 @@
 package analyticalengine.components;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import analyticalengine.components.cards.Card;
-import analyticalengine.components.cards.CardChain;
 import analyticalengine.components.cards.CardType;
-import analyticalengine.newio.ArrayListCardChain;
 
 public class DefaultAttendant implements Attendant {
 
-    private CardReader cardReader = null;
-    private String report = "";
-    private boolean writeInRows = true;
-
-    @Override
-    public void reset() {
-        this.report = "";
-        this.cardReader.unmountCards();
-    }
-
-    private static CardChain strippedComments(CardChain cards) {
-        CardChain result = new ArrayListCardChain();
+    private static List<Card> strippedComments(List<Card> cards) {
+        List<Card> result = new ArrayList<Card>();
         for (Card card : cards) {
             if (card.type() != CardType.COMMENT) {
                 result.add(card);
@@ -30,8 +26,159 @@ public class DefaultAttendant implements Attendant {
         return result;
     }
 
-    private CardChain expandDecimal(CardChain cards) throws BadCard {
-        CardChain result = new ArrayListCardChain();
+    private static final boolean isCycleStart(CardType type) {
+        return type == CardType.BACKSTART || type == CardType.CBACKSTART
+                || type == CardType.FORWARDSTART
+                || type == CardType.CFORWARDSTART;
+    }
+
+    private static final boolean isCycleEnd(CardType type) {
+        return type == CardType.BACKEND || type == CardType.ALTERNATION
+                || type == CardType.FORWARDEND;
+    }
+
+    private void translateCombinatorics(List<Card> cards) throws BadCard {
+        for (int i = 0; i < cards.size(); i++) {
+            if (isCycleStart(cards.get(i).type())) {
+                this.translateCycle(cards, i);
+            }
+        }
+    }
+
+    private void translateCycle(List<Card> cards, int start) throws BadCard {
+        Card c = cards.get(start);
+        boolean depends = false;
+        int i;
+
+        depends = (c.type() == CardType.CBACKSTART || c.type() == CardType.CFORWARDSTART);
+        if (this.stripComments) {
+            cards.remove(start);
+            start--;
+        } else {
+            cards.remove(start);
+            cards.add(start,
+                    Card.commentCard(". " + c + " Translated by attendant"));
+        }
+
+        /*
+         * Search for the end of this cycle. If a sub-cycle is detected,
+         * recurse to translate it.
+         */
+
+        for (i = start + 1; i < cards.size(); i++) {
+            Card u = cards.get(i);
+
+            if (isCycleStart(u.type())) {
+                translateCycle(cards, i);
+            }
+            if (isCycleEnd(u.type())) {
+                boolean isElse = u.type() == CardType.ALTERNATION;
+
+                if (((c.type() == CardType.CBACKSTART || c.type() == CardType.BACKSTART) && u
+                        .type() != CardType.BACKEND)
+                        || ((c.type() == CardType.CFORWARDSTART || c.type() == CardType.FORWARDSTART) && (u
+                                .type() != CardType.FORWARDEND || u.type() != CardType.ALTERNATION))) {
+                    throw new BadCard("End of cycle does not match " + c
+                            + " beginning on card " + start, u);
+                }
+                cards.remove(i);
+                if (!this.stripComments) {
+                    cards.remove(i);
+                    cards.add(
+                            start,
+                            Card.commentCard(". " + u
+                                    + " Translated by attendant"));
+                }
+                if (c.type() == CardType.BACKSTART) {
+                    // It's a loop
+                    CardType newType = depends
+                                              ? CardType.CBACKWARD
+                                                  : CardType.BACKWARD;
+                    String[] newArgs = { Integer.toString(i - start) };
+                    cards.add(i, new Card(newType, newArgs));
+                } else {
+                    // It's a forward skip, possibly with an else clause
+                    CardType newType = depends
+                                              ? CardType.CFORWARD
+                                                  : CardType.FORWARD;
+                    String[] newArgs = { Integer
+                            .toString(((isElse
+                                              ? (this.stripComments
+                                                                   ? 0
+                                                                       : 1)
+                                                  : (this.stripComments
+                                                                       ? -1
+                                                                           : 0)) + Math
+                                    .abs(i - start))) };
+                    cards.add(start + 1, new Card(newType, newArgs));
+
+                    // Translate else branch of conditional, if present
+                    if (isElse) {
+                        int j;
+
+                        for (j = i + 1; j < cards.size(); j++) {
+                            u = cards.get(j);
+
+                            if (isCycleStart(u.type())) {
+                                translateCycle(cards, j);
+                            }
+                            if (isCycleEnd(u.type())) {
+                                if (u.type() != CardType.FORWARDEND
+                                        || u.type() != CardType.ALTERNATION) {
+                                    throw new BadCard(
+                                            "End of else cycle does not match "
+                                                    + c
+                                                    + " beginning on card "
+                                                    + i, u);
+                                }
+                                cards.remove(j);
+                                if (!this.stripComments) {
+                                    cards.add(j, Card.commentCard(u
+                                            + " Translated by attendant"));
+                                }
+                                CardType newType2 = CardType.FORWARD;
+                                String[] newArgs2 = { Integer.toString(Math
+                                        .abs(j - i)
+                                        - (this.stripComments
+                                                             ? 1
+                                                                 : 1)) };
+                                cards.add(i + (this.stripComments
+                                                                 ? 1
+                                                                     : 2),
+                                        new Card(newType2, newArgs2));
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        throw new BadCard("No matching end of cycle.", c);
+    }
+
+    private CardReader cardReader = null;
+
+    private String formatString = null;
+
+    private List<Path> libraryPaths;
+
+    private String report = "";
+
+    private boolean stripComments = false;
+
+    private boolean writeInRows = true;
+
+    @Override
+    public void annotate(String message) {
+        if (this.writeInRows) {
+            this.report += message;
+        } else {
+            // TODO do something different
+        }
+    }
+
+    private List<Card> expandDecimal(List<Card> cards) throws BadCard {
+        List<Card> result = new ArrayList<Card>();
         int decimalPlace = -1;
         for (Card card : cards) {
             switch (card.type()) {
@@ -220,20 +367,10 @@ public class DefaultAttendant implements Attendant {
         return result;
     }
 
-    private static CardChain translateCombinatorics(CardChain cards) {
-        return cards;
-    }
-
     @Override
-    public void loadProgram(CardChain cards) throws BadCard {
-        // Note: "A write numbers as ..." cards remain in the card chain.
-        cards = strippedComments(cards);
-        cards = this.expandDecimal(cards);
-        cards = translateCombinatorics(cards);
-        this.cardReader.mountCards(cards);
+    public String finalReport() {
+        return this.report;
     }
-
-    private String formatString = null;
 
     private String formatted(String input) {
         String s = input;
@@ -325,6 +462,17 @@ public class DefaultAttendant implements Attendant {
     }
 
     @Override
+    public void loadProgram(List<Card> cards) throws BadCard, IOException {
+        // Note: "A write numbers as ..." cards remain in the card chain.
+        cards = this.transcludeLibraryCards(cards);
+        cards = strippedComments(cards);
+        cards = this.expandDecimal(cards);
+        // TODO this method should return a new list like the others do 
+        translateCombinatorics(cards);
+        this.cardReader.mountCards(cards);
+    }
+
+    @Override
     public void receiveOutput(String printed) {
         String toWrite = this.formatted(printed);
         if (this.writeInRows) {
@@ -335,12 +483,97 @@ public class DefaultAttendant implements Attendant {
     }
 
     @Override
-    public void annotate(String message) {
-        if (this.writeInRows) {
-            this.report += message;
-        } else {
-            // TODO do something different
+    public void reset() {
+        this.report = "";
+        this.cardReader.unmountCards();
+    }
+
+    @Override
+    public void setCardReader(CardReader reader) {
+        this.cardReader = reader;
+    }
+
+    @Override
+    public void setLibraryPaths(List<Path> paths) {
+        Collections.copy(this.libraryPaths, paths);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see analyticalengine.components.Attendant#setStripComments(boolean)
+     */
+    @Override
+    public void setStripComments(boolean stripComments) {
+        this.stripComments = stripComments;
+    }
+
+    private List<Card> transcludeLibraryCards(List<Card> cards)
+            throws BadCard, IOException {
+        List<Card> result = new ArrayList<Card>();
+        for (Card card : cards) {
+            /*
+             * We recognise a card which begins with an "@" or the more
+             * Victorian " A include cards " as an instruction to the attendant
+             * to locate the chain of cards bearing that label and interpolate
+             * it into the chain, replacing the card requesting it. This allows
+             * commonly used sequences of calculation to be called out without
+             * having to physically copy them into the original card chain.
+             */
+            if (card.type() == CardType.INCLUDE) {
+                Path path = Paths.get(card.argument(0));
+                if (!Files.exists(path)) {
+                    throw new BadCard("Could not find file: " + path, card);
+                }
+
+                result.add(Card.commentCard("Begin interpolation of " + card
+                        + " by attendant"));
+                result.addAll(analyticalengine.newio.CardReader.fromPath(path));
+                result.add(Card.commentCard("Endinterpolation of " + card
+                        + " by attendant"));
+                /*
+                 * The analyst can request the inclusion of a set of cards from
+                 * the machine's library with the request to the attendant:
+                 * 
+                 * A include from library cards for <whatever>
+                 * 
+                 * The attendant searches for a set of cards named <whatever>
+                 * and, if found, they are strung into the chain, replacing the
+                 * library request.
+                 */
+            } else if (card.type() == CardType.INCLUDELIB) {
+                // we assume library files have the .ae file extension
+                String filename = card.argument(0) + ".ae";
+
+                // look for the file in the known paths
+                Path libraryFile = null;
+                for (Path path : this.libraryPaths) {
+                    libraryFile = path.resolve(filename);
+                    if (Files.exists(libraryFile)) {
+                        break;
+                    }
+                    libraryFile = null;
+                }
+
+                // raise an exception if the requested library file could not
+                // be found in any of the known paths
+                if (libraryFile == null) {
+                    throw new BadCard("Could not find library file: "
+                            + filename, card);
+                }
+
+                result.add(Card.commentCard("Begin interpolation of "
+                        + libraryFile + " from library by attendant"));
+                result.addAll(analyticalengine.newio.CardReader
+                        .fromPath(libraryFile));
+                result.add(Card.commentCard("End interpolation of "
+                        + libraryFile + " from library by attendant"));
+            } else {
+                result.add(card);
+            }
         }
+
+        return result;
     }
 
     @Override
@@ -354,30 +587,8 @@ public class DefaultAttendant implements Attendant {
     }
 
     @Override
-    public String finalReport() {
-        return this.report;
-    }
-
-    @Override
     public void writeNewline() {
         this.report += System.getProperty("line.separator");
-    }
-
-    @Override
-    public void setCardReader(CardReader reader) {
-        this.cardReader = reader;
-    }
-
-    private boolean stripComments = false;
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see analyticalengine.components.Attendant#setStripComments(boolean)
-     */
-    @Override
-    public void setStripComments(boolean stripComments) {
-        this.stripComments = stripComments;
     }
 
 }

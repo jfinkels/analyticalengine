@@ -1,14 +1,15 @@
 package analyticalengine.components;
 
+import java.util.List;
+
 import analyticalengine.components.cards.Card;
-import analyticalengine.components.cards.CardChain;
 
 public interface CardReader {
     void advance(int n);
 
     //CardChain cards();
 
-    void mountCards(CardChain cards);
+    void mountCards(List<Card> cardChain);
 
     Card readAndAdvance() throws Halt;
 

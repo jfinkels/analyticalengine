@@ -5,6 +5,11 @@ import java.util.Arrays;
 public class Card {
     private CardType type;
     private String[] arguments;
+    
+    public static Card commentCard(String comment) {
+        return new Card(CardType.COMMENT, new String[] {". " + comment});
+    }
+    
     public Card(CardType type, String[] arguments) {
         this.type = type;
         this.arguments = arguments;

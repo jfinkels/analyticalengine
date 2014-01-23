@@ -5,16 +5,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import analyticalengine.components.cards.Card;
-import analyticalengine.components.cards.CardChain;
 
 public class CardReader {
 
-    public static CardChain fromFile(File input) throws FileNotFoundException, IOException {
-        CardChain cards = new ArrayListCardChain();
+    private CardReader() {
+        // intentionally unimplemented
+    }
+
+    public static List<Card> fromFile(File input)
+            throws FileNotFoundException, IOException {
+        List<Card> cards = new ArrayList<Card>();
         try (BufferedReader reader = new BufferedReader(new FileReader(input))) {
             String currentLine = reader.readLine();
             while (currentLine != null) {
@@ -25,16 +30,16 @@ public class CardReader {
         return cards;
     }
 
-    public static CardChain fromFilename(String filename) throws IOException {
-        return fromFile(new File(filename));
+    public static List<Card> fromPath(Path path) throws IOException {
+        return fromFile(path.toFile());
     }
 
-    public static CardChain fromString(String input) {
+    public static List<Card> fromString(String input) {
         return fromString(input, System.lineSeparator());
     }
 
-    public static CardChain fromString(String input, String lineSeparator) {
-        CardChain cards = new ArrayListCardChain();
+    public static List<Card> fromString(String input, String lineSeparator) {
+        List<Card> cards = new ArrayList<Card>();
         for (String line : input.split(lineSeparator)) {
             cards.add(CardParser.toCard(line));
         }
