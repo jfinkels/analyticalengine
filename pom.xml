@@ -9,13 +9,13 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>  
   <dependencies>
-    <!-- <dependency> -->
-    <!--   <groupId>log4j</groupId> -->
-    <!--   <artifactId>log4j</artifactId> -->
-    <!--   <version>1.2.17</version> -->
-    <!--   <scope>compile</scope> -->
-    <!--   <optional>true</optional> -->
-    <!-- </dependency> -->
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+      <scope>compile</scope>
+      <optional>true</optional>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -36,7 +36,7 @@
     <!-- plugin versions -->
     <version.plugin.javadoc>2.9.1</version.plugin.javadoc>
     <version.plugin.scm>1.8.1</version.plugin.scm>
-    <version.plugin.surefire>2.12.4</version.plugin.surefire>
+    <version.plugin.surefire>2.13</version.plugin.surefire>
     
     <!-- SCM provider versions -->
     <version.scm.hg>${version.plugin.scm}</version.scm.hg>
