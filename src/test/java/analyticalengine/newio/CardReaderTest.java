@@ -2,12 +2,10 @@ package analyticalengine.newio;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.annotation.Resources;
 
 import org.junit.Test;
 
@@ -55,7 +53,7 @@ public class CardReaderTest {
     @Test
     public void testFromFile() {
         try {
-            List<Card> cards = CardReader.fromFile(new File(TESTFILE));
+            List<Card> cards = CardReader.fromPath(Paths.get(TESTFILE));
             assertCardsEqual(EXPECTED, cards);
         } catch (IOException | UnknownCard e) {
             TestUtils.fail(e);
