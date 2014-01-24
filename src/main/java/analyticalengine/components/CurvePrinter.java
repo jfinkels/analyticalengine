@@ -10,4 +10,6 @@ public interface CurvePrinter {
     void draw();
 
     void move();
+    
+    void reset();
 }

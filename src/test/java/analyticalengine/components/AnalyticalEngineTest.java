@@ -1,11 +1,10 @@
 package analyticalengine.components;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.After;
@@ -44,7 +43,10 @@ public class AnalyticalEngineTest {
 
     @After
     public void tearDown() throws Exception {
+        // this technically doesn't need to be done, since we are creating new
+        // objects in set up code anyway
         this.attendant.reset();
+        this.engine.reset();
     }
 
     @Test
@@ -54,7 +56,8 @@ public class AnalyticalEngineTest {
         List<Card> cards = null;
         try {
             // TODO real argument parsing
-            Path program = Paths.get("src/test/resources/analyticalengine/components/ex0.ae");
+            Path program = Paths
+                    .get("src/test/resources/analyticalengine/components/ex0.ae");
             cards = analyticalengine.newio.CardReader.fromPath(program);
         } catch (IOException | UnknownCard e) {
             TestUtils.fail(e);
@@ -63,14 +66,16 @@ public class AnalyticalEngineTest {
         // Second, instruct the attendant to load the card chain into the
         // machine.
         try {
-            attendant.loadProgram(cards);
+            this.attendant.loadProgram(cards);
         } catch (BadCard | IOException | UnknownCard e) {
             TestUtils.fail(e);
         }
 
         // Finally, run the Analytical Engine with the specified program.
-        engine.run();
-        
+        this.engine.run();
+
+        // The final report should indicate a 3333, according to the program.
+        assertEquals("3333", this.attendant.finalReport());
     }
 
 }

@@ -6,16 +6,19 @@ import java.math.BigInteger;
 public interface Mill {
     boolean hasRunUp();
 
+    void reset();
+
     void leftShift(int shift);
 
     BigInteger maxValue();
+
     BigInteger minValue();
-    
+
     void rightShift(int shift);
 
     void setOperation(Operation operation);
 
-    //void transferIn(BigInteger value);
+    // void transferIn(BigInteger value);
 
     void transferIn(BigInteger value, boolean prime);
 

@@ -25,4 +25,9 @@ public class HashMapStore implements Store {
         return this.rack.get(address);
     }
 
+    @Override
+    public void reset() {
+        this.rack.clear();
+    }
+
 }

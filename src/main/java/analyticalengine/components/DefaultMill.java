@@ -8,15 +8,24 @@ public class DefaultMill implements Mill {
     private Operation currentOperation = null;
 
     @Override
+    public void reset() {
+        this.currentOperation = null;
+        this.currentAxis = 0;
+        this.ingressAxes = new BigInteger[3];
+        this.egressAxes = new BigInteger[2];
+        this.runUp = false;
+    }
+
+    @Override
     public BigInteger maxValue() {
         return MAX;
     }
-    
+
     @Override
     public BigInteger minValue() {
         return MIN;
     }
-    
+
     private int currentAxis = 0;
     private BigInteger[] ingressAxes = new BigInteger[3];
     private BigInteger[] egressAxes = new BigInteger[2];
@@ -34,10 +43,14 @@ public class DefaultMill implements Mill {
 
     @Override
     public BigInteger transferOut(boolean prime) {
+        BigInteger result = null;
         if (prime) {
-            return this.egressAxes[1];
+            result = this.egressAxes[1];
+        } else {
+            result = this.egressAxes[2];
         }
-        return this.egressAxes[2];
+        this.mostRecentValue = result;
+        return result;
     }
 
     @Override
@@ -75,6 +88,7 @@ public class DefaultMill implements Mill {
             }
             this.egressAxes[0] = result;
             this.egressAxes[1] = BigInteger.ZERO;
+            this.mostRecentValue = result;
             break;
         case DIVIDE:
             BigInteger dividend = this.ingressAxes[0];
@@ -85,6 +99,7 @@ public class DefaultMill implements Mill {
             if (this.ingressAxes[1].signum() == 0) {
                 this.egressAxes[0] = BigInteger.ZERO;
                 this.egressAxes[1] = BigInteger.ZERO;
+                this.mostRecentValue = BigInteger.ZERO;
                 this.runUp = true;
                 break;
             }
@@ -94,11 +109,13 @@ public class DefaultMill implements Mill {
                 // Overflow if quotient more than 50 digits
                 this.egressAxes[0] = BigInteger.ZERO;
                 this.egressAxes[1] = BigInteger.ZERO;
+                this.mostRecentValue = BigInteger.ZERO;
                 this.runUp = true;
                 break;
             }
             this.egressAxes[0] = quotientRemainder[1];
             this.egressAxes[1] = quotientRemainder[0];
+            this.mostRecentValue = quotientRemainder[1];
             break;
         case MULTIPLY:
             result = this.ingressAxes[0].multiply(this.ingressAxes[1]);
@@ -110,9 +127,11 @@ public class DefaultMill implements Mill {
                 BigInteger[] qr = result.divideAndRemainder(MAX);
                 this.egressAxes[0] = qr[1];
                 this.egressAxes[1] = qr[0];
+                this.mostRecentValue = qr[1];
             } else {
                 this.egressAxes[0] = result;
                 this.egressAxes[1] = BigInteger.ZERO;
+                this.mostRecentValue = result;
             }
             break;
         case NOOP:
@@ -138,6 +157,7 @@ public class DefaultMill implements Mill {
             }
             this.egressAxes[0] = result;
             this.egressAxes[1] = BigInteger.ZERO;
+            this.mostRecentValue = result;
             break;
         default:
             break;
@@ -152,6 +172,8 @@ public class DefaultMill implements Mill {
 
     @Override
     public void transferIn(BigInteger value, boolean prime) {
+        this.mostRecentValue = value;
+
         if (prime) {
             this.ingressAxes[2] = value;
             return;
@@ -185,7 +207,7 @@ public class DefaultMill implements Mill {
 
     // TODO set this after each operation, each shift, and each transfer
     private BigInteger mostRecentValue = null;
-    
+
     @Override
     public BigInteger mostRecentValue() {
         return this.mostRecentValue;

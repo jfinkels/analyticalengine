@@ -1,7 +1,6 @@
 package analyticalengine.components;
 
 import java.math.BigInteger;
-import java.util.List;
 
 import analyticalengine.components.cards.Card;
 
@@ -13,13 +12,18 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
     private Printer printer = null;
     private CurvePrinter curvePrinter = null;
 
+    @Override
+    public void reset() {
+        this.mill.reset();
+        this.store.reset();
+        this.curvePrinter.reset();
+    }
+
     // void inputCards(List<Card> cards) {
     // this.cardReader.mountCards(cards);
     // }
 
     private void executeCard(Card card) throws Bell, Halt, Error {
-        // TODO here is where we create an entry for each instruction in the
-        // instruction set
         switch (card.type()) {
         case ADD:
             this.mill.setOperation(Operation.ADD);
@@ -189,6 +193,12 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case WRITEROWS:
             this.attendant.writeInRows();
             break;
+        case WRITEPICTURE:
+            this.attendant.setFormat(card.argument(0));
+            break;
+        case WRITEDECIMAL:
+            this.attendant.writeWithDecimal();
+            break;
         case ALTERNATION:
         case BACKEND:
         case BACKSTART:
@@ -199,8 +209,6 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case FORWARDSTART:
         case INCLUDE:
         case INCLUDELIB:
-        case WRITEDECIMAL:
-        case WRITEPICTURE:
             // TODO these should all be removed by attendant before loading
             // cards
             throw new Error("Attendant failed to remove block card", card);

@@ -19,8 +19,12 @@ public class Card {
         this.arguments = arguments;
     }
 
-    public String[] arguments() {
-        return Arrays.copyOf(this.arguments, type.numArguments());
+    //public String[] arguments() {
+    //    return Arrays.copyOf(this.arguments, type.numArguments());
+    //}
+    
+    public int numArguments() {
+        return this.type.numArguments();
     }
 
     public CardType type() {
@@ -29,5 +33,10 @@ public class Card {
 
     public String argument(int i) throws IndexOutOfBoundsException {
         return this.arguments[i];
+    }
+    
+    @Override
+    public String toString() {
+        return this.type + Arrays.toString(this.arguments);
     }
 }

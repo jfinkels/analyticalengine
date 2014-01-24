@@ -49,6 +49,8 @@ public class DefaultAttendant implements Attendant {
 
     private boolean writeInRows = true;
 
+    private boolean writeWithDecimal;
+
     @Override
     public void annotate(String message) {
         if (this.writeInRows) {
@@ -95,9 +97,9 @@ public class DefaultAttendant implements Attendant {
                         }
 
                         if (!this.stripComments) {
-                            Card replacement = new Card(CardType.COMMENT,
-                                    new String[] { "A set decimal places to "
-                                            + card.argument(0) });
+                            Card replacement = Card
+                                    .commentCard("A set decimal places to "
+                                            + card.argument(0));
                             result.add(replacement);
                         }
                         decimalPlace = d;
@@ -136,77 +138,71 @@ public class DefaultAttendant implements Attendant {
              * the proper number of digits.
              */
             case NUMBER: {
-                StringTokenizer stok = new StringTokenizer(card.argument(0)
-                        .substring(1));
-                if (stok.countTokens() == 2) {
-                    String cn, nspec;
+                String cn = card.argument(0);
+                String nspec = card.argument(1);
+                int dp = nspec.indexOf(".");
+                if (dp >= 0) {
+                    if (decimalPlace < 0) {
+                        throw new BadCard(
+                                "I cannot add the number of decimal places because\n"
+                                        + "you have not instructed me how many decimal\n"
+                                        + "places to use in a prior \"A set decimal places\"\ninstruction.",
+                                card);
+                    } else {
+                        String dpart = nspec.substring(dp + 1);
+                        // dpnew = "";
+                        // int j, places = 0;
+                        // char ch;
+                        //
+                        // for (j = 0; j < dpart.length(); j++) {
+                        // if (Character.isDigit(ch = dpart.charAt(j)))
+                        // {
+                        // dpnew += ch;
+                        // places++;
+                        // }
+                        // }
 
-                    cn = stok.nextToken();
-                    nspec = stok.nextToken();
-                    int dp = nspec.indexOf(".");
+                        /*
+                         * Now adjust the decimal part to the given number of
+                         * decimal places by trimming excess digits and
+                         * appending zeroes as required.
+                         */
 
-                    if (dp >= 0) {
-                        if (decimalPlace < 0) {
-                            throw new BadCard(
-                                    "I cannot add the number of decimal places because\n"
-                                            + "you have not instructed me how many decimal\n"
-                                            + "places to use in a prior \"A set decimal places\"\ninstruction.",
-                                    card);
-                        } else {
-                            String dpart = nspec.substring(dp + 1);
-                            // dpnew = "";
-                            // int j, places = 0;
-                            // char ch;
-                            //
-                            // for (j = 0; j < dpart.length(); j++) {
-                            // if (Character.isDigit(ch = dpart.charAt(j)))
-                            // {
-                            // dpnew += ch;
-                            // places++;
-                            // }
-                            // }
-
+                        if (dpart.length() > decimalPlace) {
                             /*
-                             * Now adjust the decimal part to the given number
-                             * of decimal places by trimming excess digits and
-                             * appending zeroes as required.
+                             * If we're trimming excess digits, round the
+                             * remaining digits based on the first digit of the
+                             * portion trimmed.
                              */
-
-                            if (dpart.length() > decimalPlace) {
-                                /*
-                                 * If we're trimming excess digits, round the
-                                 * remaining digits based on the first digit of
-                                 * the portion trimmed.
-                                 */
-                                if ((decimalPlace > 0)
-                                        && (Character
-                                                .digit(dpart
-                                                        .charAt(decimalPlace),
-                                                        10) >= 5)) {
-                                    dpart = new BigInteger(dpart.substring(0,
-                                            decimalPlace), 10).add(
-                                            BigInteger.ONE).toString();
-                                } else {
-                                    dpart = dpart.substring(0, decimalPlace);
-                                }
+                            if ((decimalPlace > 0)
+                                    && (Character.digit(
+                                            dpart.charAt(decimalPlace), 10) >= 5)) {
+                                dpart = new BigInteger(dpart.substring(0,
+                                        decimalPlace), 10).add(BigInteger.ONE)
+                                        .toString();
+                            } else {
+                                dpart = dpart.substring(0, decimalPlace);
                             }
-                            while (dpart.length() < decimalPlace) {
-                                dpart += "0";
-                            }
-
-                            // Append the decimal part to fixed part from
-                            // card
-                            String newNumber = "N" + cn + " "
-                                    + nspec.substring(0, dp) + dpart;
-                            if (!this.stripComments) {
-                                newNumber += " . Decimal expansion by attendant";
-                            }
-
-                            Card replacement = new Card(CardType.NUMBER,
-                                    new String[] { newNumber });
-                            result.add(replacement);
                         }
+                        while (dpart.length() < decimalPlace) {
+                            dpart += "0";
+                        }
+
+                        // Append the decimal part to fixed part from
+                        // card
+                        String newNumber = "N" + cn + " "
+                                + nspec.substring(0, dp) + dpart;
+                        if (!this.stripComments) {
+                            newNumber += " . Decimal expansion by attendant";
+                        }
+
+                        Card replacement = new Card(CardType.NUMBER,
+                                new String[] { newNumber });
+                        result.add(replacement);
                     }
+                } else {
+                    // Just add the card as it is
+                    result.add(card);
                 }
 
                 break;
@@ -590,6 +586,16 @@ public class DefaultAttendant implements Attendant {
     @Override
     public void writeNewline() {
         this.report += System.getProperty("line.separator");
+    }
+
+    @Override
+    public void writeWithDecimal() {
+        this.writeWithDecimal = true;
+    }
+
+    @Override
+    public void setFormat(String formatString) {
+        this.formatString = formatString;
     }
 
 }

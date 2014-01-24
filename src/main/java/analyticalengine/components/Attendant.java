@@ -30,4 +30,8 @@ public interface Attendant {
     void reset();
 
     void setLibraryPaths(List<Path> paths);
+
+    void writeWithDecimal();
+
+    void setFormat(String argument);
 }

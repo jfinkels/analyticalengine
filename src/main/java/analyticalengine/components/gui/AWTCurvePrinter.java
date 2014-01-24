@@ -6,8 +6,8 @@ import analyticalengine.components.CurvePrinter;
 
 public class AWTCurvePrinter implements CurvePrinter {
 
-    private BigInteger x;
-    private BigInteger y;
+    private BigInteger x = BigInteger.ZERO;
+    private BigInteger y = BigInteger.ZERO;
     
     @Override
     public void setX(BigInteger x) {
@@ -29,6 +29,12 @@ public class AWTCurvePrinter implements CurvePrinter {
     public void move() {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void reset() {
+        this.x = BigInteger.ZERO;
+        this.y = BigInteger.ZERO;
     }
 
 }

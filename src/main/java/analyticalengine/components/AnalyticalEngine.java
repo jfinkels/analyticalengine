@@ -40,6 +40,8 @@ public interface AnalyticalEngine {
 
     void setCurvePrinter(CurvePrinter printer);
 
+    void reset();
+    
     /**
      * Runs the program specified by the card chain in the card reader.
      * 

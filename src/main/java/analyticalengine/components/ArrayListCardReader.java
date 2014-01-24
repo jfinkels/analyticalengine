@@ -20,14 +20,14 @@ public class ArrayListCardReader implements CardReader {
         this.currentCard += n;
     }
 
-//    @Override
-//    public CardChain cards() {
-//        return Collections.unmodifiableList(this.cards);
-//    }
+    // @Override
+    // public CardChain cards() {
+    // return Collections.unmodifiableList(this.cards);
+    // }
 
     @Override
     public void mountCards(List<Card> cardChain) {
-        Collections.copy(this.cardChain, cardChain);
+        this.cardChain = cardChain;
     }
 
     @Override
