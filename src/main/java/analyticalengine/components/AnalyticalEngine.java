@@ -24,8 +24,29 @@ package analyticalengine.components;
  * The Analytical Engine aggregates the components of the computing system and
  * allows them to communicate with one another.
  * 
+ * The Engine is similar to a modern processor. The {@link Mill} corresponds to
+ * the arithmetic logic unit. The {@link Store} corresponds to random access
+ * memory. The {@link Attendant} is a person who operates the machine (an
+ * "operator" in the language of the early days of digital computers, in which
+ * a programmer provided his or her program as punched cards to an operator who
+ * physically inserted them in the computer).
+ * 
+ * When cards are mounted in it, the {@link CardReader} provides a list of
+ * instructions for the Engine. Each
+ * {@link analyticalengine.components.cards.Card} corresponds to an
+ * instruction. During execution of the program specified by the mounted cards,
+ * output will be produced on the {@link Printer} (or {@link CurvePrinter},
+ * which we would call a "plotter"), possibly annotated by the attendant.
+ * 
+ * In order to run a program given as a {@link java.util.List} of {@code Card}
+ * objects, your code should first instruct the attendant to load the program
+ * by invoking the {@link Attendant#loadProgram(java.util.List)} method, then
+ * start the engine by invoking the {@link #run()} method. Any output produced
+ * by the printer will be available from the attendant after the engine has
+ * halted.
+ * 
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
- * @since 0.1.1
+ * @since 0.0.1
  */
 public interface AnalyticalEngine {
     void setAttendant(Attendant attendant);
@@ -40,13 +61,22 @@ public interface AnalyticalEngine {
 
     void setCurvePrinter(CurvePrinter printer);
 
+    /**
+     * Resets each of the components of the engine to their initial states.
+     * 
+     * This includes clearing the store and resetting the mill.
+     */
     void reset();
-    
+
     /**
      * Runs the program specified by the card chain in the card reader.
      * 
      * This method sequentially executes each card in the card chain, alerting
      * the attendant if his or her action is required.
+     * 
+     * The mill, store, card reader, printer, and attendant properties must all
+     * be set before invoking this method. Furthermore, the attendant must have
+     * loaded a program into the card reader before invoking this method.
      */
     void run();
 }

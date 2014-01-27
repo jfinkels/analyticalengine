@@ -78,4 +78,34 @@ public class AnalyticalEngineTest {
         assertEquals("3333", this.attendant.finalReport());
     }
 
+    @Test
+    public void testDivide() {
+        // First, load the cards specified in the filename given as an
+        // argument.
+        List<Card> cards = null;
+        try {
+            // TODO real argument parsing
+            Path program = Paths
+                    .get("src/test/resources/analyticalengine/components/ex1.ae");
+            cards = analyticalengine.newio.CardReader.fromPath(program);
+        } catch (IOException | UnknownCard e) {
+            TestUtils.fail(e);
+        }
+
+        // Second, instruct the attendant to load the card chain into the
+        // machine.
+        try {
+            this.attendant.loadProgram(cards);
+        } catch (BadCard | IOException | UnknownCard e) {
+            TestUtils.fail(e);
+        }
+
+        // Finally, run the Analytical Engine with the specified program.
+        this.engine.run();
+
+        // The final report should indicate a 3333, according to the program.
+        assertEquals("357" + System.lineSeparator() + "4",
+                this.attendant.finalReport());
+    }
+
 }

@@ -31,7 +31,9 @@ public class CardReader {
         try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
             String currentLine = reader.readLine();
             while (currentLine != null) {
-                cards.add(CardParser.toCard(currentLine));
+                if (!currentLine.isEmpty()) {
+                    cards.add(CardParser.toCard(currentLine));
+                }
                 currentLine = reader.readLine();
             }
         }

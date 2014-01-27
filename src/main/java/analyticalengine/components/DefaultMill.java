@@ -3,60 +3,23 @@ package analyticalengine.components;
 import java.math.BigInteger;
 
 public class DefaultMill implements Mill {
+    
     public static final BigInteger MAX = BigInteger.TEN.pow(50);
+    
     public static final BigInteger MIN = MAX.negate();
-    private Operation currentOperation = null;
-
-    @Override
-    public void reset() {
-        this.currentOperation = null;
-        this.currentAxis = 0;
-        this.ingressAxes = new BigInteger[3];
-        this.egressAxes = new BigInteger[2];
-        this.runUp = false;
-    }
-
-    @Override
-    public BigInteger maxValue() {
-        return MAX;
-    }
-
-    @Override
-    public BigInteger minValue() {
-        return MIN;
-    }
 
     private int currentAxis = 0;
-    private BigInteger[] ingressAxes = new BigInteger[3];
+
+    private Operation currentOperation = null;
+
     private BigInteger[] egressAxes = new BigInteger[2];
+
+    private BigInteger[] ingressAxes = new BigInteger[3];
+
+    // load and store instructions use this
+    private BigInteger mostRecentValue = null;
+
     private boolean runUp;
-
-    // @Override
-    // public void transferIn(BigInteger value) {
-    // this.transferIn(value, false);
-    // }
-
-    @Override
-    public BigInteger transferOut() {
-        return this.transferOut(false);
-    }
-
-    @Override
-    public BigInteger transferOut(boolean prime) {
-        BigInteger result = null;
-        if (prime) {
-            result = this.egressAxes[1];
-        } else {
-            result = this.egressAxes[2];
-        }
-        this.mostRecentValue = result;
-        return result;
-    }
-
-    @Override
-    public boolean hasRunUp() {
-        return this.runUp;
-    }
 
     // at the end of this method, the egress axes have been set as a side
     // effect
@@ -134,8 +97,6 @@ public class DefaultMill implements Mill {
                 this.mostRecentValue = result;
             }
             break;
-        case NOOP:
-            break;
         case SUBTRACT:
             result = this.ingressAxes[0].subtract(this.ingressAxes[1]);
             /*
@@ -159,10 +120,133 @@ public class DefaultMill implements Mill {
             this.egressAxes[1] = BigInteger.ZERO;
             this.mostRecentValue = result;
             break;
+        case NOOP:
         default:
             break;
         }
     }
+    @Override
+    public boolean hasRunUp() {
+        return this.runUp;
+    }
+
+    // @Override
+    // public void transferIn(BigInteger value) {
+    // this.transferIn(value, false);
+    // }
+
+    @Override
+    public void leftShift(int shift) {
+
+        /*
+         * A left shift is performed before a fixed point division, so the two
+         * ingress axes containing the dividend are shifted.
+         */
+        BigInteger value = this.ingressAxes[0];
+        if (this.ingressAxes[2].signum() != 0) {
+            value = value.add(this.ingressAxes[2].multiply(MAX));
+        }
+
+        BigInteger sf = BigInteger.TEN.pow(shift);
+        BigInteger pr = value.multiply(sf);
+  
+        if (pr.compareTo(MAX) != 0) {
+            BigInteger[] pq = pr.divideAndRemainder(MAX);
+            this.ingressAxes[0] = pq[1];
+            this.ingressAxes[2] = pq[0];
+        } else {
+            this.ingressAxes[0] = pr;
+            this.ingressAxes[2] = BigInteger.ZERO;
+        }
+
+        this.mostRecentValue = this.ingressAxes[0];
+    }
+
+    @Override
+    public BigInteger maxValue() {
+        return MAX;
+    }
+
+    @Override
+    public BigInteger minValue() {
+        return MIN;
+    }
+
+    @Override
+    public BigInteger mostRecentValue() {
+        return this.mostRecentValue;
+    }
+
+    @Override
+    public void reset() {
+        this.currentOperation = null;
+        this.currentAxis = 0;
+        this.ingressAxes = new BigInteger[3];
+        this.egressAxes = new BigInteger[2];
+        this.runUp = false;
+    }
+
+    @Override
+    public void rightShift(int shift) {
+        /*
+         * A right shift is used to normalise after a fixed point
+         * multiplication, so the egress axes are used.
+         */
+        BigInteger value = this.egressAxes[0];
+        if (this.egressAxes[1].signum() != 0) {
+            value = value.add(this.egressAxes[1].multiply(MAX));
+        }
+
+        BigInteger shiftFactor = BigInteger.TEN.pow(shift);
+        BigInteger[] qr = value.divideAndRemainder(shiftFactor);
+
+        if (qr[0].compareTo(MAX) != 0) {
+            qr = qr[0].divideAndRemainder(MAX);
+            this.egressAxes[0] = qr[1];
+            this.egressAxes[1] = qr[0];
+        } else {
+            this.egressAxes[0] = qr[0];
+            this.egressAxes[1] = BigInteger.ZERO;
+        }
+
+        this.mostRecentValue = this.egressAxes[0];
+    }
+
+    /*
+     * From the original code:
+     * 
+     * In Section 1.[5] of his 26 December 1837 "On the Mathematical Powers of
+     * the Calculating Engine", Babbage remarks: "The termination of the
+     * Multiplication arises from the action of the Counting apparatus which at
+     * a certain time directs the barrels to order the product thus obtained to
+     * be stepped down so the decimal point may be in its proper place,...",
+     * which implies a right shift as an integral part of the multiply
+     * operation. This makes enormous sense, since it would take only a tiny
+     * fraction of the time a full-fledged divide would require to renormalise
+     * the number. I have found no description in this or later works of how
+     * the number of digits to shift was to be conveyed to the mill. So, I am
+     * introducing a rather curious operation for this purpose. Invoked after a
+     * multiplication, but before the result has been emitted from the egress
+     * axes, it shifts the double-length product right by a fixed number of
+     * decimal places, and leaves the result in the egress axes. Thus, to
+     * multiple V11 and V12, scale the result right 10 decimal places, and
+     * store the scaled product in V10, one would write:
+     * 
+     * × L011 L012 >10 S010
+     * 
+     * Similarly, we provide a left shift for prescaling fixed point dividends
+     * prior to division; this operation shifts the two ingress axes containing
+     * the dividend by the given amount, and must be done after the ingress
+     * axes are loaded but before the variable card supplying the divisor is
+     * given. For example, if V11 and V12 contain the lower and upper halves of
+     * the quotient, respectively, and we wish to shift this quantity left 10
+     * digits before dividing by the divisor in V13, we use:
+     * 
+     * ÷ L011 L012' <10 L013 S010
+     * 
+     * Note that shifting does not change the current operation for which the
+     * mill is set; it merely shifts the axes in place.
+     */
 
     @Override
     public void setOperation(Operation operation) {
@@ -194,22 +278,19 @@ public class DefaultMill implements Mill {
     }
 
     @Override
-    public void leftShift(int shift) {
-        // TODO Auto-generated method stub
-
+    public BigInteger transferOut() {
+        return this.transferOut(false);
     }
 
     @Override
-    public void rightShift(int shift) {
-        // TODO Auto-generated method stub
-
-    }
-
-    // TODO set this after each operation, each shift, and each transfer
-    private BigInteger mostRecentValue = null;
-
-    @Override
-    public BigInteger mostRecentValue() {
-        return this.mostRecentValue;
+    public BigInteger transferOut(boolean prime) {
+        BigInteger result = null;
+        if (prime) {
+            result = this.egressAxes[1];
+        } else {
+            result = this.egressAxes[2];
+        }
+        this.mostRecentValue = result;
+        return result;
     }
 }
