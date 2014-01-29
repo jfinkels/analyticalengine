@@ -24,17 +24,23 @@ package analyticalengine;
 import java.math.BigInteger;
 
 /**
+ * Curve printer that stores x and y coordinates.
+ * 
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
  */
 public abstract class AbstractCurvePrinter implements CurvePrinter {
 
+    /** The current x location of the drawing pen. */
     private BigInteger x = BigInteger.ZERO;
+    /** The current y location of the drawing pen. */
     private BigInteger y = BigInteger.ZERO;
 
-    /*
-     * (non-Javadoc)
+    /**
+     * {@inheritDoc}
      * 
+     * @param x
+     *            {@inheritDoc}
      * @see analyticalengine.components.CurvePrinter#setX(java.math.BigInteger)
      */
     @Override
@@ -42,9 +48,11 @@ public abstract class AbstractCurvePrinter implements CurvePrinter {
         this.x = x;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * {@inheritDoc}
      * 
+     * @param x
+     *            {@inheritDoc}
      * @see analyticalengine.components.CurvePrinter#setY(java.math.BigInteger)
      */
     @Override
@@ -52,16 +60,26 @@ public abstract class AbstractCurvePrinter implements CurvePrinter {
         this.y = y;
     }
 
+    /**
+     * Gets the x location of the drawing pen.
+     * 
+     * @return The x location of the drawing pen.
+     */
     protected BigInteger x() {
         return this.x;
     }
 
+    /**
+     * Gets the y location of the drawing pen.
+     * 
+     * @return The y location of the drawing pen.
+     */
     protected BigInteger y() {
         return this.y;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * {@inheritDoc}
      * 
      * @see analyticalengine.components.CurvePrinter#reset()
      */

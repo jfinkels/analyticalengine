@@ -52,21 +52,89 @@ import analyticalengine.io.UnknownCard;
  * @since 0.0.1
  */
 public interface Attendant {
+
+    /**
+     * Instructs the attendant to annotate the final report with the specified
+     * message.
+     * 
+     * @param message
+     *            The message to write to the final report.
+     */
     void annotate(String message);
 
+    /**
+     * Gets the output from the Analytical Engine with annotations.
+     * 
+     * If this method is called before the program loaded in the Analytical
+     * Engine has completed, then the returned report will reflect everything
+     * that has been printed or annotated up to that point.
+     * 
+     * @return The annotated output from the Analytical Engine.
+     */
     String finalReport();
 
+    /**
+     * Instructs the attendant to load the specified sequence of cards into the
+     * card reader, thereby making them available to the Analytical Engine.
+     * 
+     * @param cards
+     *            The cards representing the program that the Engine will run.
+     * @throws BadCard
+     *             if one of the cards is used incorrectly (that is, if there
+     *             is a syntax error in the program specified by the card
+     *             chain)
+     * @throws IOException
+     *             if the attendant fails to locate the cards requested from an
+     *             "include" card.
+     * @throws UnknownCard
+     *             if a card specified in an "included" file has incorrect
+     *             syntax.
+     */
     void loadProgram(List<Card> cards) throws BadCard, IOException,
             UnknownCard;
 
+    /**
+     * Instructs the attendant to record the printed output from the Engine's
+     * printer.
+     * 
+     * @param printed
+     *            The output from the printer.
+     */
     void receiveOutput(String printed);
 
+    /**
+     * Clears the current report and resets the card reader.
+     */
     void reset();
 
+    /**
+     * Sets the card reader in which the attendant will load cards.
+     * 
+     * @param reader
+     *            The device in which the attendant will load cards.
+     */
     void setCardReader(CardReader reader);
 
+    /**
+     * Instructs the attendant to record output from the printer in a specific
+     * format.
+     * 
+     * The currently accepted format string is specified (informally) <a
+     * href="http://fourmilab.ch/babbage/cards.html#numeric">here</a>.
+     * 
+     * @param argument
+     *            The format in which to write the ouput from the printer.
+     */
     void setFormat(String argument);
 
+    /**
+     * Specifies a list of paths to search when including external functions.
+     * 
+     * The paths will be searched in the order specified by the iterator.
+     * 
+     * @param paths
+     *            A list of paths to search for included functions.
+     */
     void setLibraryPaths(List<Path> paths);
 
     void setStripComments(boolean stripComments);

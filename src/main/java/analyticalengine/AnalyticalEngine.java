@@ -32,11 +32,11 @@ package analyticalengine;
  * physically inserted them in the computer).
  * 
  * When cards are mounted in it, the {@link CardReader} provides a list of
- * instructions for the Engine. Each
- * {@link analyticalengine.cards.Card} corresponds to an
- * instruction. During execution of the program specified by the mounted cards,
- * output will be produced on the {@link Printer} (or {@link CurvePrinter},
- * which we would call a "plotter"), possibly annotated by the attendant.
+ * instructions for the Engine. Each {@link analyticalengine.cards.Card}
+ * corresponds to an instruction. During execution of the program specified by
+ * the mounted cards, output will be produced on the {@link Printer} (or
+ * {@link CurvePrinter}, which we would call a "plotter"), possibly annotated
+ * by the attendant.
  * 
  * In order to run a program given as a {@link java.util.List} of {@code Card}
  * objects, your code should first instruct the attendant to load the program
@@ -49,16 +49,53 @@ package analyticalengine;
  * @since 0.0.1
  */
 public interface AnalyticalEngine {
+
+    /**
+     * Sets the attendant, who operates the Analytical Engine.
+     * 
+     * @param attendant
+     *            The operator of the Analytical Engine.
+     */
     void setAttendant(Attendant attendant);
 
+    /**
+     * Sets the mill, which performs the arithmetic logic.
+     * 
+     * @param mill
+     *            The arithmetic logic unit of the Engine.
+     */
     void setMill(Mill mill);
 
+    /**
+     * Sets the store, which is the memory of the Engine.
+     * 
+     * @param store
+     *            The memory of the Engine.
+     */
     void setStore(Store store);
 
+    /**
+     * Sets the card reader, which provides the program for the Engine.
+     * 
+     * @param reader
+     *            The device which provides the program for the Engine.
+     */
     void setCardReader(CardReader reader);
 
+    /**
+     * Sets the printer, which produces the textual output from the Engine.
+     * 
+     * @param printer
+     *            The device which produces the textual output from the Engine.
+     */
     void setPrinter(Printer printer);
 
+    /**
+     * Sets the curve printer, which outputs plots of curves.
+     * 
+     * @param printer
+     *            The device which plots curves.
+     */
     void setCurvePrinter(CurvePrinter printer);
 
     /**

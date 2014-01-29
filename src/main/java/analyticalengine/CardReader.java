@@ -24,18 +24,61 @@ import java.util.List;
 
 import analyticalengine.cards.Card;
 
-
+/**
+ * A device through which a sequence of cards is provided to the Engine.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public interface CardReader {
-    void advance(int n);
 
-    //CardChain cards();
+    /**
+     * Make the card {@code n} cards ahead of the current card to be the next
+     * card read.
+     * 
+     * @param n
+     *            The number of cards by which to advance the index of the
+     *            current card.
+     * @throws IndexOutOfBoundsException
+     *             if invoking this method with the parameter {@code n} would
+     *             advance beyond the end of the card chain.
+     */
+    void advance(int n) throws IndexOutOfBoundsException;
 
+    /**
+     * Make the specified card chain available to the card reader.
+     * 
+     * @param cardChain
+     *            The sequence of cards to load.
+     */
     void mountCards(List<Card> cardChain);
 
+    /**
+     * Reads the current card in the card chain and prepares the following card
+     * to be read on the next invocation of this method.
+     * 
+     * @return The next card in the card chain.
+     * @throws Halt
+     *             if there are no more cards to read in the card chain.
+     */
     Card readAndAdvance() throws Halt;
 
-    void reverse(int n);
+    /**
+     * Make the card {@code n} cards behind the current card to be the next
+     * card read.
+     * 
+     * @param n
+     *            The number of cards by which to decrease the index of the
+     *            current card.
+     * @throws IndexOutOfBoundsException
+     *             if invoking this method with the parameter {@code n} would
+     *             reverse beyond the beginning of the card chain.
+     */
+    void reverse(int n) throws IndexOutOfBoundsException;
 
+    /**
+     * Removes the currently mounted card chain from the card reader.
+     */
     void unmountCards();
 
 }

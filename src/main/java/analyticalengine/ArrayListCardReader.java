@@ -28,11 +28,22 @@ import org.slf4j.LoggerFactory;
 
 import analyticalengine.cards.Card;
 
-
+/**
+ * A card reader backed by an {@link java.util.ArrayList} of cards.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public class ArrayListCardReader implements CardReader {
 
+    /**
+     * The sequence of cards representing the instructions to the Engine.
+     */
     private List<Card> cardChain = new ArrayList<Card>();
-    // always points to the index of the card before the next card to read
+
+    /**
+     * The index of the card before the next card to read in the card chain.
+     */
     private int currentCard = -1;
 
     /**
@@ -41,6 +52,16 @@ public class ArrayListCardReader implements CardReader {
     private static final transient Logger LOG = LoggerFactory
             .getLogger(ArrayListCardReader.class);
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param n
+     *            {@inheritDoc}
+     * @throws IndexOutOfBoundsException
+     *             if the parameter indicates an advance beyond the end of the
+     *             card chain.
+     * @see analyticalengine.CardReader#advance(int)
+     */
     @Override
     public void advance(int n) throws IndexOutOfBoundsException {
         if (this.currentCard + n >= this.cardChain.size()) {
@@ -49,17 +70,27 @@ public class ArrayListCardReader implements CardReader {
         this.currentCard += n;
     }
 
-    // @Override
-    // public CardChain cards() {
-    // return Collections.unmodifiableList(this.cards);
-    // }
-
+    /**
+     * {@inheritDoc}
+     * 
+     * @param cardChain
+     *            {@inheritDoc}
+     * @see analyticalengine.CardReader#mountCards(List)
+     */
     @Override
     public void mountCards(List<Card> cardChain) {
         LOG.debug("Mounting card chain {}", cardChain);
-        this.cardChain = cardChain;
+        this.cardChain = new ArrayList<Card>(cardChain);
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@inheritDoc}
+     * @throws Halt
+     *             {@inheritDoc}
+     * @see analyticalengine.CardReader#readAndAdvance()
+     */
     @Override
     public Card readAndAdvance() throws Halt {
         if (this.currentCard + 1 == this.cardChain.size()) {
@@ -69,6 +100,16 @@ public class ArrayListCardReader implements CardReader {
         return this.cardChain.get(this.currentCard);
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param n
+     *            {@inheritDoc}
+     * @throws IndexOutOfBoundsException
+     *             if the parameter indicates an advance beyond the end of the
+     *             card chain.
+     * @see analyticalengine.CardReader#advance(int)
+     */
     @Override
     public void reverse(int n) throws IndexOutOfBoundsException {
         if (this.currentCard - n < -1) {
@@ -78,6 +119,11 @@ public class ArrayListCardReader implements CardReader {
         this.currentCard -= n;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @see analyticalengine.CardReader#unmountCards()
+     */
     @Override
     public void unmountCards() {
         this.currentCard = -1;
