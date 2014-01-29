@@ -38,7 +38,7 @@ public class CardParser {
         case '-':
             return new Card(CardType.SUBTRACT);
         case 'N':
-            String[] args = rest.split("\\s");
+            String[] args = rest.split("\\s+");
             for (int i = 0; i < args.length; i++) {
                 args[i] = args[i].trim();
             }
