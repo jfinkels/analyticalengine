@@ -55,8 +55,16 @@ public class Card {
         return this.arguments[i];
     }
     
+    /**
+     * {@inheritDoc}
+     * @return {@inheritDoc}
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
-        return this.type + Arrays.toString(this.arguments);
+        if (this.numArguments() > 0) {
+            return this.type + Arrays.toString(this.arguments);
+        }
+        return this.type.toString();
     }
 }
