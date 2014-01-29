@@ -12,8 +12,6 @@ import org.junit.Test;
 import analyticalengine.Card;
 import analyticalengine.CardType;
 import analyticalengine.TestUtils;
-import analyticalengine.io.CardReader;
-import analyticalengine.io.UnknownCard;
 
 public class CardReaderTest {
 

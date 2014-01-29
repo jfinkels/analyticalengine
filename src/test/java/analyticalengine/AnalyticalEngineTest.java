@@ -10,25 +10,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import analyticalengine.AWTCurvePrinter;
-import analyticalengine.AnalyticalEngine;
-import analyticalengine.ArrayListCardReader;
-import analyticalengine.Attendant;
-import analyticalengine.BadCard;
-import analyticalengine.Card;
-import analyticalengine.CardReader;
-import analyticalengine.CurvePrinter;
-import analyticalengine.DefaultAnalyticalEngine;
-import analyticalengine.DefaultAttendant;
-import analyticalengine.DefaultMill;
-import analyticalengine.HashMapStore;
-import analyticalengine.Mill;
-import analyticalengine.Printer;
-import analyticalengine.Store;
-import analyticalengine.StringPrinter;
 import analyticalengine.io.UnknownCard;
 
 public class AnalyticalEngineTest {

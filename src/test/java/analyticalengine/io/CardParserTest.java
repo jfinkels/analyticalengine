@@ -6,8 +6,6 @@ import org.junit.Test;
 
 import analyticalengine.CardType;
 import analyticalengine.TestUtils;
-import analyticalengine.io.CardParser;
-import analyticalengine.io.UnknownCard;
 
 public class CardParserTest {
 
