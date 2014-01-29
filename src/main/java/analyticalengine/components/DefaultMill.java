@@ -308,7 +308,7 @@ public class DefaultMill implements Mill {
         if (prime) {
             result = this.egressAxes[1];
         } else {
-            result = this.egressAxes[2];
+            result = this.egressAxes[0];
         }
         this.mostRecentValue = result;
         return result;
