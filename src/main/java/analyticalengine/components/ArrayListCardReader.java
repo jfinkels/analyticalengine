@@ -21,8 +21,10 @@
 package analyticalengine.components;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import analyticalengine.components.cards.Card;
 
@@ -31,6 +33,12 @@ public class ArrayListCardReader implements CardReader {
     private List<Card> cardChain = new ArrayList<Card>();
     // always points to the index of the card before the next card to read
     private int currentCard = -1;
+
+    /**
+     * The logger for this class.
+     */
+    private static final transient Logger LOG = LoggerFactory
+            .getLogger(ArrayListCardReader.class);
 
     @Override
     public void advance(int n) throws IndexOutOfBoundsException {
@@ -47,6 +55,7 @@ public class ArrayListCardReader implements CardReader {
 
     @Override
     public void mountCards(List<Card> cardChain) {
+        LOG.debug("Mounting card chain {}", cardChain);
         this.cardChain = cardChain;
     }
 

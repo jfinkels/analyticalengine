@@ -22,6 +22,9 @@ package analyticalengine.components;
 
 import java.math.BigInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import analyticalengine.components.cards.Card;
 
 public class DefaultAnalyticalEngine implements AnalyticalEngine {
@@ -31,6 +34,12 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
     private CardReader cardReader = null;
     private Printer printer = null;
     private CurvePrinter curvePrinter = null;
+
+    /**
+     * The logger for this class.
+     */
+    private static final transient Logger LOG = LoggerFactory
+            .getLogger(DefaultAnalyticalEngine.class);
 
     @Override
     public void reset() {
@@ -44,6 +53,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
     // }
 
     private void executeCard(Card card) throws Bell, Halt, Error {
+        LOG.debug("Executing card {}", card);
         switch (card.type()) {
         case ADD:
             this.mill.setOperation(Operation.ADD);
@@ -72,7 +82,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             break;
         }
         case COMMENT:
-            // TODO log comment
+            LOG.debug("Comment: " + card.argument(0));
             break;
         case DIVIDE:
             this.mill.setOperation(Operation.DIVIDE);
@@ -246,15 +256,20 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 try {
                     this.executeCard(currentCard);
                 } catch (Bell bell) {
-                    // TODO do something
+                    LOG.info("Bell!");
                 }
             }
         } catch (Error error) {
             // TODO do something
         } catch (Halt halt) {
-            // TODO do something
+            // This would print the stack trace for the Halt exception.
+            //LOG.info("Program halted.", halt);
+            LOG.info("Program halted.");
         } catch (IndexOutOfBoundsException exception) {
-            // TODO do something
+            LOG.error(
+                    "Program indicated advance or reverse beyond boundary of card chain.",
+                    exception);
+            throw exception;
         }
     }
 

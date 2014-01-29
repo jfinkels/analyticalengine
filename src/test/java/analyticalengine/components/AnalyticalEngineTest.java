@@ -10,6 +10,8 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import analyticalengine.TestUtils;
 import analyticalengine.components.cards.Card;
@@ -55,7 +57,6 @@ public class AnalyticalEngineTest {
         // argument.
         List<Card> cards = null;
         try {
-            // TODO real argument parsing
             Path program = Paths
                     .get("src/test/resources/analyticalengine/components/ex0.ae");
             cards = analyticalengine.newio.CardReader.fromPath(program);
@@ -84,7 +85,6 @@ public class AnalyticalEngineTest {
         // argument.
         List<Card> cards = null;
         try {
-            // TODO real argument parsing
             Path program = Paths
                     .get("src/test/resources/analyticalengine/components/ex1.ae");
             cards = analyticalengine.newio.CardReader.fromPath(program);
@@ -103,9 +103,39 @@ public class AnalyticalEngineTest {
         // Finally, run the Analytical Engine with the specified program.
         this.engine.run();
 
-        // The final report should indicate a 3333, according to the program.
+        // The final report should indicate a "357\n4"
         assertEquals("357" + System.lineSeparator() + "4",
                 this.attendant.finalReport());
     }
 
+
+    @Test
+    public void testShifts() {
+        // First, load the cards specified in the filename given as an
+        // argument.
+        List<Card> cards = null;
+        try {
+            Path program = Paths
+                    .get("src/test/resources/analyticalengine/components/ex2.ae");
+            cards = analyticalengine.newio.CardReader.fromPath(program);
+        } catch (IOException | UnknownCard e) {
+            TestUtils.fail(e);
+        }
+
+        // Second, instruct the attendant to load the card chain into the
+        // machine.
+        try {
+            this.attendant.loadProgram(cards);
+        } catch (BadCard | IOException | UnknownCard e) {
+            TestUtils.fail(e);
+        }
+
+        // Finally, run the Analytical Engine with the specified program.
+        this.engine.run();
+
+        assertEquals("357142857" + System.lineSeparator() + "4000000",
+                this.attendant.finalReport());
+    }
+
+    
 }
