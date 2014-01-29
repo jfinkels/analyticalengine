@@ -54,6 +54,31 @@ import analyticalengine.io.UnknownCard;
 public interface Attendant {
 
     /**
+     * Adds the specified path to the list of paths to search when including
+     * external functions.
+     * 
+     * Multiple invocations of this method append new paths to the end of the
+     * list, so paths added first will be searched first.
+     * 
+     * @param path
+     *            A path to search for included functions.
+     */
+    void addLibraryPath(Path path);
+
+    /**
+     * Adds each of the specified paths to the list of paths to search when
+     * including external functions.
+     * 
+     * The paths will be searched in the order specified by the iterator.
+     * Multiple invocations of this method append new paths to the end of the
+     * list.
+     * 
+     * @param paths
+     *            A list of paths to search for included functions.
+     */
+    void addLibraryPaths(List<Path> paths);
+
+    /**
      * Instructs the attendant to annotate the final report with the specified
      * message.
      * 
@@ -126,16 +151,6 @@ public interface Attendant {
      *            The format in which to write the ouput from the printer.
      */
     void setFormat(String argument);
-
-    /**
-     * Specifies a list of paths to search when including external functions.
-     * 
-     * The paths will be searched in the order specified by the iterator.
-     * 
-     * @param paths
-     *            A list of paths to search for included functions.
-     */
-    void setLibraryPaths(List<Path> paths);
 
     /**
      * Instructs the attendant to remove comment cards when loading a program

@@ -25,6 +25,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import analyticalengine.AWTCurvePrinter;
 import analyticalengine.AnalyticalEngine;
 import analyticalengine.ArrayListCardReader;
@@ -43,6 +46,8 @@ import analyticalengine.StringPrinter;
 import analyticalengine.cards.Card;
 import analyticalengine.io.UnknownCard;
 
+import com.beust.jcommander.JCommander;
+
 /**
  * A command-line driver for the Analytical Engine simulation.
  * 
@@ -56,24 +61,34 @@ public final class Main {
         // intentionally unimplemented
     }
 
-    // static void usage() {
-    // up("Options:");
-    // up("  -c    Don't mount comment cards");
-    // up("  -l    List program as mounted by attendant");
-    // up("  -n    No execution of program");
-    // up("  -p    Punch copy of program as mounted by attendant");
-    // up("  -sLST Use LST as library search template");
-    // up("  -t    Print trace of program execution");
-    // up("  -u    Print this message");
-    // }
+    /**
+     * The logger for this class.
+     */
+    private static final transient Logger LOG = LoggerFactory
+            .getLogger(Main.class);
 
     /**
      * The main method for the command-line program.
      * 
-     * @param args
+     * @param argv
      *            The command-line arguments to the program.
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] argv) {
+        Arguments arguments = new Arguments();
+        JCommander argparser = new JCommander(arguments, argv);
+
+        if (arguments.help || arguments.args.size() != 1) {
+            argparser.usage();
+            return;
+        }
+
+        if (arguments.verbosity == 1) {
+            // TODO increase debugging level to info
+        } else if (arguments.verbosity == 2) {
+            // TODO increase debugging level to debug
+        }
+
+        // create the analytical engine and necessary components
         AnalyticalEngine engine = new DefaultAnalyticalEngine();
         Attendant attendant = new DefaultAttendant();
         CardReader reader = new ArrayListCardReader();
@@ -82,6 +97,7 @@ public final class Main {
         Printer printer = new StringPrinter();
         Store store = new HashMapStore();
 
+        // hook up the components of the engine
         attendant.setCardReader(reader);
 
         engine.setAttendant(attendant);
@@ -91,42 +107,47 @@ public final class Main {
         engine.setPrinter(printer);
         engine.setStore(store);
 
-        // First, load the cards specified in the filename given as an
-        // argument.
+        // apply any configuration specified on command line
+        attendant.setStripComments(arguments.stripComments);
+        attendant.addLibraryPaths(arguments.libraryPath);
+        // always search the current directory as well
+        attendant.addLibraryPath(Paths.get("."));
+
+        // load the file specified in the command-line argument
         List<Card> cards;
         try {
-            // TODO real argument parsing
-            Path program = Paths.get(args[1]);
+            Path program = Paths.get(arguments.args.get(0));
             cards = analyticalengine.io.CardReader.fromPath(program);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error("Failed to load specified program", e);
             return;
         } catch (UnknownCard e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error("Unknown card in file", e);
             return;
         }
 
-        // Second, instruct the attendant to load the card chain into the
-        // machine.
+        // instruct the attendant to load the card chain into the machine
         try {
             attendant.loadProgram(cards);
         } catch (BadCard e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error("Attendant encountered bad card", e);
             return;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error("Attendant could not locate library file", e);
             return;
         } catch (UnknownCard e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error("Included file contains unknown card", e);
             return;
         }
 
-        // Finally, run the Analytical Engine with the specified program.
+        if (arguments.listOnly) {
+            for (Card card : reader.cards()) {
+                System.out.println(card);
+            }
+            return;
+        }
+
+        // finally, run the analytical engine with the specified program
         engine.run();
     }
 }

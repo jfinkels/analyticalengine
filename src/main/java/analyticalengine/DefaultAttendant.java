@@ -120,7 +120,7 @@ public class DefaultAttendant implements Attendant {
      * A list of paths to search when a card requesting a library function is
      * encountered.
      */
-    private List<Path> libraryPaths = Collections.emptyList();
+    private List<Path> libraryPaths = new ArrayList<Path>();
 
     /** The cumulative formatted output from the printer. */
     private String report = "";
@@ -137,6 +137,28 @@ public class DefaultAttendant implements Attendant {
      * If this is false, the output will be written in columns.
      */
     private boolean writeInRows = true;
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @param path
+     *            {@inheritDoc}
+     */
+    @Override
+    public void addLibraryPath(final Path path) {
+        this.libraryPaths.add(path);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @param paths
+     *            {@inheritDoc}
+     */
+    @Override
+    public void addLibraryPaths(final List<Path> paths) {
+        this.libraryPaths.addAll(paths);
+    }
 
     /**
      * {@inheritDoc}
@@ -546,6 +568,7 @@ public class DefaultAttendant implements Attendant {
     public void reset() {
         this.report = "";
         this.cardReader.unmountCards();
+        this.libraryPaths.clear();
     }
 
     /**
@@ -568,17 +591,6 @@ public class DefaultAttendant implements Attendant {
     @Override
     public void setFormat(final String formatString) {
         this.formatString = formatString;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @param paths
-     *            {@inheritDoc}
-     */
-    @Override
-    public void setLibraryPaths(final List<Path> paths) {
-        Collections.copy(this.libraryPaths, paths);
     }
 
     /**

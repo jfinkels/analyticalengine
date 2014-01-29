@@ -21,6 +21,7 @@
 package analyticalengine;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -37,6 +38,12 @@ import analyticalengine.cards.Card;
 public class ArrayListCardReader implements CardReader {
 
     /**
+     * The logger for this class.
+     */
+    private static final transient Logger LOG = LoggerFactory
+            .getLogger(ArrayListCardReader.class);
+
+    /**
      * The sequence of cards representing the instructions to the Engine.
      */
     private List<Card> cardChain = new ArrayList<Card>();
@@ -45,12 +52,6 @@ public class ArrayListCardReader implements CardReader {
      * The index of the card before the next card to read in the card chain.
      */
     private int currentCard = -1;
-
-    /**
-     * The logger for this class.
-     */
-    private static final transient Logger LOG = LoggerFactory
-            .getLogger(ArrayListCardReader.class);
 
     /**
      * {@inheritDoc}
@@ -65,6 +66,17 @@ public class ArrayListCardReader implements CardReader {
             throw new IndexOutOfBoundsException("No more cards to read.");
         }
         this.currentCard += n;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@inheritDoc}
+     * @see analyticalengine.CardReader#cards()
+     */
+    @Override
+    public List<Card> cards() {
+        return Collections.unmodifiableList(this.cardChain);
     }
 
     /**

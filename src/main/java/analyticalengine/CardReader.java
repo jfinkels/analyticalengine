@@ -46,6 +46,13 @@ public interface CardReader {
     void advance(int n);
 
     /**
+     * Provides an unmodifiable view of the cards loaded in the reader.
+     * 
+     * @return An unmodifiable view of the cards loaded in the reader.
+     */
+    List<Card> cards();
+
+    /**
      * Make the specified card chain available to the card reader.
      * 
      * @param cardChain
