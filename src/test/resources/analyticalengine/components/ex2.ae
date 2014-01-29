@@ -1,15 +1,35 @@
+  This program essentially does the same thing as ex1.ae, but to a higher
+  precision by using left and right shifts.
+
 N0 4000000000
 N1    2500000
 N2   28000000
 
-×
+  Multiply 4,000,000,000 by 2,500,000.
+
+*
 L0
 L1
+
+  Shift the result down by six decimal places.
+
 >6
 S3
 
-÷
+  Divide that number by
+
+/
 L3
 <6
 L2
+
+  Store the quotient (from the prime egress axis) and print it.
+
 S4'
+P
+A write new line
+
+  Store the remainder (from the main egress axis) and print it.
+
+S5
+P

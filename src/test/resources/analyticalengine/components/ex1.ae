@@ -10,6 +10,7 @@ L002
 
 S003'
 P
+A write new line
 
 . Store the remainder (from the main egress axis) and print it.
 
