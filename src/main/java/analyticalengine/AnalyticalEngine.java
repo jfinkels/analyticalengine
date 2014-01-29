@@ -33,7 +33,7 @@ package analyticalengine;
  * 
  * When cards are mounted in it, the {@link CardReader} provides a list of
  * instructions for the Engine. Each
- * {@link analyticalengine.Card} corresponds to an
+ * {@link analyticalengine.cards.Card} corresponds to an
  * instruction. During execution of the program specified by the mounted cards,
  * output will be produced on the {@link Printer} (or {@link CurvePrinter},
  * which we would call a "plotter"), possibly annotated by the attendant.

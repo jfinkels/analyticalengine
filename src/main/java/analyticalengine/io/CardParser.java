@@ -20,14 +20,19 @@
  */
 package analyticalengine.io;
 
-import analyticalengine.Card;
-import analyticalengine.CardType;
+import analyticalengine.cards.Card;
+import analyticalengine.cards.CardType;
 
-public class CardParser {
+public final class CardParser {
+    
+    private CardParser() {
+        // intentionally unimplemented
+    }
+
     public static Card toCard(String cardString) throws UnknownCard {
         char firstChar = cardString.charAt(0);
         String rest = cardString.substring(1).trim();
-
+        // TODO need to account for possible inline comments after period
         switch (firstChar) {
         case '+':
             return new Card(CardType.ADD);
@@ -123,13 +128,17 @@ public class CardParser {
             }
         case 'A':
             if (rest.startsWith("include cards")) {
-                return new Card(CardType.INCLUDE, new String[] {rest.substring(14)});   
+                return new Card(CardType.INCLUDE,
+                        new String[] { rest.substring(14) });
             } else if (rest.startsWith("include from library cards for")) {
-                return new Card(CardType.INCLUDELIB, new String[] {rest.substring(31)});   
+                return new Card(CardType.INCLUDELIB,
+                        new String[] { rest.substring(31) });
             } else if (rest.startsWith("set decimal places to")) {
-                return new Card(CardType.DECIMALEXPAND, new String[] {rest.substring(22)});   
+                return new Card(CardType.DECIMALEXPAND,
+                        new String[] { rest.substring(22) });
             } else if (rest.startsWith("write numbers as")) {
-                return new Card(CardType.WRITEPICTURE, new String[] {rest.substring(17)});   
+                return new Card(CardType.WRITEPICTURE,
+                        new String[] { rest.substring(17) });
             } else if (rest.startsWith("write numbers with decimal point")) {
                 return new Card(CardType.WRITEDECIMAL);
             } else if (rest.startsWith("write in rows")) {
@@ -139,7 +148,8 @@ public class CardParser {
             } else if (rest.startsWith("write new line")) {
                 return new Card(CardType.NEWLINE);
             } else if (rest.startsWith("write annotation")) {
-                return new Card(CardType.ANNOTATE, new String[] {rest.substring(17)});
+                return new Card(CardType.ANNOTATE,
+                        new String[] { rest.substring(17) });
             }
         case '(':
             if (!rest.isEmpty() && rest.charAt(0) == '?') {
@@ -164,7 +174,8 @@ public class CardParser {
             } else if (rest.charAt(0) == '0') {
                 return new Card(CardType.TRACEOFF);
             } else {
-                throw new UnknownCard("Expected T0 or T1 but got: " + cardString);
+                throw new UnknownCard("Expected T0 or T1 but got: "
+                        + cardString);
             }
         case ' ':
         case '.':

@@ -25,6 +25,7 @@ import java.math.BigInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import analyticalengine.cards.Card;
 
 public class DefaultAnalyticalEngine implements AnalyticalEngine {
     private Attendant attendant = null;
@@ -53,6 +54,14 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
 
     private void executeCard(Card card) throws Bell, Halt, Error {
         LOG.debug("Executing card {}", card);
+
+        // These variables show up in more than one case, but we cannot define
+        // them within each case because each case has the same (switch-level)
+        // scope, even though it would be more readable that way.
+        int numCards;
+        long address;
+        BigInteger value;
+
         switch (card.type()) {
         case ADD:
             this.mill.setOperation(Operation.ADD);
@@ -60,26 +69,24 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case ANNOTATE:
             this.attendant.annotate(card.argument(0));
             break;
-        case BACKWARD: {
-            int numCards = Integer.parseInt(card.argument(0));
+        case BACKWARD:
+            numCards = Integer.parseInt(card.argument(0));
             this.cardReader.reverse(numCards);
             break;
-        }
         case BELL:
             throw new Bell("Card indicated bell", card);
         case CBACKWARD:
             if (this.mill.hasRunUp()) {
-                int numCards = Integer.parseInt(card.argument(0));
+                numCards = Integer.parseInt(card.argument(0));
                 this.cardReader.reverse(numCards);
             }
             break;
-        case CFORWARD: {
+        case CFORWARD:
             if (this.mill.hasRunUp()) {
-                int numCards = Integer.parseInt(card.argument(0));
+                numCards = Integer.parseInt(card.argument(0));
                 this.cardReader.advance(numCards);
+                break;
             }
-            break;
-        }
         case COMMENT:
             LOG.debug("Comment: " + card.argument(0));
             break;
@@ -95,17 +102,16 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case DRAW:
             this.curvePrinter.draw();
             break;
-        case FORWARD: {
-            int numCards = Integer.parseInt(card.argument(0));
+        case FORWARD:
+            numCards = Integer.parseInt(card.argument(0));
             this.cardReader.advance(numCards);
             break;
-        }
         case HALT:
             throw new Halt("Card indicated halt", card);
         case LOAD:
             try {
-                long address = Long.parseLong(card.argument(0));
-                BigInteger value = this.store.get(address);
+                address = Long.parseLong(card.argument(0));
+                value = this.store.get(address);
                 this.mill.transferIn(value, false);
             } catch (NumberFormatException exception) {
                 throw new Error("Failed to parse load address", exception);
@@ -113,8 +119,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             break;
         case LOADPRIME:
             try {
-                long address = Long.parseLong(card.argument(0));
-                BigInteger value = this.store.get(address);
+                address = Long.parseLong(card.argument(0));
+                value = this.store.get(address);
                 this.mill.transferIn(value, true);
             } catch (NumberFormatException exception) {
                 throw new Error("Failed to parse load address", exception);
@@ -137,24 +143,22 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case MULTIPLY:
             this.mill.setOperation(Operation.MULTIPLY);
             break;
-        case NUMBER: {
-            long address = Long.parseLong(card.argument(0));
+        case NUMBER:
+            address = Long.parseLong(card.argument(0));
             if (address < 0 || address >= this.store.maxAddress()) {
                 throw new Error("Address out of bounds: " + address);
             }
-            BigInteger value = new BigInteger(card.argument(1));
+            value = new BigInteger(card.argument(1));
             if (value.compareTo(this.mill.maxValue()) > 0) {
                 throw new Error("Value too large to store: " + value);
             }
             this.store.put(address, value);
             break;
-        }
-        case PRINT: {
-            BigInteger value = this.mill.mostRecentValue();
+        case PRINT:
+            value = this.mill.mostRecentValue();
             String printed = this.printer.print(value);
             this.attendant.receiveOutput(printed);
             break;
-        }
         case RSHIFT:
             try {
                 int shift = Integer.parseInt(card.argument(0));
@@ -168,8 +172,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             break;
         case STORE:
             try {
-                long address = Long.parseLong(card.argument(0));
-                BigInteger value = this.mill.transferOut(false);
+                address = Long.parseLong(card.argument(0));
+                value = this.mill.transferOut(false);
                 this.store.put(address, value);
             } catch (NumberFormatException exception) {
                 throw new Error("Failed to parse store address", exception);
@@ -177,8 +181,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             break;
         case STOREPRIME:
             try {
-                long address = Long.parseLong(card.argument(0));
-                BigInteger value = this.mill.transferOut(true);
+                address = Long.parseLong(card.argument(0));
+                value = this.mill.transferOut(true);
                 this.store.put(address, value);
             } catch (NumberFormatException exception) {
                 throw new Error("Failed to parse store address", exception);
@@ -195,8 +199,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             break;
         case ZLOAD:
             try {
-                long address = Long.parseLong(card.argument(0));
-                BigInteger value = this.store.get(address);
+                address = Long.parseLong(card.argument(0));
+                value = this.store.get(address);
                 this.store.put(address, BigInteger.ZERO);
                 this.mill.transferIn(value, false);
             } catch (NumberFormatException exception) {
@@ -205,8 +209,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             break;
         case ZLOADPRIME:
             try {
-                long address = Long.parseLong(card.argument(0));
-                BigInteger value = this.store.get(address);
+                address = Long.parseLong(card.argument(0));
+                value = this.store.get(address);
                 this.store.put(address, BigInteger.ZERO);
                 this.mill.transferIn(value, true);
             } catch (NumberFormatException exception) {
@@ -231,19 +235,17 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case ALTERNATION:
         case BACKEND:
         case BACKSTART:
+        case DECIMALEXPAND:
         case CBACKSTART:
         case CFORWARDSTART:
-        case DECIMALEXPAND:
         case FORWARDEND:
         case FORWARDSTART:
         case INCLUDE:
         case INCLUDELIB:
-            // TODO these should all be removed by attendant before loading
-            // cards
-            throw new Error("Attendant failed to remove block card", card);
+            // these should all be removed by attendant before loading cards
+            throw new Error("Attendant failed to remove card", card);
         default:
             break;
-
         }
     }
 
@@ -262,7 +264,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             // TODO do something
         } catch (Halt halt) {
             // This would print the stack trace for the Halt exception.
-            //LOG.info("Program halted.", halt);
+            // LOG.info("Program halted.", halt);
             LOG.info("Program halted.");
         } catch (IndexOutOfBoundsException exception) {
             LOG.error(

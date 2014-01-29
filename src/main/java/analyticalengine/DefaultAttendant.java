@@ -29,16 +29,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import analyticalengine.cards.Card;
+import analyticalengine.cards.CardType;
 import analyticalengine.io.UnknownCard;
 
 public class DefaultAttendant implements Attendant {
 
-    private static final boolean isCycleEnd(CardType type) {
+    private static boolean isCycleEnd(CardType type) {
         return type == CardType.BACKEND || type == CardType.ALTERNATION
                 || type == CardType.FORWARDEND;
     }
 
-    private static final boolean isCycleStart(CardType type) {
+    private static boolean isCycleStart(CardType type) {
         return type == CardType.BACKSTART || type == CardType.CBACKSTART
                 || type == CardType.FORWARDSTART
                 || type == CardType.CFORWARDSTART;
@@ -86,51 +88,47 @@ public class DefaultAttendant implements Attendant {
             case DECIMALEXPAND:
                 String dspec = card.argument(0);
                 int relative = 0;
-                boolean dspok = true;
 
                 if (dspec.charAt(0) == '+' || dspec.charAt(0) == '-') {
                     if (decimalPlace == -1) {
-                        dspok = false;
                         throw new BadCard(
                                 "I cannot accept a relative decimal place setting\nwithout a prior absolute setting.",
                                 card);
+                    }
+                    if (dspec.charAt(0) == '+') {
+                        relative = 1;
                     } else {
-                        relative = (dspec.charAt(0) == '+')
-                                                           ? 1
-                                                               : -1;
-                        dspec = dspec.substring(1);
+                        relative = -1;
                     }
+                    dspec = dspec.substring(1);
                 }
-                if (dspok) {
-                    try {
-                        int d = Integer.parseInt(dspec);
-                        if (relative != 0) {
-                            d = decimalPlace + (d * relative);
-                        }
-                        if (d < 0 || d > 50) {
-                            throw new BadCard(
-                                    "I can only set the decimal place between 0 and 50 digits.",
-                                    card);
-                        }
+                int d;
+                try {
+                    d = Integer.parseInt(dspec);
+                } catch (NumberFormatException ne) {
+                    throw new BadCard(
+                            "I cannot find the number of decimal places you wish to use.",
+                            card);
+                }
+                if (relative != 0) {
+                    d = decimalPlace + (d * relative);
+                }
+                if (d < 0 || d > 50) {
+                    throw new BadCard(
+                            "I can only set the decimal place between 0 and 50 digits.",
+                            card);
+                }
 
-                        if (!this.stripComments) {
-                            Card replacement = Card
-                                    .commentCard("A set decimal places to "
-                                            + card.argument(0));
-                            result.add(replacement);
-                        }
-                        decimalPlace = d;
-                    } catch (NumberFormatException ne) {
-                        throw new BadCard(
-                                "I cannot find the number of decimal places you wish to use.",
-                                card);
-                    }
+                if (!this.stripComments) {
+                    Card replacement = Card
+                            .commentCard("A set decimal places to "
+                                    + card.argument(0));
+                    result.add(replacement);
                 }
+                decimalPlace = d;
                 break;
             // Convert "A write numbers with decimal point" to a picture
             case WRITEDECIMAL: {
-                int dpa;
-
                 if (decimalPlace < 0) {
                     throw new BadCard(
                             "I cannot add the number of decimal places because\n"
@@ -139,15 +137,8 @@ public class DefaultAttendant implements Attendant {
                             card);
                 }
 
-                StringBuilder formatString = new StringBuilder("9.");
-                for (dpa = 0; dpa < decimalPlace; dpa++) {
-                    formatString.append("9");
-                }
-
-                Card replacement = new Card(CardType.WRITEPICTURE,
-                        new String[] { formatString.toString() });
+                Card replacement = this.expandWriteDecimal(decimalPlace, card);
                 result.add(replacement);
-
                 break;
             }
             /*
@@ -155,73 +146,22 @@ public class DefaultAttendant implements Attendant {
              * the proper number of digits.
              */
             case NUMBER: {
-                String cn = card.argument(0);
-                String nspec = card.argument(1);
-                int dp = nspec.indexOf(".");
-                if (dp >= 0) {
-                    if (decimalPlace < 0) {
-                        throw new BadCard(
-                                "I cannot add the number of decimal places because\n"
-                                        + "you have not instructed me how many decimal\n"
-                                        + "places to use in a prior \"A set decimal places\"\ninstruction.",
-                                card);
-                    } else {
-                        String dpart = nspec.substring(dp + 1);
-                        // dpnew = "";
-                        // int j, places = 0;
-                        // char ch;
-                        //
-                        // for (j = 0; j < dpart.length(); j++) {
-                        // if (Character.isDigit(ch = dpart.charAt(j)))
-                        // {
-                        // dpnew += ch;
-                        // places++;
-                        // }
-                        // }
-
-                        /*
-                         * Now adjust the decimal part to the given number of
-                         * decimal places by trimming excess digits and
-                         * appending zeroes as required.
-                         */
-
-                        if (dpart.length() > decimalPlace) {
-                            /*
-                             * If we're trimming excess digits, round the
-                             * remaining digits based on the first digit of the
-                             * portion trimmed.
-                             */
-                            if ((decimalPlace > 0)
-                                    && (Character.digit(
-                                            dpart.charAt(decimalPlace), 10) >= 5)) {
-                                dpart = new BigInteger(dpart.substring(0,
-                                        decimalPlace), 10).add(BigInteger.ONE)
-                                        .toString();
-                            } else {
-                                dpart = dpart.substring(0, decimalPlace);
-                            }
-                        }
-                        while (dpart.length() < decimalPlace) {
-                            dpart += "0";
-                        }
-
-                        // Append the decimal part to fixed part from
-                        // card
-                        String newNumber = "N" + cn + " "
-                                + nspec.substring(0, dp) + dpart;
-                        if (!this.stripComments) {
-                            newNumber += " . Decimal expansion by attendant";
-                        }
-
-                        Card replacement = new Card(CardType.NUMBER,
-                                new String[] { newNumber });
-                        result.add(replacement);
-                    }
-                } else {
-                    // Just add the card as it is
+                String number = card.argument(1);
+                int decimalIndex = number.indexOf(".");
+                // If the number has no decimal, just add the card as is.
+                if (decimalIndex < 0) {
                     result.add(card);
+                    break;
                 }
-
+                if (decimalPlace < 0) {
+                    throw new BadCard(
+                            "I cannot add the number of decimal places because\n"
+                                    + "you have not instructed me how many decimal\n"
+                                    + "places to use in a prior \"A set decimal places\"\ninstruction.",
+                            card);
+                }
+                Card replacement = this.expandNumber(decimalPlace, card);
+                result.add(replacement);
                 break;
             }
             // Add step up/down to "<" or ">" if not specified
@@ -235,21 +175,7 @@ public class DefaultAttendant implements Attendant {
                             card);
                 }
 
-                String newArg = null;
-                CardType newType = null;
-                if (card.type() == CardType.LSHIFT) {
-                    newArg = "<";
-                    newType = CardType.LSHIFTN;
-                } else {
-                    newArg = ">";
-                    newType = CardType.RSHIFTN;
-                }
-
-                newArg += String.valueOf(decimalPlace);
-                if (!this.stripComments) {
-                    newArg += " . Step count added by attendant";
-                }
-                Card replacement = new Card(newType, new String[] { newArg });
+                Card replacement = this.expandShift(decimalPlace, card);
                 result.add(replacement);
                 break;
             default:
@@ -259,6 +185,76 @@ public class DefaultAttendant implements Attendant {
             }
         }
         return result;
+    }
+
+    private Card expandNumber(int decimalPlace, Card card) {
+        // TODO these two lines are repeated in the calling function, but we
+        // repeat them here so that this method has only the two parameters
+        String number = card.argument(1);
+        int decimalIndex = number.indexOf(".");
+
+        /*
+         * Now adjust the decimal part to the given number of decimal places by
+         * trimming excess digits and appending zeroes as required.
+         */
+        String dpart = number.substring(decimalIndex + 1);
+        if (dpart.length() > decimalPlace) {
+            /*
+             * If we're trimming excess digits, round the remaining digits
+             * based on the first digit of the portion trimmed.
+             */
+            if (Character.digit(dpart.charAt(decimalPlace), 10) >= 5) {
+                dpart = new BigInteger(dpart.substring(0, decimalPlace), 10)
+                        .add(BigInteger.ONE).toString();
+            } else {
+                dpart = dpart.substring(0, decimalPlace);
+            }
+        }
+
+        // TODO do this is a string formatting operation
+        while (dpart.length() < decimalPlace) {
+            dpart += "0";
+        }
+
+        // Append the decimal part to fixed part from card
+        String newNumber = number.substring(0, decimalIndex) + dpart;
+        if (this.stripComments) {
+            return new Card(CardType.NUMBER, new String[] { card.argument(0),
+                    newNumber });
+        }
+        return new Card(CardType.NUMBER, new String[] { card.argument(0),
+                newNumber }, "Decimal expansion by attendant");
+    }
+
+    private Card expandWriteDecimal(int decimalPlace, Card card) {
+        int dpa;
+
+        StringBuilder formatString = new StringBuilder("9.");
+        for (dpa = 0; dpa < decimalPlace; dpa++) {
+            formatString.append("9");
+        }
+
+        return new Card(CardType.WRITEPICTURE,
+                new String[] { formatString.toString() });
+    }
+
+    private Card expandShift(int decimalPlace, Card card) {
+
+        String newArg = null;
+        CardType newType = null;
+        if (card.type() == CardType.LSHIFT) {
+            newArg = "<";
+            newType = CardType.LSHIFTN;
+        } else {
+            newArg = ">";
+            newType = CardType.RSHIFTN;
+        }
+
+        newArg += String.valueOf(decimalPlace);
+        if (!this.stripComments) {
+            newArg += " . Step count added by attendant";
+        }
+        return new Card(newType, new String[] { newArg });
     }
 
     @Override
@@ -532,18 +528,29 @@ public class DefaultAttendant implements Attendant {
                     cards.add(i, new Card(newType, newArgs));
                 } else {
                     // It's a forward skip, possibly with an else clause
-                    CardType newType = depends
-                                              ? CardType.CFORWARD
-                                                  : CardType.FORWARD;
-                    String[] newArgs = { Integer
-                            .toString(((isElse
-                                              ? (this.stripComments
-                                                                   ? 0
-                                                                       : 1)
-                                                  : (this.stripComments
-                                                                       ? -1
-                                                                           : 0)) + Math
-                                    .abs(i - start))) };
+                    CardType newType;
+                    if (depends) {
+                        newType = CardType.CFORWARD;
+                    } else {
+                        newType = CardType.FORWARD;
+                    }
+
+                    int argument;
+                    if (isElse) {
+                        if (this.stripComments) {
+                            argument = 0;
+                        } else {
+                            argument = 1;
+                        }
+                    } else {
+                        if (this.stripComments) {
+                            argument = -1;
+                        } else {
+                            argument = 0;
+                        }
+                    }
+                    argument += Math.abs(i - start);
+                    String[] newArgs = { Integer.toString(argument) };
                     cards.add(start + 1, new Card(newType, newArgs));
 
                     // Translate else branch of conditional, if present
@@ -572,14 +579,15 @@ public class DefaultAttendant implements Attendant {
                                 }
                                 CardType newType2 = CardType.FORWARD;
                                 String[] newArgs2 = { Integer.toString(Math
-                                        .abs(j - i)
-                                        - (this.stripComments
-                                                             ? 1
-                                                                 : 1)) };
-                                cards.add(i + (this.stripComments
-                                                                 ? 1
-                                                                     : 2),
-                                        new Card(newType2, newArgs2));
+                                        .abs(j - i) - 1) };
+                                int location = i;
+                                if (this.stripComments) {
+                                    location += 1;
+                                } else {
+                                    location += 2;
+                                }
+                                cards.add(location, new Card(newType2,
+                                        newArgs2));
                                 return;
                             }
                         }

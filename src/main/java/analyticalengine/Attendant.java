@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
+import analyticalengine.cards.Card;
 import analyticalengine.io.UnknownCard;
 
 /**

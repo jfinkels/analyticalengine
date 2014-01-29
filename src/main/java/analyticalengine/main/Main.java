@@ -30,7 +30,6 @@ import analyticalengine.AnalyticalEngine;
 import analyticalengine.ArrayListCardReader;
 import analyticalengine.Attendant;
 import analyticalengine.BadCard;
-import analyticalengine.Card;
 import analyticalengine.CardReader;
 import analyticalengine.CurvePrinter;
 import analyticalengine.DefaultAnalyticalEngine;
@@ -41,20 +40,25 @@ import analyticalengine.Mill;
 import analyticalengine.Printer;
 import analyticalengine.Store;
 import analyticalengine.StringPrinter;
+import analyticalengine.cards.Card;
 import analyticalengine.io.UnknownCard;
 
-public class Main {
-//    static void usage() {
-//        up("Options:");
-//        up("  -c    Don't mount comment cards");
-//        up("  -l    List program as mounted by attendant");
-//        up("  -n    No execution of program");
-//        up("  -p    Punch copy of program as mounted by attendant");
-//        up("  -sLST Use LST as library search template");
-//        up("  -t    Print trace of program execution");
-//        up("  -u    Print this message");
-//    }
-    
+public final class Main {
+    private Main() {
+        // intentionally unimplemented
+    }
+
+    // static void usage() {
+    // up("Options:");
+    // up("  -c    Don't mount comment cards");
+    // up("  -l    List program as mounted by attendant");
+    // up("  -n    No execution of program");
+    // up("  -p    Punch copy of program as mounted by attendant");
+    // up("  -sLST Use LST as library search template");
+    // up("  -t    Print trace of program execution");
+    // up("  -u    Print this message");
+    // }
+
     public static void main(String[] args) {
         AnalyticalEngine engine = new DefaultAnalyticalEngine();
         Attendant attendant = new DefaultAttendant();
@@ -75,7 +79,7 @@ public class Main {
 
         // First, load the cards specified in the filename given as an
         // argument.
-        List<Card> cards = null;
+        List<Card> cards;
         try {
             // TODO real argument parsing
             Path program = Paths.get(args[1]);
@@ -83,9 +87,11 @@ public class Main {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return;
         } catch (UnknownCard e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return;
         }
 
         // Second, instruct the attendant to load the card chain into the
@@ -95,12 +101,15 @@ public class Main {
         } catch (BadCard e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return;
         } catch (UnknownCard e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return;
         }
 
         // Finally, run the Analytical Engine with the specified program.

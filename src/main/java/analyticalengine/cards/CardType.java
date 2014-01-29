@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
+package analyticalengine.cards;
 
 public enum CardType {
     ADD(0), ALTERNATION(0), ANNOTATE(1), BACKEND(0), BACKSTART(0), BACKWARD(1), BELL(

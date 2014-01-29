@@ -22,6 +22,8 @@ package analyticalengine;
 
 import java.util.List;
 
+import analyticalengine.cards.Card;
+
 
 public interface CardReader {
     void advance(int n);

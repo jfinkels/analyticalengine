@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import analyticalengine.cards.Card;
 import analyticalengine.io.UnknownCard;
 
 public class AnalyticalEngineTest {
@@ -53,7 +54,7 @@ public class AnalyticalEngineTest {
         List<Card> cards = null;
         try {
             Path program = Paths
-                    .get("src/test/resources/analyticalengine/components/ex0.ae");
+                    .get("src/test/resources/analyticalengine/ex0.ae");
             cards = analyticalengine.io.CardReader.fromPath(program);
         } catch (IOException | UnknownCard e) {
             TestUtils.fail(e);
@@ -81,7 +82,7 @@ public class AnalyticalEngineTest {
         List<Card> cards = null;
         try {
             Path program = Paths
-                    .get("src/test/resources/analyticalengine/components/ex1.ae");
+                    .get("src/test/resources/analyticalengine/ex1.ae");
             cards = analyticalengine.io.CardReader.fromPath(program);
         } catch (IOException | UnknownCard e) {
             TestUtils.fail(e);
@@ -111,7 +112,7 @@ public class AnalyticalEngineTest {
         List<Card> cards = null;
         try {
             Path program = Paths
-                    .get("src/test/resources/analyticalengine/components/ex2.ae");
+                    .get("src/test/resources/analyticalengine/ex2.ae");
             cards = analyticalengine.io.CardReader.fromPath(program);
         } catch (IOException | UnknownCard e) {
             TestUtils.fail(e);

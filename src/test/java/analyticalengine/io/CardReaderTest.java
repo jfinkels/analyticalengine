@@ -9,13 +9,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import analyticalengine.Card;
-import analyticalengine.CardType;
 import analyticalengine.TestUtils;
+import analyticalengine.cards.Card;
+import analyticalengine.cards.CardType;
 
 public class CardReaderTest {
 
-    public static final String TESTFILE = "src/test/resources/analyticalengine/components/ex0.ae";
+    public static final String TESTFILE = "src/test/resources/analyticalengine/ex0.ae";
 
     // A write in rows
     // A write numbers as 9

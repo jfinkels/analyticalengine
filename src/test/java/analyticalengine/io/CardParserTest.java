@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import analyticalengine.CardType;
 import analyticalengine.TestUtils;
+import analyticalengine.cards.CardType;
 
 public class CardParserTest {
 

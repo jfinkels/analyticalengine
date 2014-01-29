@@ -18,13 +18,14 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
+package analyticalengine.cards;
 
 import java.util.Arrays;
 
 public class Card {
     private CardType type;
     private String[] arguments;
+    private String comment;
 
     public static Card commentCard(String comment) {
         return new Card(CardType.COMMENT, new String[] { ". " + comment });
@@ -35,16 +36,25 @@ public class Card {
     }
 
     public Card(CardType type, String[] arguments) {
-        this.type = type;
-        this.arguments = arguments;
+        this(type, arguments, "");
     }
 
-    //public String[] arguments() {
-    //    return Arrays.copyOf(this.arguments, type.numArguments());
-    //}
-    
+    // public String[] arguments() {
+    // return Arrays.copyOf(this.arguments, type.numArguments());
+    // }
+
+    public Card(CardType type, String[] arguments, String comment) {
+        this.type = type;
+        this.arguments = arguments.clone();
+        this.comment = comment;
+    }
+
     public int numArguments() {
         return this.type.numArguments();
+    }
+
+    public String comment() {
+        return this.comment;
     }
 
     public CardType type() {
@@ -54,9 +64,10 @@ public class Card {
     public String argument(int i) throws IndexOutOfBoundsException {
         return this.arguments[i];
     }
-    
+
     /**
      * {@inheritDoc}
+     * 
      * @return {@inheritDoc}
      * @see java.lang.Object#toString()
      */

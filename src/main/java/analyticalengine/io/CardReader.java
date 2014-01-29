@@ -29,9 +29,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import analyticalengine.Card;
+import analyticalengine.cards.Card;
 
-public class CardReader {
+public final class CardReader {
 
     private CardReader() {
         // intentionally unimplemented

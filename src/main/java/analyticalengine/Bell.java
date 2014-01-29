@@ -20,6 +20,8 @@
  */
 package analyticalengine;
 
+import analyticalengine.cards.Card;
+
 
 public class Bell extends CardException {
 

@@ -1,5 +1,5 @@
 /**
- * CardException.java - exception that stores the card that caused it
+ * package-info.java -
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -18,28 +18,9 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
-
-import analyticalengine.cards.Card;
-
-
-public class CardException extends Exception {
-    /**
-     * Default generated serial version UID.
-     */
-    private static final long serialVersionUID = -590810062640328181L;
-    private Card cause = null;
-
-    public CardException(String message, Card cause) {
-        super(message);
-        this.cause = cause;
-    }
-
-    public CardException(String message) {
-        super(message);
-    }
-
-    public CardException(String message, Exception cause) {
-        super(message, cause);
-    }
-}
+/**
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
+package analyticalengine.cards;

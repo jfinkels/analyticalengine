@@ -20,6 +20,8 @@
  */
 package analyticalengine;
 
+import analyticalengine.cards.Card;
+
 
 /**
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>

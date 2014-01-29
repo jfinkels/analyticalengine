@@ -20,6 +20,8 @@
  */
 package analyticalengine;
 
+import analyticalengine.cards.Card;
+
 
 // TODO remove String only constructor
 public class Error extends CardException {
