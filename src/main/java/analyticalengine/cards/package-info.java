@@ -1,5 +1,5 @@
 /**
- * package-info.java -
+ * package-info.java - package-level documentation
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -18,9 +18,15 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
+ * Provides instructions for the Analytical Engine in the form of cards.
+ * 
+ * Each card has a type which indicates the specific instruction that the card
+ * represents. Each card type has zero or more required arguments.
  * 
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
  */
 package analyticalengine.cards;
+

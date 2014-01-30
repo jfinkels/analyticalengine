@@ -21,7 +21,6 @@
 package analyticalengine.io;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -31,19 +30,58 @@ import java.util.List;
 
 import analyticalengine.cards.Card;
 
+/**
+ * Reads an Analytical Engine program from a string or file and returns the
+ * card chain that it represents.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public final class CardReader {
 
+    /** Instantiation disallowed. */
     private CardReader() {
         // intentionally unimplemented
     }
 
-    public static List<Card> fromPath(Path path) throws FileNotFoundException,
-            IOException, UnknownCard {
+    /**
+     * Convenience method for {@link #fromPath(Path, Charset)} where the
+     * charset is the default charset of this Java virtual machine.
+     * 
+     * @param path
+     *            The path of the file containing the program.
+     * @return A card chain, given as a {@link java.util.List} of
+     *         {@link analyticalengine.cards.Card} instances.
+     * @throws IOException
+     *             if there is a problem reading the file.
+     * @throws UnknownCard
+     *             if a line in the file does not correspond to a known type of
+     *             card (essentially, this is a syntax error).
+     */
+    public static List<Card> fromPath(final Path path) throws IOException,
+            UnknownCard {
         return fromPath(path, Charset.defaultCharset());
     }
 
-    public static List<Card> fromPath(Path path, Charset charset)
-            throws FileNotFoundException, IOException, UnknownCard {
+    /**
+     * Reads an Analytical Engine program from the specified path and converts
+     * it into a card chain.
+     * 
+     * @param path
+     *            The path of the file containing the program.
+     * @param charset
+     *            The charset of the file.
+     * @return A card chain, given as a {@link java.util.List} of
+     *         {@link analyticalengine.cards.Card} instances.
+     * @throws IOException
+     *             if there is a problem reading the file.
+     * @throws UnknownCard
+     *             if a line in the file does not correspond to a known type of
+     *             card (essentially, this is a syntax error).
+     */
+    // TODO create a syntax error and raise it instead of unknown card?
+    public static List<Card> fromPath(final Path path, final Charset charset)
+            throws IOException, UnknownCard {
         List<Card> cards = new ArrayList<Card>();
         try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
             String currentLine = reader.readLine();
@@ -57,12 +95,38 @@ public final class CardReader {
         return cards;
     }
 
-    public static List<Card> fromString(String input) throws UnknownCard {
+    /**
+     * Convenience method for {@link #fromString(String, String)}, where the
+     * second argument is the system line separator.
+     * 
+     * @param input
+     *            The string containing the program.
+     * @return A card chain, given as a {@link java.util.List} of
+     *         {@link analyticalengine.cards.Card} instances.
+     * @throws UnknownCard
+     *             if a line in the string does not correspond to a known type
+     *             of card (essentially, this is a syntax error).
+     */
+    public static List<Card> fromString(final String input) throws UnknownCard {
         return fromString(input, System.lineSeparator());
     }
 
-    public static List<Card> fromString(String input, String lineSeparator)
-            throws UnknownCard {
+    /**
+     * Reads an Analytical Engine program from the specified string and
+     * converts it into a card chain.
+     * 
+     * @param input
+     *            The string containing the program.
+     * @param lineSeparator
+     *            The string that separates lines in the given input string.
+     * @return A card chain, given as a {@link java.util.List} of
+     *         {@link analyticalengine.cards.Card} instances.
+     * @throws UnknownCard
+     *             if a line in the string does not correspond to a known type
+     *             of card (essentially, this is a syntax error).
+     */
+    public static List<Card> fromString(final String input,
+            final String lineSeparator) throws UnknownCard {
         List<Card> cards = new ArrayList<Card>();
         for (String line : input.split(lineSeparator)) {
             cards.add(CardParser.toCard(line));

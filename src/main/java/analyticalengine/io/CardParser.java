@@ -23,13 +23,34 @@ package analyticalengine.io;
 import analyticalengine.cards.Card;
 import analyticalengine.cards.CardType;
 
+/**
+ * Parses a card from a string.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public final class CardParser {
-    
+
+    /**
+     * Instantiation is disallowed.
+     */
     private CardParser() {
         // intentionally unimplemented
     }
 
-    public static Card toCard(String cardString) throws UnknownCard {
+    /**
+     * Parses a card from the specified card string.
+     * 
+     * A card string is a single line of an Analytical Engine program.
+     * 
+     * @param cardString
+     *            A string representation of a card.
+     * @return The card specified by the given string.
+     * @throws UnknownCard
+     *             if the specified string does not correspond to a known card
+     *             (essentially, this is a syntax error).
+     */
+    public static Card toCard(final String cardString) throws UnknownCard {
         char firstChar = cardString.charAt(0);
         String rest = cardString.substring(1).trim();
         // TODO need to account for possible inline comments after period

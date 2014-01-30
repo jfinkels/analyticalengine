@@ -22,47 +22,125 @@ package analyticalengine.cards;
 
 import java.util.Arrays;
 
+/**
+ * Provides an instruction for the Analytical Engine.
+ * 
+ * The specific instruction is specified by the
+ * {@link analyticalengine.cards.CardType} parameter of the constructor.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public class Card {
-    private CardType type;
-    private String[] arguments;
-    private String comment;
-
-    public static Card commentCard(String comment) {
-        return new Card(CardType.COMMENT, new String[] { ". " + comment });
+    /**
+     * Creates and returns a new comment card with the specified comment.
+     * 
+     * @param comment
+     *            The comment to place on the card.
+     * @return A new comment card containing the specified message.
+     */
+    public static Card commentCard(final String comment) {
+        return new Card(CardType.COMMENT, new String[] { comment });
     }
 
-    public Card(CardType type) {
+    /**
+     * The arguments to the instruction, if any.
+     * 
+     * If the instruction does not require any arguments, this is an array of
+     * length zero.
+     */
+    private final String[] arguments;
+
+    /**
+     * An additional comment provided on the card after the instruction and
+     * arguments.
+     */
+    private final String comment;
+
+    /** The specific instruction indicated by this card. */
+    private final CardType type;
+
+    /**
+     * Creates a new card of the specified type with no arguments and no
+     * additional comments.
+     * 
+     * @param type
+     *            The type of the card.
+     */
+    public Card(final CardType type) {
         this(type, new String[] {});
     }
 
-    public Card(CardType type, String[] arguments) {
+    /**
+     * Creates a new card of the specified type with the specified arguments
+     * but no additional comments.
+     * 
+     * @param type
+     *            The type of the card.
+     * @param arguments
+     *            The arguments to the instruction that this card represents.
+     */
+    public Card(final CardType type, final String[] arguments) {
         this(type, arguments, "");
     }
 
-    // public String[] arguments() {
-    // return Arrays.copyOf(this.arguments, type.numArguments());
-    // }
-
-    public Card(CardType type, String[] arguments, String comment) {
+    /**
+     * Creates a new card of the specified type with the specified arguments
+     * and specified additional comments.
+     * 
+     * @param type
+     *            The type of the card.
+     * @param arguments
+     *            The arguments to the instruction that this card represents.
+     * @param comment
+     *            An additional comment on the card that doesn't affect its
+     *            behavior.
+     */
+    public Card(final CardType type, final String[] arguments,
+            final String comment) {
         this.type = type;
         this.arguments = arguments.clone();
         this.comment = comment;
     }
 
-    public int numArguments() {
-        return this.type.numArguments();
+    /**
+     * Returns the argument at the specified index.
+     * 
+     * Calling code must ensure that the index is less than the number of
+     * arguments.
+     * 
+     * @param i
+     *            The index of the argument to return in the array of all
+     *            arguments.
+     * @return The argument at index {@code i}
+     */
+    public String argument(final int i) {
+        return this.arguments[i];
     }
 
+    /**
+     * Returns any additional comment provided when read from the input.
+     * 
+     * If no comment was provided, this method returns the empty string.
+     * 
+     * If the type of this card is
+     * {@link analyticalengine.cards.CardType#COMMENT}, then this method
+     * returns the empty string; on such a card, the comment is provided as the
+     * first (and only) argument.
+     * 
+     * @return The additional comment, if any, provided on the card.
+     */
     public String comment() {
         return this.comment;
     }
 
-    public CardType type() {
-        return this.type;
-    }
-
-    public String argument(int i) throws IndexOutOfBoundsException {
-        return this.arguments[i];
+    /**
+     * Returns the number of arguments of a card of this type.
+     * 
+     * @return The number of arguments of a card of this type.
+     */
+    public int numArguments() {
+        return this.type.numArguments();
     }
 
     /**
@@ -77,5 +155,14 @@ public class Card {
             return this.type + Arrays.toString(this.arguments);
         }
         return this.type.toString();
+    }
+
+    /**
+     * Returns the type of instruction this card represents.
+     * 
+     * @return The type of instruction this card represents.
+     */
+    public CardType type() {
+        return this.type;
     }
 }

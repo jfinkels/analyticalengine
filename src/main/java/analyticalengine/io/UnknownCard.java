@@ -20,15 +20,28 @@
  */
 package analyticalengine.io;
 
+/**
+ * This exception is raised when an attempt to parse a string into a card
+ * fails.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public class UnknownCard extends Exception {
 
-    public UnknownCard(String string) {
-        super(string);
-    }
-
     /**
-     * 
+     * A default generated serial version UID.
      */
     private static final long serialVersionUID = -5748344376227284027L;
+
+    /**
+     * Creates a new exception with the specified error message.
+     * 
+     * @param string
+     *            The error message.
+     */
+    public UnknownCard(final String string) {
+        super(string);
+    }
 
 }
