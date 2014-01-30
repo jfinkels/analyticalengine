@@ -57,13 +57,10 @@ public class ArrayListCardReader implements CardReader {
      * 
      * @param n
      *            {@inheritDoc}
-     * @throws IndexOutOfBoundsException
-     *             if the parameter indicates an advance beyond the end of the
-     *             card chain.
      * @see analyticalengine.CardReader#advance(int)
      */
     @Override
-    public void advance(int n) throws IndexOutOfBoundsException {
+    public void advance(final int n) {
         if (this.currentCard + n >= this.cardChain.size()) {
             throw new IndexOutOfBoundsException("No more cards to read.");
         }
@@ -78,7 +75,7 @@ public class ArrayListCardReader implements CardReader {
      * @see analyticalengine.CardReader#mountCards(List)
      */
     @Override
-    public void mountCards(List<Card> cardChain) {
+    public void mountCards(final List<Card> cardChain) {
         LOG.debug("Mounting card chain {}", cardChain);
         this.cardChain = new ArrayList<Card>(cardChain);
     }
@@ -105,13 +102,10 @@ public class ArrayListCardReader implements CardReader {
      * 
      * @param n
      *            {@inheritDoc}
-     * @throws IndexOutOfBoundsException
-     *             if the parameter indicates an advance beyond the end of the
-     *             card chain.
      * @see analyticalengine.CardReader#advance(int)
      */
     @Override
-    public void reverse(int n) throws IndexOutOfBoundsException {
+    public void reverse(final int n) {
         if (this.currentCard - n < -1) {
             throw new IndexOutOfBoundsException(
                     "Cannot reverse beyond beginning.");

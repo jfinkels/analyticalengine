@@ -20,15 +20,26 @@
  */
 package analyticalengine;
 
-
+/**
+ * Plots the curve produced by the Analytical Engine in an AWT window.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public class AWTCurvePrinter extends AbstractCurvePrinter {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void draw() {
         // TODO Auto-generated method stub
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void move() {
         // TODO Auto-generated method stub

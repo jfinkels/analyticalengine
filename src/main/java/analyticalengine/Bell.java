@@ -22,7 +22,13 @@ package analyticalengine;
 
 import analyticalengine.cards.Card;
 
-
+/**
+ * Represents a bell that rings on the Analytical Engine, attracting the
+ * attention of the attendant.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public class Bell extends CardException {
 
     /**
@@ -30,7 +36,15 @@ public class Bell extends CardException {
      */
     private static final long serialVersionUID = 505374666147267503L;
 
-    public Bell(String string, Card card) {
+    /**
+     * {@inheritDoc}
+     * 
+     * @param string
+     *            {@inheritDoc}
+     * @param card
+     *            {@inheritDoc}
+     */
+    public Bell(final String string, final Card card) {
         super(string, card);
     }
 

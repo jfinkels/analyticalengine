@@ -44,19 +44,19 @@ public abstract class AbstractCurvePrinter implements CurvePrinter {
      * @see analyticalengine.components.CurvePrinter#setX(java.math.BigInteger)
      */
     @Override
-    public void setX(BigInteger x) {
+    public void setX(final BigInteger x) {
         this.x = x;
     }
 
     /**
      * {@inheritDoc}
      * 
-     * @param x
+     * @param y
      *            {@inheritDoc}
      * @see analyticalengine.components.CurvePrinter#setY(java.math.BigInteger)
      */
     @Override
-    public void setY(BigInteger y) {
+    public void setY(final BigInteger y) {
         this.y = y;
     }
 

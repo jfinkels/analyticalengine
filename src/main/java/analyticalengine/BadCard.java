@@ -22,26 +22,32 @@ package analyticalengine;
 
 import analyticalengine.cards.Card;
 
-
 /**
+ * This exception is raised when the attendant discovers an incorrectly used
+ * card.
+ * 
+ * This is essentially a syntax error.
+ * 
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
  */
-// this is essentially a syntax error
 public class BadCard extends CardException {
 
     /**
-     * 
+     * A default generated serial version UID.
      */
     private static final long serialVersionUID = -3311831632309378417L;
 
     /**
+     * {@inheritDoc}
+     * 
      * @param message
+     *            {@inheritDoc}
      * @param cause
+     *            {@inheritDoc}
      */
-    public BadCard(String message, Card cause) {
+    public BadCard(final String message, final Card cause) {
         super(message, cause);
-        // TODO Auto-generated constructor stub
     }
 
 }

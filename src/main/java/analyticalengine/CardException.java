@@ -22,24 +22,64 @@ package analyticalengine;
 
 import analyticalengine.cards.Card;
 
-
-public class CardException extends Exception {
+/**
+ * Base class for exceptions that are caused by cards.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
+public abstract class CardException extends Exception {
     /**
      * Default generated serial version UID.
      */
     private static final long serialVersionUID = -590810062640328181L;
-    private Card cause = null;
 
-    public CardException(String message, Card cause) {
+    /** The card that caused this exception. */
+    private Card card = null;
+
+    /**
+     * Instantiates this exception with the specified error message.
+     * 
+     * @param message
+     *            The error message.
+     */
+    public CardException(final String message) {
         super(message);
-        this.cause = cause;
     }
 
-    public CardException(String message) {
+    /**
+     * Instantiates this exception with the specified error message and the
+     * specified card that caused the exception.
+     * 
+     * @param message
+     *            The error message.
+     * @param cause
+     *            The card that caused this exception.
+     */
+    public CardException(final String message, final Card cause) {
         super(message);
+        this.card = cause;
     }
 
-    public CardException(String message, Exception cause) {
+    /**
+     * Instantiates this exception with the specified error message and the
+     * specified exception that caused the exception.
+     * 
+     * @param message
+     *            The error message.
+     * @param cause
+     *            The throwable that caused this exception.
+     */
+    public CardException(final String message, final Throwable cause) {
         super(message, cause);
+    }
+
+    /**
+     * Gets the card that caused this exception.
+     * 
+     * @return The card that caused this exception.
+     */
+    public Card card() {
+        return this.card;
     }
 }
