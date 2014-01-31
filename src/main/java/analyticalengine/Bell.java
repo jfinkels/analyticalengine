@@ -37,12 +37,13 @@ public class Bell extends CardException {
     private static final long serialVersionUID = 505374666147267503L;
 
     /**
-     * {@inheritDoc}
+     * Instantiates this exception with the specified error message and the
+     * specified card that caused the exception.
      * 
-     * @param string
-     *            {@inheritDoc}
-     * @param card
-     *            {@inheritDoc}
+     * @param message
+     *            The error message.
+     * @param cause
+     *            The card that caused this exception.
      */
     public Bell(final String string, final Card card) {
         super(string, card);

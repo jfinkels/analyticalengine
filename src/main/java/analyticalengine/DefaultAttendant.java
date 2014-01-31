@@ -68,8 +68,6 @@ public class DefaultAttendant implements Attendant {
 
     private boolean writeInRows = true;
 
-    private boolean writeWithDecimal;
-
     @Override
     public void annotate(String message) {
         if (this.writeInRows) {
@@ -611,11 +609,6 @@ public class DefaultAttendant implements Attendant {
     @Override
     public void writeNewline() {
         this.report += System.getProperty("line.separator");
-    }
-
-    @Override
-    public void writeWithDecimal() {
-        this.writeWithDecimal = true;
     }
 
     @Override

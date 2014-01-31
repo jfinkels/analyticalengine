@@ -52,7 +52,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
     // this.cardReader.mountCards(cards);
     // }
 
-    private void executeCard(Card card) throws Bell, Halt, Error {
+    private void executeCard(Card card) throws Bell, Halt, BadCard {
         LOG.debug("Executing card {}", card);
 
         // These variables show up in more than one case, but we cannot define
@@ -114,7 +114,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 value = this.store.get(address);
                 this.mill.transferIn(value, false);
             } catch (NumberFormatException exception) {
-                throw new Error("Failed to parse load address", exception);
+                throw new BadCard("Failed to parse load address", card);
             }
             break;
         case LOADPRIME:
@@ -123,18 +123,18 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 value = this.store.get(address);
                 this.mill.transferIn(value, true);
             } catch (NumberFormatException exception) {
-                throw new Error("Failed to parse load address", exception);
+                throw new BadCard("Failed to parse load address", card);
             }
             break;
         case LSHIFT:
             try {
                 int shift = Integer.parseInt(card.argument(0));
                 if (shift < 0 || shift > 100) {
-                    throw new Error("Bad stepping up card");
+                    throw new BadCard("Bad stepping up card", card);
                 }
                 this.mill.leftShift(shift);
             } catch (NumberFormatException exception) {
-                throw new Error("Failed to parse step up value", exception);
+                throw new BadCard("Failed to parse step up value", card);
             }
             break;
         case MOVE:
@@ -146,11 +146,11 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case NUMBER:
             address = Long.parseLong(card.argument(0));
             if (address < 0 || address >= this.store.maxAddress()) {
-                throw new Error("Address out of bounds: " + address);
+                throw new BadCard("Address out of bounds: " + address, card);
             }
             value = new BigInteger(card.argument(1));
             if (value.compareTo(this.mill.maxValue()) > 0) {
-                throw new Error("Value too large to store: " + value);
+                throw new BadCard("Value too large to store: " + value, card);
             }
             this.store.put(address, value);
             break;
@@ -163,11 +163,11 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             try {
                 int shift = Integer.parseInt(card.argument(0));
                 if (shift < 0 || shift > 100) {
-                    throw new Error("Bad stepping up card");
+                    throw new BadCard("Bad stepping up card", card);
                 }
                 this.mill.rightShift(shift);
             } catch (NumberFormatException exception) {
-                throw new Error("Failed to parse step down value", exception);
+                throw new BadCard("Failed to parse step down value", card);
             }
             break;
         case STORE:
@@ -176,7 +176,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 value = this.mill.transferOut(false);
                 this.store.put(address, value);
             } catch (NumberFormatException exception) {
-                throw new Error("Failed to parse store address", exception);
+                throw new BadCard("Failed to parse store address", card);
             }
             break;
         case STOREPRIME:
@@ -185,7 +185,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 value = this.mill.transferOut(true);
                 this.store.put(address, value);
             } catch (NumberFormatException exception) {
-                throw new Error("Failed to parse store address", exception);
+                throw new BadCard("Failed to parse store address", card);
             }
             break;
         case SUBTRACT:
@@ -204,7 +204,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 this.store.put(address, BigInteger.ZERO);
                 this.mill.transferIn(value, false);
             } catch (NumberFormatException exception) {
-                throw new Error("Failed to parse zload address", exception);
+                throw new BadCard("Failed to parse zload address", card);
             }
             break;
         case ZLOADPRIME:
@@ -214,7 +214,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 this.store.put(address, BigInteger.ZERO);
                 this.mill.transferIn(value, true);
             } catch (NumberFormatException exception) {
-                throw new Error("Failed to parse zload address", exception);
+                throw new BadCard("Failed to parse zload address", card);
             }
             break;
         case NEWLINE:
@@ -229,9 +229,6 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case WRITEPICTURE:
             this.attendant.setFormat(card.argument(0));
             break;
-        case WRITEDECIMAL:
-            this.attendant.writeWithDecimal();
-            break;
         case ALTERNATION:
         case BACKEND:
         case BACKSTART:
@@ -242,8 +239,9 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case FORWARDSTART:
         case INCLUDE:
         case INCLUDELIB:
+        case WRITEDECIMAL:
             // these should all be removed by attendant before loading cards
-            throw new Error("Attendant failed to remove card", card);
+            throw new BadCard("Attendant failed to remove card", card);
         default:
             break;
         }
@@ -260,17 +258,17 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                     LOG.info("Bell!");
                 }
             }
-        } catch (Error error) {
-            // TODO do something
-        } catch (Halt halt) {
+        } catch (BadCard e) {
+            LOG.error("Program error", e);
+        } catch (Halt e) {
             // This would print the stack trace for the Halt exception.
-            // LOG.info("Program halted.", halt);
+            // LOG.info("Program halted.", e);
             LOG.info("Program halted.");
-        } catch (IndexOutOfBoundsException exception) {
+        } catch (IndexOutOfBoundsException e) {
             LOG.error(
                     "Program indicated advance or reverse beyond boundary of card chain.",
-                    exception);
-            throw exception;
+                    e);
+            throw e;
         }
     }
 

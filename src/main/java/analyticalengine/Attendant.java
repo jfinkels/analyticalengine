@@ -144,6 +144,4 @@ public interface Attendant {
     void writeInRows();
 
     void writeNewline();
-
-    void writeWithDecimal();
 }

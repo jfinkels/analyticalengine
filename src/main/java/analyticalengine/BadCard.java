@@ -39,12 +39,13 @@ public class BadCard extends CardException {
     private static final long serialVersionUID = -3311831632309378417L;
 
     /**
-     * {@inheritDoc}
+     * Instantiates this exception with the specified error message and the
+     * specified card that caused the exception.
      * 
      * @param message
-     *            {@inheritDoc}
+     *            The error message.
      * @param cause
-     *            {@inheritDoc}
+     *            The card that caused this exception.
      */
     public BadCard(final String message, final Card cause) {
         super(message, cause);
