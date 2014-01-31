@@ -324,6 +324,19 @@
           </reportPlugins>
         </configuration>
       </plugin>
+      <plugin> <!-- for generating executable scripts -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <version>1.7</version>
+        <configuration>
+          <programs>
+            <program>
+              <mainClass>analyticalengine.main.Main</mainClass>
+              <id>analyticalengine</id>
+            </program>
+          </programs>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 

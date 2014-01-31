@@ -8,7 +8,7 @@ The original source code was written by [John Walker][1], and is available from
 [this website][2]. That software is in the public domain, according to [this
 website][3].
 
-This file was last updated on January 17, 2014.
+This file was last updated on January 31, 2014.
 
 [1]: http://www.fourmilab.ch
 [2]: http://www.fourmilab.ch/babbage/contents.html
@@ -46,6 +46,17 @@ To get project reports and development information, run
   
 You can then view the site by opening `target/site/index.html` in a web
 browser.
+
+Running the Analytical Engine
+-----------------------------
+
+To create a shell script that runs the simulator, run
+
+    mvn appassembler:assemble
+
+Then, to run the simulator on a file named `myprogram.ae`, run
+
+    sh target/appassembler/bin/analyticalengine myprogram.ae
 
 Writing programs for the Analytical Engine
 ------------------------------------------
