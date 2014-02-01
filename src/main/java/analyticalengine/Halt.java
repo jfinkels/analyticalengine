@@ -22,23 +22,54 @@ package analyticalengine;
 
 import analyticalengine.cards.Card;
 
-
+/**
+ * This exception is raised when the Analytical Engine stops executing its
+ * program, either because the program includes a "halt" instruction, or the
+ * card reader has read every available card.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public class Halt extends CardException {
 
     /**
-     * Default generated serial version UID.  
+     * Default generated serial version UID.
      */
     private static final long serialVersionUID = -8026821124810632777L;
 
-    public Halt(String string) {
-        super(string);
+    /**
+     * Instantiates this exception with the specified error message.
+     * 
+     * @param message
+     *            The error message.
+     */
+    public Halt(final String message) {
+        super(message);
     }
 
-    public Halt(String message, Exception cause) {
+    /**
+     * Instantiates this exception with the specified error message and the
+     * specified exception that caused the exception.
+     * 
+     * @param message
+     *            The error message.
+     * @param cause
+     *            The throwable that caused this exception.
+     */
+    public Halt(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public Halt(String message, Card cause) {
+    /**
+     * Instantiates this exception with the specified error message and the
+     * specified card that caused the exception.
+     * 
+     * @param message
+     *            The error message.
+     * @param cause
+     *            The card that caused this exception.
+     */
+    public Halt(final String message, final Card cause) {
         super(message, cause);
     }
 

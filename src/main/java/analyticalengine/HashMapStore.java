@@ -24,27 +24,59 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A memory store for the Analytical Engine backed by a
+ * {@link java.util.HashMap}.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public class HashMapStore implements Store {
 
+    /** The maximum number of cells in the store. */
     public static final int MAX_ADDRESS = 1000;
-    
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@inheritDoc}
+     */
     @Override
     public int maxAddress() {
         return MAX_ADDRESS;
     }
-    
+
+    /** The hash map that provides the addressable, random-access storage. */
     private Map<Long, BigInteger> rack = new HashMap<Long, BigInteger>();
-    
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @param address
+     *            {@inheritDoc}
+     * @param value
+     *            {@inheritDoc}
+     */
     @Override
-    public void put(long address, BigInteger value) {
+    public void put(final long address, final BigInteger value) {
         this.rack.put(address, value);
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param address
+     *            {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
-    public BigInteger get(long address) {
+    public BigInteger get(final long address) {
         return this.rack.get(address);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reset() {
         this.rack.clear();
