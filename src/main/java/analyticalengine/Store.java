@@ -28,8 +28,22 @@ import java.math.BigInteger;
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  */
 public interface Store {
-    void reset();
+    /**
+     * Retrieves and returns the value stored at {@code address}.
+     * 
+     * @param address
+     *            A memory location.
+     * @return The value stored at the memory location.
+     */
+    BigInteger get(long address);
+
+    /**
+     * Returns the maximum address that this store recognizes.
+     * 
+     * @return The maximum address that this store recognizes.
+     */
     int maxAddress();
+
     /**
      * Stores {@code value} in the memory location specified by {@code address}
      * .
@@ -42,11 +56,7 @@ public interface Store {
     void put(long address, BigInteger value);
 
     /**
-     * Retrieves and returns the value stored at {@code address}.
-     * 
-     * @param address
-     *            A memory location.
-     * @return The value stored at the memory location.
+     * Clears all values in the store.
      */
-    BigInteger get(long address);
+    void reset();
 }

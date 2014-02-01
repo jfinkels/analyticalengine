@@ -135,6 +135,18 @@ public class DefaultAttendant implements Attendant {
         }
     }
 
+    /**
+     * Looks for cards that specify a global number of decimal places and
+     * replaces any later cards that may be affected, like implicit shift or
+     * number cards.
+     * 
+     * @param cards
+     *            The list of cards to scan for decimal expansion.
+     * @return A new list of cards representing the same program, but with the
+     *         implicit decimals expanded into explicit decimals.
+     * @throws BadCard
+     *             if a card related to decimal expansion has invalid syntax.
+     */
     private List<Card> expandDecimal(final List<Card> cards) throws BadCard {
         List<Card> result = new ArrayList<Card>();
         int decimalPlace = -1;
@@ -243,6 +255,20 @@ public class DefaultAttendant implements Attendant {
         return result;
     }
 
+    /**
+     * Returns a new number card that represents the same number, but trimmed
+     * or expanded to have the specified number of digits after the decimal
+     * point.
+     * 
+     * @param decimalPlace
+     *            The number of digits the number should have after the decimal
+     *            point.
+     * @param card
+     *            A card with type {@link CardType#NUMBER}.
+     * @return A new card that represents the same number as on the original
+     *         card, but with the specified number of digits after the decimal
+     *         point.
+     */
     private Card expandNumber(final int decimalPlace, final Card card) {
         // TODO these two lines are repeated in the calling function, but we
         // repeat them here so that this method has only the two parameters
@@ -267,7 +293,7 @@ public class DefaultAttendant implements Attendant {
             }
         }
 
-        // TODO do this is a string formatting operation
+        // TODO do this as a string formatting operation
         while (dpart.length() < decimalPlace) {
             dpart += "0";
         }
@@ -282,9 +308,24 @@ public class DefaultAttendant implements Attendant {
                 newNumber }, "Decimal expansion by attendant");
     }
 
+    /**
+     * Replaces a {@link CardType#WRITEDECIMAL} card with a
+     * {@link CardType#WRITEPICTURE} card that instructs the attendant to
+     * format the output with the specified number of decimal places.
+     * 
+     * @param decimalPlace
+     *            The number of digits that the attendant should write after
+     *            the decimal point.
+     * @param card
+     *            A {@link CardType#WRITEDECIMAL} card.
+     * @return A {@link CardType#WRITEPICTURE} card that instructs the
+     *         attendant to format the output with the specified number of
+     *         decimal places.
+     */
     private Card expandWriteDecimal(final int decimalPlace, final Card card) {
         int dpa;
 
+        // TODO do this as a string formatting operation
         StringBuilder formatString = new StringBuilder("9.");
         for (dpa = 0; dpa < decimalPlace; dpa++) {
             formatString.append("9");
@@ -294,6 +335,18 @@ public class DefaultAttendant implements Attendant {
                 new String[] { formatString.toString() });
     }
 
+    /**
+     * Replaces the given implicit left or right shift card with the
+     * corresponding explicit shift card, with a shift of the specified number
+     * of decimal places.
+     * 
+     * @param decimalPlace
+     *            The number of digits by which to shift.
+     * @param card
+     *            An implicit left or right shift card.
+     * @return An explicit left or right shift card with a shift argument of
+     *         the specified number of decimal places.
+     */
     private Card expandShift(final int decimalPlace, final Card card) {
 
         String newArg = null;
@@ -323,6 +376,16 @@ public class DefaultAttendant implements Attendant {
         return this.report;
     }
 
+    /**
+     * Returns a formatted version of the specified number (given as a string)
+     * according to the value specified previously by the
+     * {@link #setFormat(String)} method.
+     * 
+     * @param input
+     *            A number to format, given as a string.
+     * @return The input number formatted according to the format specified by
+     *         a previous invocation of {@link #setFormat(String)}.
+     */
     private String formatted(final String input) {
         String s = input;
         boolean negative = (input.charAt(0) == '-');
@@ -496,6 +559,24 @@ public class DefaultAttendant implements Attendant {
         this.stripComments = stripComments;
     }
 
+    /**
+     * Scans the list of cards for any inclusion requests and replaces those
+     * inclusion cards with the cards of the requested function.
+     * 
+     * @param cards
+     *            The list of cards to scan for include requests.
+     * @return A new list of cards representing the same program, but with the
+     *         include requests replaced with the cards necessary to execute
+     *         the requested function.
+     * @throws BadCard
+     *             if the requested file could not be found.
+     * @throws IOException
+     *             if there was a problem reading the file containing the
+     *             requested function.
+     * @throws UnknownCard
+     *             if there was a syntax error in the file containing the
+     *             requested function.
+     */
     private List<Card> transcludeLibraryCards(final List<Card> cards)
             throws BadCard, IOException, UnknownCard {
         List<Card> result = new ArrayList<Card>();
@@ -564,7 +645,19 @@ public class DefaultAttendant implements Attendant {
         return result;
     }
 
-    private void translateCombinatorics(List<Card> cards) throws BadCard {
+    /**
+     * Scans the list of cards for implicit combinatorial (control) cards and
+     * replaces them (in-place) with the corresponding explicit forward and
+     * backward jump cards.
+     * 
+     * @param cards
+     *            The list of cards to scan for implicit loops.
+     * @throws BadCard
+     *             if there is a syntax error in one of the implicit
+     *             combinatorial cards (for example, if a start card has no
+     *             corresponding end card).
+     */
+    private void translateCombinatorics(final List<Card> cards) throws BadCard {
         for (int i = 0; i < cards.size(); i++) {
             if (isCycleStart(cards.get(i).type())) {
                 this.translateCycle(cards, i);
@@ -572,7 +665,23 @@ public class DefaultAttendant implements Attendant {
         }
     }
 
-    private void translateCycle(List<Card> cards, int start) throws BadCard {
+    /**
+     * Replaces the implicit cycle (loop) starting at the specified index in
+     * the given list of cards with explicit forward and/or backward jump
+     * cards.
+     * 
+     * @param cards
+     *            The list of cards containing the implicit loop to replace
+     *            (in-place).
+     * @param start
+     *            The index of the implicit loop to replace.
+     * @throws BadCard
+     *             if there is a syntax error in one of the implicit
+     *             combinatorial cards (for example, if a start card has no
+     *             corresponding end card).
+     */
+    private void translateCycle(final List<Card> cards, int start)
+            throws BadCard {
         Card c = cards.get(start);
         boolean depends = false;
         int i;

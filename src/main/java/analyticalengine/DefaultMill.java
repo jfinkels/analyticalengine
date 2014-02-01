@@ -71,7 +71,7 @@ public class DefaultMill implements Mill {
      * computing the result of an arithmetic operation.
      * 
      * It is impossible to know which of those options this flag indicates
-     * without knowing which operation has been performed.
+     * without knowing the operation and the operands.
      */
     private boolean runUp;
 
@@ -194,47 +194,8 @@ public class DefaultMill implements Mill {
         return this.runUp;
     }
 
-    /*
-     * From the original code:
-     * 
-     * In Section 1.[5] of his 26 December 1837 "On the Mathematical Powers of
-     * the Calculating Engine", Babbage remarks: "The termination of the
-     * Multiplication arises from the action of the Counting apparatus which at
-     * a certain time directs the barrels to order the product thus obtained to
-     * be stepped down so the decimal point may be in its proper place,...",
-     * which implies a right shift as an integral part of the multiply
-     * operation. This makes enormous sense, since it would take only a tiny
-     * fraction of the time a full-fledged divide would require to renormalise
-     * the number. I have found no description in this or later works of how
-     * the number of digits to shift was to be conveyed to the mill. So, I am
-     * introducing a rather curious operation for this purpose. Invoked after a
-     * multiplication, but before the result has been emitted from the egress
-     * axes, it shifts the double-length product right by a fixed number of
-     * decimal places, and leaves the result in the egress axes. Thus, to
-     * multiple V11 and V12, scale the result right 10 decimal places, and
-     * store the scaled product in V10, one would write:
-     * 
-     * × L011 L012 >10 S010
-     * 
-     * Similarly, we provide a left shift for prescaling fixed point dividends
-     * prior to division; this operation shifts the two ingress axes containing
-     * the dividend by the given amount, and must be done after the ingress
-     * axes are loaded but before the variable card supplying the divisor is
-     * given. For example, if V11 and V12 contain the lower and upper halves of
-     * the quotient, respectively, and we wish to shift this quantity left 10
-     * digits before dividing by the divisor in V13, we use:
-     * 
-     * ÷ L011 L012' <10 L013 S010
-     * 
-     * Note that shifting does not change the current operation for which the
-     * mill is set; it merely shifts the axes in place.
-     */
-
     /**
      * {@inheritDoc}
-     * 
-     * This method sets the value of {@link #mostRecentValue} to be the value
-     * stored in the main ingress axis (after the shift).
      * 
      * @param shift
      *            {@inheritDoc}
@@ -311,9 +272,6 @@ public class DefaultMill implements Mill {
     /**
      * {@inheritDoc}
      * 
-     * This method sets the value of {@link #mostRecentValue} to be the value
-     * stored in the main ingress axis (after the shift).
-     * 
      * @param shift
      *            {@inheritDoc}
      */
@@ -358,8 +316,16 @@ public class DefaultMill implements Mill {
     /**
      * {@inheritDoc}
      * 
-     * This method sets the value of {@link #mostRecentValue} to be the value
-     * transferred in.
+     * @param value
+     *            {@inheritDoc}
+     */
+    @Override
+    public void transferIn(final BigInteger value) {
+        this.transferIn(value, false);
+    }
+    
+    /**
+     * {@inheritDoc}
      * 
      * @param value
      *            {@inheritDoc}
@@ -392,9 +358,6 @@ public class DefaultMill implements Mill {
     /**
      * {@inheritDoc}
      * 
-     * This method sets the value of {@link #mostRecentValue} to be the value
-     * transferred out.
-     * 
      * @return {@inheritDoc}
      */
     @Override
@@ -404,9 +367,6 @@ public class DefaultMill implements Mill {
 
     /**
      * {@inheritDoc}
-     * 
-     * This method sets the value of {@link #mostRecentValue} to be the value
-     * transferred out.
      * 
      * @param prime
      *            {@inheritDoc}

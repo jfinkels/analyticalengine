@@ -22,10 +22,24 @@ package analyticalengine;
 
 import java.math.BigInteger;
 
+/**
+ * A basic implementation of a printer.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public class StringPrinter implements Printer {
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param value
+     *            {@inheritDoc}
+     * @return {@inheritDoc}
+     * @see analyticalengine.Printer#print(BigInteger)
+     */
     @Override
-    public String print(BigInteger value) {
+    public String print(final BigInteger value) {
         return value.toString();
     }
 

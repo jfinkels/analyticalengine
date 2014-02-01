@@ -64,7 +64,21 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         this.curvePrinter.reset();
     }
 
-    private void executeCard(Card card) throws Bell, Halt, BadCard {
+    /**
+     * Performs the instruction specified by the given card.
+     * 
+     * @param card
+     *            The card containing the instruction for the Engine.
+     * @throws Bell
+     *             if the card indicates that a bell on the Analytical Engine
+     *             should be rung.
+     * @throws Halt
+     *             if the card indicates that the Engine should halt execution
+     *             immediately.
+     * @throws BadCard
+     *             If the specified card has invalid syntax.
+     */
+    private void executeCard(final Card card) throws Bell, Halt, BadCard {
         LOG.debug("Executing card {}", card);
 
         // These variables show up in more than one case, but we cannot define
@@ -124,7 +138,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             try {
                 address = Long.parseLong(card.argument(0));
                 value = this.store.get(address);
-                this.mill.transferIn(value, false);
+                this.mill.transferIn(value);
             } catch (NumberFormatException exception) {
                 throw new BadCard("Failed to parse load address", card);
             }
@@ -185,7 +199,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case STORE:
             try {
                 address = Long.parseLong(card.argument(0));
-                value = this.mill.transferOut(false);
+                value = this.mill.transferOut();
                 this.store.put(address, value);
             } catch (NumberFormatException exception) {
                 throw new BadCard("Failed to parse store address", card);
@@ -214,7 +228,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 address = Long.parseLong(card.argument(0));
                 value = this.store.get(address);
                 this.store.put(address, BigInteger.ZERO);
-                this.mill.transferIn(value, false);
+                this.mill.transferIn(value);
             } catch (NumberFormatException exception) {
                 throw new BadCard("Failed to parse zload address", card);
             }

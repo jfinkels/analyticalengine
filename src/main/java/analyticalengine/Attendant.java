@@ -137,11 +137,30 @@ public interface Attendant {
      */
     void setLibraryPaths(List<Path> paths);
 
+    /**
+     * Instructs the attendant to remove comment cards when loading a program
+     * into the card reader.
+     * 
+     * @param stripComments
+     *            Whether to remove comment cards when loading a program.
+     */
     void setStripComments(boolean stripComments);
 
+    /**
+     * Instructs the attendant to format the output from the printer in columns
+     * instead of rows.
+     */
     void writeInColumns();
 
+    /**
+     * Instructs the attendant to format the output from the printer in rows
+     * instead of columns.
+     */
     void writeInRows();
 
+    /**
+     * Instructs the attendant to write any following output from the printer
+     * on a new line.
+     */
     void writeNewline();
 }

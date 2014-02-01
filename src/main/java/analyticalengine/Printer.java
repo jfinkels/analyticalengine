@@ -22,6 +22,19 @@ package analyticalengine;
 
 import java.math.BigInteger;
 
+/**
+ * Device that produces textual output from the Analytical Engine.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public interface Printer {
+    /**
+     * Converts the specified integer to a string.
+     * 
+     * @param value
+     *            The value to print.
+     * @return The string representing the printed integer.
+     */
     String print(BigInteger value);
 }
