@@ -41,7 +41,7 @@ public abstract class AbstractCurvePrinter implements CurvePrinter {
      * 
      * @param x
      *            {@inheritDoc}
-     * @see analyticalengine.components.CurvePrinter#setX(java.math.BigInteger)
+     * @see analyticalengine.CurvePrinter#setX(java.math.BigInteger)
      */
     @Override
     public void setX(final BigInteger x) {
@@ -53,7 +53,7 @@ public abstract class AbstractCurvePrinter implements CurvePrinter {
      * 
      * @param y
      *            {@inheritDoc}
-     * @see analyticalengine.components.CurvePrinter#setY(java.math.BigInteger)
+     * @see analyticalengine.CurvePrinter#setY(java.math.BigInteger)
      */
     @Override
     public void setY(final BigInteger y) {

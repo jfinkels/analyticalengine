@@ -45,8 +45,8 @@ public class Bell extends CardException {
      * @param cause
      *            The card that caused this exception.
      */
-    public Bell(final String string, final Card card) {
-        super(string, card);
+    public Bell(final String message, final Card cause) {
+        super(message, cause);
     }
 
 }
