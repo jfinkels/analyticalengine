@@ -20,6 +20,11 @@
  */
 
 /**
+ * Contains the command-line program that runs the Analytical Engine
+ * simulation.
  * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
  */
 package analyticalengine.main;
+

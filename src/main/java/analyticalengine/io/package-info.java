@@ -1,5 +1,5 @@
 /**
- * package-info.java -
+ * package-info.java - package-level documentation
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -18,9 +18,13 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
+ * Contains utility classes that aid in parsing Analytical Engine programs from
+ * strings or files.
  * 
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
  */
 package analyticalengine.io;
+

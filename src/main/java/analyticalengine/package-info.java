@@ -24,6 +24,7 @@
  * Engine.
  * 
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.1.1
  */
 package analyticalengine;
 
