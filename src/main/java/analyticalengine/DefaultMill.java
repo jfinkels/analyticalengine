@@ -22,18 +22,37 @@ package analyticalengine;
 
 import java.math.BigInteger;
 
+/**
+ * Basic implementation of a mill, the arithmetic logic unit of the Analytical
+ * Engine.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public class DefaultMill implements Mill {
-    
+
+    /** The maximum value of an integer that can be stored in mill's axes. */
     public static final BigInteger MAX = BigInteger.TEN.pow(50);
-    
+
+    /** The minimum value of an integer that can be stored in mill's axes. */
     public static final BigInteger MIN = MAX.negate();
 
+    /**
+     * The index of the next axis to which a number will be loaded, either
+     * directly or from the store.
+     */
     private int currentAxis = 0;
 
+    /** The operation to apply to the next two numbers loaded into the mill. */
     private Operation currentOperation = null;
 
+    /** The outgoing axes, which store the result of the arithmetic operations. */
     private BigInteger[] egressAxes = new BigInteger[2];
 
+    /**
+     * The incoming axes, which store the operands of the arithmetic
+     * operations.
+     */
     private BigInteger[] ingressAxes = new BigInteger[3];
 
     // load and store instructions use this
@@ -145,91 +164,15 @@ public class DefaultMill implements Mill {
             break;
         }
     }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@inheritDoc}
+     */
     @Override
     public boolean hasRunUp() {
         return this.runUp;
-    }
-
-    // @Override
-    // public void transferIn(BigInteger value) {
-    // this.transferIn(value, false);
-    // }
-
-    @Override
-    public void leftShift(int shift) {
-
-        /*
-         * A left shift is performed before a fixed point division, so the two
-         * ingress axes containing the dividend are shifted.
-         */
-        BigInteger value = this.ingressAxes[0];
-        if (this.ingressAxes[2].signum() != 0) {
-            value = value.add(this.ingressAxes[2].multiply(MAX));
-        }
-
-        BigInteger sf = BigInteger.TEN.pow(shift);
-        BigInteger pr = value.multiply(sf);
-  
-        if (pr.compareTo(MAX) != 0) {
-            BigInteger[] pq = pr.divideAndRemainder(MAX);
-            this.ingressAxes[0] = pq[1];
-            this.ingressAxes[2] = pq[0];
-        } else {
-            this.ingressAxes[0] = pr;
-            this.ingressAxes[2] = BigInteger.ZERO;
-        }
-
-        this.mostRecentValue = this.ingressAxes[0];
-    }
-
-    @Override
-    public BigInteger maxValue() {
-        return MAX;
-    }
-
-    @Override
-    public BigInteger minValue() {
-        return MIN;
-    }
-
-    @Override
-    public BigInteger mostRecentValue() {
-        return this.mostRecentValue;
-    }
-
-    @Override
-    public void reset() {
-        this.currentOperation = null;
-        this.currentAxis = 0;
-        this.ingressAxes = new BigInteger[3];
-        this.egressAxes = new BigInteger[2];
-        this.runUp = false;
-    }
-
-    @Override
-    public void rightShift(int shift) {
-        /*
-         * A right shift is used to normalise after a fixed point
-         * multiplication, so the egress axes are used.
-         */
-        BigInteger value = this.egressAxes[0];
-        if (this.egressAxes[1].signum() != 0) {
-            value = value.add(this.egressAxes[1].multiply(MAX));
-        }
-
-        BigInteger shiftFactor = BigInteger.TEN.pow(shift);
-        BigInteger[] qr = value.divideAndRemainder(shiftFactor);
-
-        if (qr[0].compareTo(MAX) != 0) {
-            qr = qr[0].divideAndRemainder(MAX);
-            this.egressAxes[0] = qr[1];
-            this.egressAxes[1] = qr[0];
-        } else {
-            this.egressAxes[0] = qr[0];
-            this.egressAxes[1] = BigInteger.ZERO;
-        }
-
-        this.mostRecentValue = this.egressAxes[0];
     }
 
     /*
@@ -268,14 +211,135 @@ public class DefaultMill implements Mill {
      * mill is set; it merely shifts the axes in place.
      */
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param shift
+     *            {@inheritDoc}
+     */
     @Override
-    public void setOperation(Operation operation) {
+    public void leftShift(final int shift) {
+
+        /*
+         * A left shift is performed before a fixed point division, so the two
+         * ingress axes containing the dividend are shifted.
+         */
+        BigInteger value = this.ingressAxes[0];
+        if (this.ingressAxes[2].signum() != 0) {
+            value = value.add(this.ingressAxes[2].multiply(MAX));
+        }
+
+        BigInteger sf = BigInteger.TEN.pow(shift);
+        BigInteger pr = value.multiply(sf);
+
+        if (pr.compareTo(MAX) != 0) {
+            BigInteger[] pq = pr.divideAndRemainder(MAX);
+            this.ingressAxes[0] = pq[1];
+            this.ingressAxes[2] = pq[0];
+        } else {
+            this.ingressAxes[0] = pr;
+            this.ingressAxes[2] = BigInteger.ZERO;
+        }
+
+        this.mostRecentValue = this.ingressAxes[0];
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@inheritDoc}
+     */
+    @Override
+    public BigInteger maxValue() {
+        return MAX;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@inheritDoc}
+     */
+    @Override
+    public BigInteger minValue() {
+        return MIN;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@inheritDoc}
+     */
+    @Override
+    public BigInteger mostRecentValue() {
+        return this.mostRecentValue;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reset() {
+        this.currentOperation = null;
+        this.currentAxis = 0;
+        this.ingressAxes = new BigInteger[3];
+        this.egressAxes = new BigInteger[2];
+        this.runUp = false;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @param shift
+     *            {@inheritDoc}
+     */
+    @Override
+    public void rightShift(final int shift) {
+        /*
+         * A right shift is used to normalise after a fixed point
+         * multiplication, so the egress axes are used.
+         */
+        BigInteger value = this.egressAxes[0];
+        if (this.egressAxes[1].signum() != 0) {
+            value = value.add(this.egressAxes[1].multiply(MAX));
+        }
+
+        BigInteger shiftFactor = BigInteger.TEN.pow(shift);
+        BigInteger[] qr = value.divideAndRemainder(shiftFactor);
+
+        if (qr[0].compareTo(MAX) != 0) {
+            qr = qr[0].divideAndRemainder(MAX);
+            this.egressAxes[0] = qr[1];
+            this.egressAxes[1] = qr[0];
+        } else {
+            this.egressAxes[0] = qr[0];
+            this.egressAxes[1] = BigInteger.ZERO;
+        }
+
+        this.mostRecentValue = this.egressAxes[0];
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @param operation
+     *            {@inheritDoc}
+     */
+    @Override
+    public void setOperation(final Operation operation) {
         this.currentOperation = operation;
         this.currentAxis = 0;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param value
+     *            {@inheritDoc}
+     * @param prime
+     *            {@inheritDoc}
+     */
     @Override
-    public void transferIn(BigInteger value, boolean prime) {
+    public void transferIn(final BigInteger value, final boolean prime) {
         this.mostRecentValue = value;
 
         if (prime) {
@@ -297,13 +361,25 @@ public class DefaultMill implements Mill {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@inheritDoc}
+     */
     @Override
     public BigInteger transferOut() {
         return this.transferOut(false);
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param prime
+     *            {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
-    public BigInteger transferOut(boolean prime) {
+    public BigInteger transferOut(final boolean prime) {
         BigInteger result = null;
         if (prime) {
             result = this.egressAxes[1];

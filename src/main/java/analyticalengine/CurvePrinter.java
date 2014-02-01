@@ -22,14 +22,43 @@ package analyticalengine;
 
 import java.math.BigInteger;
 
+/**
+ * Device that plots curves produced by the Analytical Engine.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public interface CurvePrinter {
+    /**
+     * Sets the x coordinate of the plotting pen.
+     * 
+     * @param x
+     *            The x coordinate of the plotting pen.
+     */
     void setX(BigInteger x);
 
+    /**
+     * Sets the y coordinate of the plotting pen.
+     * 
+     * @param y
+     *            The y coordinate of the plotting pen.
+     */
     void setY(BigInteger y);
 
+    /**
+     * Draws to the current location specified by the x and y coordinates.
+     */
     void draw();
 
+    /**
+     * Moves the pen (without drawing) to the current location specified by the
+     * x and y coordinates.
+     */
     void move();
-    
+
+    /**
+     * Resets the position of the pen to the origin and clears the current
+     * plot.
+     */
     void reset();
 }

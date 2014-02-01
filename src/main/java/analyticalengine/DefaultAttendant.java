@@ -33,20 +33,53 @@ import analyticalengine.cards.Card;
 import analyticalengine.cards.CardType;
 import analyticalengine.io.UnknownCard;
 
+/**
+ * A basic implementation of the Attendant interface.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public class DefaultAttendant implements Attendant {
 
-    private static boolean isCycleEnd(CardType type) {
+    /**
+     * Returns {@code true} if and only if the card type indicates the end of a
+     * cycle block (including an alternation).
+     * 
+     * @param type
+     *            The type of card.
+     * @return {@code true} if and only if the card type indicates the end of a
+     *         cycle block (including an alternation).
+     */
+    private static boolean isCycleEnd(final CardType type) {
         return type == CardType.BACKEND || type == CardType.ALTERNATION
                 || type == CardType.FORWARDEND;
     }
 
-    private static boolean isCycleStart(CardType type) {
+    /**
+     * Returns {@code true} if and only if the card type indicates the start of
+     * a cycle block.
+     * 
+     * @param type
+     *            The type of card.
+     * @return {@code true} if and only if the card type indicates the start of
+     *         a cycle block.
+     */
+    private static boolean isCycleStart(final CardType type) {
         return type == CardType.BACKSTART || type == CardType.CBACKSTART
                 || type == CardType.FORWARDSTART
                 || type == CardType.CFORWARDSTART;
     }
 
-    private static List<Card> strippedComments(List<Card> cards) {
+    /**
+     * Returns a new {@link java.util.List} containing only those cards that
+     * are not comments.
+     * 
+     * @param cards
+     *            The list of cards to filter.
+     * @return A new {@link java.util.List} containing only those cards that
+     *         are not comments.
+     */
+    private static List<Card> strippedComments(final List<Card> cards) {
         List<Card> result = new ArrayList<Card>();
         for (Card card : cards) {
             if (card.type() != CardType.COMMENT) {
@@ -56,20 +89,45 @@ public class DefaultAttendant implements Attendant {
         return result;
     }
 
+    /** The device in which the attendant loads the requested program. */
     private CardReader cardReader = null;
 
+    /**
+     * The format in which the attendant should write the output printed from
+     * the Analytical Engine.
+     */
     private String formatString = null;
 
+    /**
+     * A list of paths to search when a card requesting a library function is
+     * encountered.
+     */
     private List<Path> libraryPaths = Collections.emptyList();
 
+    /** The cumulative formatted output from the printer. */
     private String report = "";
 
+    /**
+     * Whether to remove comment cards from the program that will be loaded.
+     */
     private boolean stripComments = false;
 
+    /**
+     * Whether to write the output from the Analytical Engine's printer in
+     * rows.
+     * 
+     * If this is false, the output will be written in columns.
+     */
     private boolean writeInRows = true;
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param message
+     *            {@inheritDoc}
+     */
     @Override
-    public void annotate(String message) {
+    public void annotate(final String message) {
         if (this.writeInRows) {
             this.report += message;
         } else {
@@ -77,7 +135,7 @@ public class DefaultAttendant implements Attendant {
         }
     }
 
-    private List<Card> expandDecimal(List<Card> cards) throws BadCard {
+    private List<Card> expandDecimal(final List<Card> cards) throws BadCard {
         List<Card> result = new ArrayList<Card>();
         int decimalPlace = -1;
         for (Card card : cards) {
@@ -185,7 +243,7 @@ public class DefaultAttendant implements Attendant {
         return result;
     }
 
-    private Card expandNumber(int decimalPlace, Card card) {
+    private Card expandNumber(final int decimalPlace, final Card card) {
         // TODO these two lines are repeated in the calling function, but we
         // repeat them here so that this method has only the two parameters
         String number = card.argument(1);
@@ -224,7 +282,7 @@ public class DefaultAttendant implements Attendant {
                 newNumber }, "Decimal expansion by attendant");
     }
 
-    private Card expandWriteDecimal(int decimalPlace, Card card) {
+    private Card expandWriteDecimal(final int decimalPlace, final Card card) {
         int dpa;
 
         StringBuilder formatString = new StringBuilder("9.");
@@ -236,7 +294,7 @@ public class DefaultAttendant implements Attendant {
                 new String[] { formatString.toString() });
     }
 
-    private Card expandShift(int decimalPlace, Card card) {
+    private Card expandShift(final int decimalPlace, final Card card) {
 
         String newArg = null;
         CardType newType = null;
@@ -255,12 +313,17 @@ public class DefaultAttendant implements Attendant {
         return new Card(newType, new String[] { newArg });
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@inheritDoc}
+     */
     @Override
     public String finalReport() {
         return this.report;
     }
 
-    private String formatted(String input) {
+    private String formatted(final String input) {
         String s = input;
         boolean negative = (input.charAt(0) == '-');
         boolean sign = false;
@@ -349,20 +412,39 @@ public class DefaultAttendant implements Attendant {
         return s;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param cards
+     *            {@inheritDoc}
+     * @throws BadCard
+     *             {@inheritDoc}
+     * @throws IOException
+     *             {@inheritDoc}
+     * @throws UnknownCard
+     *             {@inheritDoc}
+     */
     @Override
-    public void loadProgram(List<Card> cards) throws BadCard, IOException,
-            UnknownCard {
+    public void loadProgram(final List<Card> cards) throws BadCard,
+            IOException, UnknownCard {
+        List<Card> result = cards;
         // Note: "A write numbers as ..." cards remain in the card chain.
-        cards = this.transcludeLibraryCards(cards);
-        cards = strippedComments(cards);
-        cards = this.expandDecimal(cards);
+        result = this.transcludeLibraryCards(result);
+        result = strippedComments(result);
+        result = this.expandDecimal(result);
         // TODO this method should return a new list like the others do
-        translateCombinatorics(cards);
-        this.cardReader.mountCards(cards);
+        translateCombinatorics(result);
+        this.cardReader.mountCards(result);
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param printed
+     *            {@inheritDoc}
+     */
     @Override
-    public void receiveOutput(String printed) {
+    public void receiveOutput(final String printed) {
         String toWrite = this.formatted(printed);
         if (this.writeInRows) {
             this.report += toWrite;
@@ -371,33 +453,50 @@ public class DefaultAttendant implements Attendant {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reset() {
         this.report = "";
         this.cardReader.unmountCards();
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param reader
+     *            {@inheritDoc}
+     */
     @Override
-    public void setCardReader(CardReader reader) {
+    public void setCardReader(final CardReader reader) {
         this.cardReader = reader;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param paths
+     *            {@inheritDoc}
+     */
     @Override
-    public void setLibraryPaths(List<Path> paths) {
+    public void setLibraryPaths(final List<Path> paths) {
         Collections.copy(this.libraryPaths, paths);
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * {@inheritDoc}
      * 
+     * @param stripComments
+     *            {@inheritDoc}
      * @see analyticalengine.components.Attendant#setStripComments(boolean)
      */
     @Override
-    public void setStripComments(boolean stripComments) {
+    public void setStripComments(final boolean stripComments) {
         this.stripComments = stripComments;
     }
 
-    private List<Card> transcludeLibraryCards(List<Card> cards)
+    private List<Card> transcludeLibraryCards(final List<Card> cards)
             throws BadCard, IOException, UnknownCard {
         List<Card> result = new ArrayList<Card>();
         for (Card card : cards) {
@@ -596,23 +695,38 @@ public class DefaultAttendant implements Attendant {
         throw new BadCard("No matching end of cycle.", c);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeInColumns() {
         this.writeInRows = false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeInRows() {
         this.writeInRows = true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeNewline() {
         this.report += System.getProperty("line.separator");
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param formatString
+     *            {@inheritDoc}
+     */
     @Override
-    public void setFormat(String formatString) {
+    public void setFormat(final String formatString) {
         this.formatString = formatString;
     }
 

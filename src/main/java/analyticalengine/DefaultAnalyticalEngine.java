@@ -27,12 +27,25 @@ import org.slf4j.LoggerFactory;
 
 import analyticalengine.cards.Card;
 
+/**
+ * A basic implementation of the Analytical Engine interface.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public class DefaultAnalyticalEngine implements AnalyticalEngine {
+
+    /** The attendant that operates the Analytical Engine. */
     private Attendant attendant = null;
+    /** The mill that performs the arithmetic logic for the Engine. */
     private Mill mill = null;
+    /** The memory for the Engine. */
     private Store store = null;
+    /** The device that maintains the sequence of cards being read. */
     private CardReader cardReader = null;
+    /** The device that prints numbers as output. */
     private Printer printer = null;
+    /** The device that plots curves as output. */
     private CurvePrinter curvePrinter = null;
 
     /**
@@ -41,16 +54,15 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
     private static final transient Logger LOG = LoggerFactory
             .getLogger(DefaultAnalyticalEngine.class);
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reset() {
         this.mill.reset();
         this.store.reset();
         this.curvePrinter.reset();
     }
-
-    // void inputCards(List<Card> cards) {
-    // this.cardReader.mountCards(cards);
-    // }
 
     private void executeCard(Card card) throws Bell, Halt, BadCard {
         LOG.debug("Executing card {}", card);
@@ -247,6 +259,9 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void run() {
         try {
@@ -272,33 +287,69 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param attendant
+     *            {@inheritDoc}
+     */
     @Override
-    public void setAttendant(Attendant attendant) {
+    public void setAttendant(final Attendant attendant) {
         this.attendant = attendant;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param mill
+     *            {@inheritDoc}
+     */
     @Override
-    public void setMill(Mill mill) {
+    public void setMill(final Mill mill) {
         this.mill = mill;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param store
+     *            {@inheritDoc}
+     */
     @Override
-    public void setStore(Store store) {
+    public void setStore(final Store store) {
         this.store = store;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param reader
+     *            {@inheritDoc}
+     */
     @Override
-    public void setCardReader(CardReader reader) {
+    public void setCardReader(final CardReader reader) {
         this.cardReader = reader;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param printer
+     *            {@inheritDoc}
+     */
     @Override
-    public void setPrinter(Printer printer) {
+    public void setPrinter(final Printer printer) {
         this.printer = printer;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param printer
+     *            {@inheritDoc}
+     */
     @Override
-    public void setCurvePrinter(CurvePrinter printer) {
+    public void setCurvePrinter(final CurvePrinter printer) {
         this.curvePrinter = printer;
     }
 }
