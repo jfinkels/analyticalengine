@@ -131,7 +131,8 @@ public class DefaultAttendant implements Attendant {
         if (this.writeInRows) {
             this.report += message;
         } else {
-            // TODO do something different
+            throw new UnsupportedOperationException(
+                    "No implementation available for writing in columns.");
         }
     }
 
@@ -518,7 +519,8 @@ public class DefaultAttendant implements Attendant {
         if (this.writeInRows) {
             this.report += toWrite;
         } else {
-            // TODO do something different
+            throw new UnsupportedOperationException(
+                    "No implementation available for writing in columns.");
         }
     }
 
@@ -679,20 +681,21 @@ public class DefaultAttendant implements Attendant {
      * @param cards
      *            The list of cards containing the implicit loop to replace
      *            (in-place).
-     * @param start
+     * @param startIndex
      *            The index of the implicit loop to replace.
      * @throws BadCard
      *             if there is a syntax error in one of the implicit
      *             combinatorial cards (for example, if a start card has no
      *             corresponding end card).
      */
-    private void translateCycle(final List<Card> cards, int start)
+    private void translateCycle(final List<Card> cards, final int startIndex)
             throws BadCard {
-        Card c = cards.get(start);
+        Card c = cards.get(startIndex);
         boolean depends = false;
         int i;
 
         depends = (c.type() == CardType.CBACKSTART || c.type() == CardType.CFORWARDSTART);
+        int start = startIndex;
         if (this.stripComments) {
             cards.remove(start);
             start--;
