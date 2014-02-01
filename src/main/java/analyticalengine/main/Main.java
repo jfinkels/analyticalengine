@@ -43,7 +43,15 @@ import analyticalengine.StringPrinter;
 import analyticalengine.cards.Card;
 import analyticalengine.io.UnknownCard;
 
+/**
+ * A command-line driver for the Analytical Engine simulation.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public final class Main {
+
+    /** Instantiation disallowed. */
     private Main() {
         // intentionally unimplemented
     }
@@ -59,7 +67,13 @@ public final class Main {
     // up("  -u    Print this message");
     // }
 
-    public static void main(String[] args) {
+    /**
+     * The main method for the command-line program.
+     * 
+     * @param args
+     *            The command-line arguments to the program.
+     */
+    public static void main(final String[] args) {
         AnalyticalEngine engine = new DefaultAnalyticalEngine();
         Attendant attendant = new DefaultAttendant();
         CardReader reader = new ArrayListCardReader();
