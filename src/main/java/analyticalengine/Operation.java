@@ -20,6 +20,19 @@
  */
 package analyticalengine;
 
+/**
+ * An arithmetic operation that the mill can perform.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public enum Operation {
-    ADD, SUBTRACT, MULTIPLY, DIVIDE, NOOP;
+    /** Add two integers. */
+    ADD,
+    /** Subtract two integers. */
+    SUBTRACT,
+    /** Multiply two integers. */
+    MULTIPLY,
+    /** Divide two integers. */
+    DIVIDE;
 }

@@ -55,13 +55,39 @@ public class DefaultMill implements Mill {
      */
     private BigInteger[] ingressAxes = new BigInteger[3];
 
-    // load and store instructions use this
+    /**
+     * The integers stored in the most recently used axis.
+     * 
+     * If a left shift or right shift is performed, this will be the value of
+     * the first main ingress axis or the main egress axis, respectively. If a
+     * load or store is performed, this will be the integer that is loaded or
+     * stored. If an arithmetic operation is performed, this will be the value
+     * of the main egress axis (after the operation is performed).
+     */
     private BigInteger mostRecentValue = null;
 
+    /**
+     * Indicates either an overflow or a change of sign that occurred while
+     * computing the result of an arithmetic operation.
+     * 
+     * It is impossible to know which of those options this flag indicates
+     * without knowing which operation has been performed.
+     */
     private boolean runUp;
 
-    // at the end of this method, the egress axes have been set as a side
-    // effect
+    /**
+     * Executes the arithmetic operation specified by the value of
+     * {@link #currentOperation} and stores the result in the egress axes.
+     * 
+     * This method is invoked after two values (and possibly an additional
+     * integer in the prime axis) have been loaded into the ingress axes.
+     * 
+     * This method sets the value of {@link #mostRecentValue} to be the result
+     * of the arithmetic operation.
+     * 
+     * If there is an arithmetic overflow or a change of operation, the run up
+     * flag will be set to {@code true}.
+     */
     private void execute() {
         this.runUp = false;
         this.currentAxis = 0;
@@ -159,7 +185,6 @@ public class DefaultMill implements Mill {
             this.egressAxes[1] = BigInteger.ZERO;
             this.mostRecentValue = result;
             break;
-        case NOOP:
         default:
             break;
         }
@@ -213,6 +238,9 @@ public class DefaultMill implements Mill {
 
     /**
      * {@inheritDoc}
+     * 
+     * This method sets the value of {@link #mostRecentValue} to be the value
+     * stored in the main ingress axis (after the shift).
      * 
      * @param shift
      *            {@inheritDoc}
@@ -289,6 +317,9 @@ public class DefaultMill implements Mill {
     /**
      * {@inheritDoc}
      * 
+     * This method sets the value of {@link #mostRecentValue} to be the value
+     * stored in the main ingress axis (after the shift).
+     * 
      * @param shift
      *            {@inheritDoc}
      */
@@ -333,6 +364,9 @@ public class DefaultMill implements Mill {
     /**
      * {@inheritDoc}
      * 
+     * This method sets the value of {@link #mostRecentValue} to be the value
+     * transferred in.
+     * 
      * @param value
      *            {@inheritDoc}
      * @param prime
@@ -364,6 +398,9 @@ public class DefaultMill implements Mill {
     /**
      * {@inheritDoc}
      * 
+     * This method sets the value of {@link #mostRecentValue} to be the value
+     * transferred out.
+     * 
      * @return {@inheritDoc}
      */
     @Override
@@ -373,6 +410,9 @@ public class DefaultMill implements Mill {
 
     /**
      * {@inheritDoc}
+     * 
+     * This method sets the value of {@link #mostRecentValue} to be the value
+     * transferred out.
      * 
      * @param prime
      *            {@inheritDoc}
