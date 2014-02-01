@@ -247,10 +247,10 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             this.attendant.writeNewline();
             break;
         case WRITECOLUMNS:
-            this.attendant.writeInColumns();
+            this.attendant.writeInDirection(WriteDirection.COLUMNS);
             break;
         case WRITEROWS:
-            this.attendant.writeInRows();
+            this.attendant.writeInDirection(WriteDirection.ROWS);
             break;
         case WRITEPICTURE:
             this.attendant.setFormat(card.argument(0));

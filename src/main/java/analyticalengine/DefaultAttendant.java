@@ -815,18 +815,13 @@ public class DefaultAttendant implements Attendant {
 
     /**
      * {@inheritDoc}
+     * 
+     * @param direction
+     *            {@inheritDoc}
      */
     @Override
-    public void writeInColumns() {
-        this.writeInRows = false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void writeInRows() {
-        this.writeInRows = true;
+    public void writeInDirection(final WriteDirection direction) {
+        this.writeInRows = direction == WriteDirection.ROWS;
     }
 
     /**

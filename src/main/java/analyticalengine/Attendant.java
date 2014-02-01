@@ -147,16 +147,13 @@ public interface Attendant {
     void setStripComments(boolean stripComments);
 
     /**
-     * Instructs the attendant to format the output from the printer in columns
-     * instead of rows.
+     * Instructs the attendant to format the output from the printer either in
+     * columns or in rows.
+     * 
+     * @param direction
+     *            The direction in which to write (rows or columns).
      */
-    void writeInColumns();
-
-    /**
-     * Instructs the attendant to format the output from the printer in rows
-     * instead of columns.
-     */
-    void writeInRows();
+    void writeInDirection(WriteDirection direction);
 
     /**
      * Instructs the attendant to write any following output from the printer
