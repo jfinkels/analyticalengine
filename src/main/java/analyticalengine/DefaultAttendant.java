@@ -151,6 +151,11 @@ public class DefaultAttendant implements Attendant {
         List<Card> result = new ArrayList<Card>();
         int decimalPlace = -1;
         for (Card card : cards) {
+            // This variable shows up in more than one case, but we cannot
+            // define it within each case because each case has the same
+            // (switch-level) scope, even though it would be more readable that
+            // way.
+            Card replacement = null;
             switch (card.type()) {
             // A set decimal places to [+/-]n
             case DECIMALEXPAND:
@@ -188,15 +193,14 @@ public class DefaultAttendant implements Attendant {
                 }
 
                 if (!this.stripComments) {
-                    Card replacement = Card
-                            .commentCard("A set decimal places to "
-                                    + card.argument(0));
+                    replacement = Card.commentCard("A set decimal places to "
+                            + card.argument(0));
                     result.add(replacement);
                 }
                 decimalPlace = d;
                 break;
             // Convert "A write numbers with decimal point" to a picture
-            case WRITEDECIMAL: {
+            case WRITEDECIMAL:
                 if (decimalPlace < 0) {
                     throw new BadCard(
                             "I cannot add the number of decimal places because\n"
@@ -205,15 +209,14 @@ public class DefaultAttendant implements Attendant {
                             card);
                 }
 
-                Card replacement = this.expandWriteDecimal(decimalPlace, card);
+                replacement = this.expandWriteDecimal(decimalPlace, card);
                 result.add(replacement);
                 break;
-            }
             /*
              * Replace number cards with decimal points with cards scaled to
              * the proper number of digits.
              */
-            case NUMBER: {
+            case NUMBER:
                 String number = card.argument(1);
                 int decimalIndex = number.indexOf(".");
                 // If the number has no decimal, just add the card as is.
@@ -228,10 +231,9 @@ public class DefaultAttendant implements Attendant {
                                     + "places to use in a prior \"A set decimal places\"\ninstruction.",
                             card);
                 }
-                Card replacement = this.expandNumber(decimalPlace, card);
+                replacement = this.expandNumber(decimalPlace, card);
                 result.add(replacement);
                 break;
-            }
             // Add step up/down to "<" or ">" if not specified
             case LSHIFT:
             case RSHIFT:
@@ -243,7 +245,7 @@ public class DefaultAttendant implements Attendant {
                             card);
                 }
 
-                Card replacement = this.expandShift(decimalPlace, card);
+                replacement = this.expandShift(decimalPlace, card);
                 result.add(replacement);
                 break;
             default:
@@ -437,16 +439,20 @@ public class DefaultAttendant implements Attendant {
                     break;
 
                 case '±': // Plus or minus sign
-                    o = (negative
-                                 ? '-'
-                                     : '+') + o;
+                    if (negative) {
+                        o = '-' + o;
+                    } else {
+                        o = '+' + o;
+                    }
                     sign = true;
                     break;
 
                 case '+': // Sign if negative, space if positive
-                    o = (negative
-                                 ? '-'
-                                     : ' ') + o;
+                    if (negative) {
+                        o = '-' + o;
+                    } else {
+                        o = ' ' + o;
+                    }
                     sign = true;
                     break;
 
@@ -727,9 +733,12 @@ public class DefaultAttendant implements Attendant {
                 }
                 if (c.type() == CardType.BACKSTART) {
                     // It's a loop
-                    CardType newType = depends
-                                              ? CardType.CBACKWARD
-                                                  : CardType.BACKWARD;
+                    CardType newType;
+                    if (depends) {
+                        newType = CardType.CBACKWARD;
+                    } else {
+                        newType = CardType.BACKWARD;
+                    }
                     String[] newArgs = { Integer.toString(i - start) };
                     cards.add(i, new Card(newType, newArgs));
                 } else {
