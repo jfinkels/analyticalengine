@@ -552,7 +552,7 @@ public class DefaultAttendant implements Attendant {
      * 
      * @param stripComments
      *            {@inheritDoc}
-     * @see analyticalengine.components.Attendant#setStripComments(boolean)
+     * @see analyticalengine.Attendant#setStripComments(boolean)
      */
     @Override
     public void setStripComments(final boolean stripComments) {

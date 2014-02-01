@@ -81,7 +81,7 @@ public abstract class AbstractCurvePrinter implements CurvePrinter {
     /**
      * {@inheritDoc}
      * 
-     * @see analyticalengine.components.CurvePrinter#reset()
+     * @see analyticalengine.CurvePrinter#reset()
      */
     @Override
     public void reset() {
