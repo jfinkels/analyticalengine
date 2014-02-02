@@ -1,14 +1,42 @@
+/**
+ * CardParserTest.java - tests for CardParser
+ * 
+ * Copyright 2014 Jeffrey Finkelstein.
+ * 
+ * This file is part of analyticalengine.
+ * 
+ * analyticalengine is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ * 
+ * analyticalengine is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
+ */
 package analyticalengine.io;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import analyticalengine.TestUtils;
 import analyticalengine.cards.CardType;
 
+/**
+ * Tests for {@link analyticalengine.io.CardParser}.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public class CardParserTest {
 
+    /** Test for parsing strings into cards. */
     @Test
     public void testToCard() {
         try {
@@ -93,7 +121,7 @@ public class CardParserTest {
             CardParser.toCard("$ bogus card");
             TestUtils.shouldHaveThrownException();
         } catch (UnknownCard e) {
-            // intentionally unimplemented
+            assertTrue(true);
         }
     }
 }

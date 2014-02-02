@@ -1,3 +1,23 @@
+/**
+ * DefaultAnalyticalEngineTest.java - tests for DefaultAnalyticalEngine
+ * 
+ * Copyright 2014 Jeffrey Finkelstein.
+ * 
+ * This file is part of analyticalengine.
+ * 
+ * analyticalengine is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ * 
+ * analyticalengine is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
+ */
 package analyticalengine;
 
 import static org.junit.Assert.assertEquals;
@@ -14,13 +34,22 @@ import org.junit.Test;
 import analyticalengine.cards.Card;
 import analyticalengine.io.UnknownCard;
 
-public class AnalyticalEngineTest {
+/**
+ * Tests for the {@link analyticalengine.DefaultAnalayticalEngine} class.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
+public class DefaultAnalyticalEngineTest {
 
+    /** The Analytical Engine instance to test. */
     private AnalyticalEngine engine = null;
+    /** The attendant required to operate the Analytical Engine. */
     private Attendant attendant = null;
 
+    /** Creates the Analytical Engine to test. */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.engine = new DefaultAnalyticalEngine();
         this.attendant = new DefaultAttendant();
         CardReader reader = new ArrayListCardReader();
@@ -39,14 +68,18 @@ public class AnalyticalEngineTest {
         this.engine.setStore(store);
     }
 
+    /** Resets the Analytical Engine being tested. */
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         // this technically doesn't need to be done, since we are creating new
         // objects in set up code anyway
         this.attendant.reset();
         this.engine.reset();
     }
 
+    /**
+     * Tests the {@link analyticalengine.DefaultAnalyticalEngine#run()} method.
+     */
     @Test
     public void testRun() {
         // First, load the cards specified in the filename given as an
@@ -75,6 +108,7 @@ public class AnalyticalEngineTest {
         assertEquals("3333", this.attendant.finalReport());
     }
 
+    /** Tests the division operator. */
     @Test
     public void testDivide() {
         // First, load the cards specified in the filename given as an
@@ -104,7 +138,7 @@ public class AnalyticalEngineTest {
                 this.attendant.finalReport());
     }
 
-
+    /** Test the shift operators. */
     @Test
     public void testShifts() {
         // First, load the cards specified in the filename given as an
@@ -133,5 +167,4 @@ public class AnalyticalEngineTest {
                 this.attendant.finalReport());
     }
 
-    
 }
