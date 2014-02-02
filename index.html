@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]>      <html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,6 +18,46 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-        <p>Hello world! This is HTML5 Boilerplate.</p>
+        <div class="container">
+          <div class="page-header">
+          <h1>Analytical Engine</h1>
+          </div>
+          <p class="lead">Java simulation of Charles Babbage's Analytical Engine.
+
+          <p>The original source code was written
+          by <a href="//www.fourmilab.ch">John Walker</a>, and is available
+          from <a href="//www.fourmilab.ch/babbage/contents.html">this
+          website</a>. That software is in the public domain, according to
+          <a href="//www.fourmilab.ch/babbage/cmdline.html">this website</a>.
+
+          <h2>Copyright license</h2>
+
+          <p>This package is distributed under the terms of the GNU General
+          Public License version 3.
+
+          <h2>Building from source</h2>
+
+          <p>This project uses <a href="//maven.apache.org/">Maven</a> for
+          build management and requires Java 1.7 to compile.
+
+          <p>To create a shell script that runs the simulator, run
+
+          <pre><code>mvn appassembler:assemble</code></pre>
+
+          <p>This produces a script that executes the simulator
+          at <code>target/appassembler/bin/analyticalengine</code>.
+
+          <h2>Running</h2>
+
+          <pre><code>analyticalengine myprogram.ae</code></pre>
+
+          <h2>Programming for the Analytical Engine</h2>
+
+          <p>The programming language for this machine is arcane, but
+          relatively similar to modern machine languages. For more information
+          on the instruction set and how to write programs for this machine,
+          see <a href="http://www.fourmilab.ch/babbage/cards.html">this
+          website</a>.
+        </div>
     </body>
 </html>
