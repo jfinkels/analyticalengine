@@ -42,6 +42,24 @@ import analyticalengine.io.UnknownCard;
 public class DefaultAttendant implements Attendant {
 
     /**
+     * Returns {@code true} if and only if the cycle started by card
+     * {@code start} matches the cycle end specified by {code end}.
+     * 
+     * @param start
+     *            A card representing the start of a cycle.
+     * @param end
+     *            A card representing the end of a cycle.
+     * @return {@code true} if and only if the cycle started by card
+     *         {@code start} matches the cycle end specified by {code end}.
+     */
+    private static boolean cyclesMatch(final Card start, final Card end) {
+        return ((start.type() == CardType.CBACKSTART || start.type() == CardType.BACKSTART
+                && end.type() != CardType.BACKEND)
+                || (start.type() == CardType.CFORWARDSTART || start.type() == CardType.FORWARDSTART)
+                && (end.type() != CardType.FORWARDEND || end.type() != CardType.ALTERNATION));
+    }
+
+    /**
      * Returns {@code true} if and only if the card type indicates the end of a
      * cycle block (including an alternation).
      * 
@@ -185,7 +203,7 @@ public class DefaultAttendant implements Attendant {
                             card);
                 }
                 if (relative != 0) {
-                    d = decimalPlace + (d * relative);
+                    d = decimalPlace + d * relative;
                 }
                 if (d < 0 || d > 50) {
                     throw new BadCard(
@@ -210,7 +228,7 @@ public class DefaultAttendant implements Attendant {
                             card);
                 }
 
-                replacement = this.expandWriteDecimal(decimalPlace, card);
+                replacement = this.expandWriteDecimal(decimalPlace);
                 result.add(replacement);
                 break;
             /*
@@ -296,46 +314,19 @@ public class DefaultAttendant implements Attendant {
             }
         }
 
-        // TODO do this as a string formatting operation
-        while (dpart.length() < decimalPlace) {
-            dpart += "0";
+        StringBuilder afterDecimal = new StringBuilder(dpart);
+        while (afterDecimal.length() < decimalPlace) {
+            afterDecimal.append("0");
         }
 
         // Append the decimal part to fixed part from card
-        String newNumber = number.substring(0, decimalIndex) + dpart;
+        String newNumber = number.substring(0, decimalIndex) + afterDecimal;
         if (this.stripComments) {
             return new Card(CardType.NUMBER, new String[] { card.argument(0),
                     newNumber });
         }
         return new Card(CardType.NUMBER, new String[] { card.argument(0),
                 newNumber }, "Decimal expansion by attendant");
-    }
-
-    /**
-     * Replaces a {@link CardType#WRITEDECIMAL} card with a
-     * {@link CardType#WRITEPICTURE} card that instructs the attendant to
-     * format the output with the specified number of decimal places.
-     * 
-     * @param decimalPlace
-     *            The number of digits that the attendant should write after
-     *            the decimal point.
-     * @param card
-     *            A {@link CardType#WRITEDECIMAL} card.
-     * @return A {@link CardType#WRITEPICTURE} card that instructs the
-     *         attendant to format the output with the specified number of
-     *         decimal places.
-     */
-    private Card expandWriteDecimal(final int decimalPlace, final Card card) {
-        int dpa;
-
-        // TODO do this as a string formatting operation
-        StringBuilder formatString = new StringBuilder("9.");
-        for (dpa = 0; dpa < decimalPlace; dpa++) {
-            formatString.append("9");
-        }
-
-        return new Card(CardType.WRITEPICTURE,
-                new String[] { formatString.toString() });
     }
 
     /**
@@ -370,6 +361,31 @@ public class DefaultAttendant implements Attendant {
     }
 
     /**
+     * Replaces a {@link CardType#WRITEDECIMAL} card with a
+     * {@link CardType#WRITEPICTURE} card that instructs the attendant to
+     * format the output with the specified number of decimal places.
+     * 
+     * @param decimalPlace
+     *            The number of digits that the attendant should write after
+     *            the decimal point.
+     * @return A {@link CardType#WRITEPICTURE} card that instructs the
+     *         attendant to format the output with the specified number of
+     *         decimal places.
+     */
+    private Card expandWriteDecimal(final int decimalPlace) {
+        int dpa;
+
+        // TODO do this as a string formatting operation
+        StringBuilder formatString = new StringBuilder("9.");
+        for (dpa = 0; dpa < decimalPlace; dpa++) {
+            formatString.append("9");
+        }
+
+        return new Card(CardType.WRITEPICTURE,
+                new String[] { formatString.toString() });
+    }
+
+    /**
      * {@inheritDoc}
      * 
      * @return {@inheritDoc}
@@ -391,7 +407,7 @@ public class DefaultAttendant implements Attendant {
      */
     private String formatted(final String input) {
         String s = input;
-        boolean negative = (input.charAt(0) == '-');
+        boolean negative = input.charAt(0) == '-';
         boolean sign = false;
 
         if (this.formatString != null) {
@@ -426,8 +442,7 @@ public class DefaultAttendant implements Attendant {
                     break;
 
                 case ',': // Comma if digits remain to output
-                    if ((this.formatString.indexOf('9') >= 0)
-                            || s.length() > 0) {
+                    if (this.formatString.indexOf('9') >= 0 || s.length() > 0) {
                         o = c + o;
                     }
                     break;
@@ -542,6 +557,17 @@ public class DefaultAttendant implements Attendant {
     @Override
     public void setCardReader(final CardReader reader) {
         this.cardReader = reader;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @param formatString
+     *            {@inheritDoc}
+     */
+    @Override
+    public void setFormat(final String formatString) {
+        this.formatString = formatString;
     }
 
     /**
@@ -694,7 +720,8 @@ public class DefaultAttendant implements Attendant {
         boolean depends = false;
         int i;
 
-        depends = (c.type() == CardType.CBACKSTART || c.type() == CardType.CFORWARDSTART);
+        depends = c.type() == CardType.CBACKSTART
+                || c.type() == CardType.CFORWARDSTART;
         int start = startIndex;
         if (this.stripComments) {
             cards.remove(start);
@@ -719,10 +746,7 @@ public class DefaultAttendant implements Attendant {
             if (isCycleEnd(u.type())) {
                 boolean isElse = u.type() == CardType.ALTERNATION;
 
-                if (((c.type() == CardType.CBACKSTART || c.type() == CardType.BACKSTART) && u
-                        .type() != CardType.BACKEND)
-                        || ((c.type() == CardType.CFORWARDSTART || c.type() == CardType.FORWARDSTART) && (u
-                                .type() != CardType.FORWARDEND || u.type() != CardType.ALTERNATION))) {
+                if (cyclesMatch(c, u)) {
                     throw new BadCard("End of cycle does not match " + c
                             + " beginning on card " + start, u);
                 }
@@ -833,17 +857,6 @@ public class DefaultAttendant implements Attendant {
     @Override
     public void writeNewline() {
         this.report += System.getProperty("line.separator");
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @param formatString
-     *            {@inheritDoc}
-     */
-    @Override
-    public void setFormat(final String formatString) {
-        this.formatString = formatString;
     }
 
 }
