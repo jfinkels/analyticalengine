@@ -32,10 +32,46 @@ import analyticalengine.cards.CardType;
 public final class CardParser {
 
     /**
-     * Instantiation is disallowed.
+     * Returns the combinatorial card represented by the specified string.
+     * 
+     * @param cardString
+     *            The string representing a combinatorial card.
+     * @return The card parsed from the specified string.
+     * @throws UnknownCard
+     *             if there is a syntax error while parsing the given string.
      */
-    private CardParser() {
-        // intentionally unimplemented
+    private static Card parseCombinatorialCard(final String cardString)
+            throws UnknownCard {
+        String rest = cardString.substring(1);
+        if (rest.charAt(0) == 'F') {
+            if (rest.charAt(1) == '?') {
+                return new Card(CardType.CFORWARD,
+                        new String[] { rest.substring(2) });
+            } else if (rest.charAt(1) == '+') {
+                return new Card(CardType.FORWARD,
+                        new String[] { rest.substring(2) });
+            } else {
+                throw new UnknownCard(
+                        "Forward card must be either CF+ or CF?, got: "
+                                + cardString);
+            }
+        } else if (rest.charAt(0) == 'B') {
+            if (rest.charAt(1) == '?') {
+                return new Card(CardType.CBACKWARD,
+                        new String[] { rest.substring(2) });
+            } else if (rest.charAt(1) == '+') {
+                return new Card(CardType.BACKWARD,
+                        new String[] { rest.substring(2) });
+            } else {
+                throw new UnknownCard(
+                        "Backward card must be either CB+ or CB?, got: "
+                                + cardString);
+            }
+        } else {
+            throw new UnknownCard(
+                    "Combinatorial card must be either CF or CB, got: "
+                            + cardString);
+        }
     }
 
     /**
@@ -98,35 +134,7 @@ public final class CardParser {
             }
             return new Card(CardType.RSHIFT);
         case 'C':
-            if (rest.charAt(0) == 'F') {
-                if (rest.charAt(1) == '?') {
-                    return new Card(CardType.CFORWARD,
-                            new String[] { rest.substring(2) });
-                } else if (rest.charAt(1) == '+') {
-                    return new Card(CardType.FORWARD,
-                            new String[] { rest.substring(2) });
-                } else {
-                    throw new UnknownCard(
-                            "Forward card must be either CF+ or CF?, got: "
-                                    + cardString);
-                }
-            } else if (rest.charAt(0) == 'B') {
-                if (rest.charAt(1) == '?') {
-                    return new Card(CardType.CBACKWARD,
-                            new String[] { rest.substring(2) });
-                } else if (rest.charAt(1) == '+') {
-                    return new Card(CardType.BACKWARD,
-                            new String[] { rest.substring(2) });
-                } else {
-                    throw new UnknownCard(
-                            "Backward card must be either CB+ or CB?, got: "
-                                    + cardString);
-                }
-            } else {
-                throw new UnknownCard(
-                        "Combinatorial card must be either CF or CB, got: "
-                                + cardString);
-            }
+            return parseCombinatorialCard(cardString);
         case 'B':
             return new Card(CardType.BELL);
         case 'P':
@@ -204,5 +212,12 @@ public final class CardParser {
         default:
             throw new UnknownCard("Unable to parse: " + cardString);
         }
+    }
+
+    /**
+     * Instantiation is disallowed.
+     */
+    private CardParser() {
+        // intentionally unimplemented
     }
 }
