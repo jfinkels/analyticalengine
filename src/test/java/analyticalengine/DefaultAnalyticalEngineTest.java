@@ -35,7 +35,7 @@ import analyticalengine.cards.Card;
 import analyticalengine.io.UnknownCard;
 
 /**
- * Tests for the {@link analyticalengine.DefaultAnalayticalEngine} class.
+ * Tests for the DefaultAnalayticalEngine class.
  * 
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
