@@ -20,11 +20,19 @@
  */
 package analyticalengine.main;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.junit.After;
 import org.junit.Before;
@@ -37,6 +45,12 @@ import org.junit.Test;
  * @since 0.0.1
  */
 public class MainTest {
+
+    /** A file containing an example Analytical Engine program. */
+    public static final String TESTFILE = "src/test/resources/analyticalengine/ex0.ae";
+
+    /** A file containing an example Analytical Engine program with comments. */
+    public static final String TESTFILE2 = "src/test/resources/analyticalengine/ex1.ae";
 
     /** The original standard error. */
     private PrintStream oldStderr;
@@ -82,37 +96,116 @@ public class MainTest {
         System.setErr(this.oldStderr);
     }
 
-    /** Test for parsing arguments. */
+    /** Test for setting the library path. */
     @Test
-    public void testArgumentParsing() {
-        String[] argv;
+    public void testLibraryPath() throws IOException {
+        // create a temporary file that will include a function from another
+        Path tempProgram = Files.createTempFile(null, null);
 
-        // simply run a program
-        argv = new String[] { "src/test/resources/analyticalengine/ex0.ae" };
-        Main.main(argv);
+        // create two temporary directories
+        Path tempDir1 = Files.createTempDirectory(null);
+        Path tempDir2 = Files.createTempDirectory(null);
 
-        // list but don't run the program
-        argv = new String[] { "-l",
-                "src/test/resources/analyticalengine/ex0.ae" };
-        Main.main(argv);
-        String output = this.stdout.toString();
-        assertTrue(output.toLowerCase().contains("number"));
-        assertTrue(output.toLowerCase().contains("120"));
-        assertTrue(output.toLowerCase().contains("10000"));
-        assertTrue(output.toLowerCase().contains("121"));
-        assertTrue(output.toLowerCase().contains("3"));
-        assertTrue(output.toLowerCase().contains("divide"));
-        assertTrue(output.toLowerCase().contains("load"));
-        assertTrue(output.toLowerCase().contains("store"));
+        // create two temporary files with the same name, one in each directory
+        Path tempFile1 = Files.createTempFile(tempDir1, null, ".ae");
+        Path baseName = tempFile1.getFileName();
+        Path tempFile2 = tempDir2.resolve(baseName);
+        Files.createFile(tempFile2);
 
-        // display verbose information
-        argv = new String[] { "-v", "1",
-                "src/test/resources/analyticalengine/ex0.ae" };
-        Main.main(argv);
+        // ensure the files are deleted when the JVM exits
+        tempProgram.toFile().deleteOnExit();
+        tempFile1.toFile().deleteOnExit();
+        tempFile2.toFile().deleteOnExit();
+        tempDir1.toFile().deleteOnExit();
+        tempDir2.toFile().deleteOnExit();
 
-        // display more verbose information
-        argv = new String[] { "-v", "2",
-                "src/test/resources/analyticalengine/ex0.ae" };
+        // write two different programs, one in each of the temporary files
+        try (BufferedWriter writer = Files.newBufferedWriter(tempFile1,
+                Charset.defaultCharset())) {
+            writer.write("N1 2\n");
+            writer.write("N2 3\n");
+            writer.write("*\n");
+            writer.write("L1\n");
+            writer.write("L2\n");
+            writer.write("S3\n");
+            // program should print 6 as output
+            writer.write("P\n");
+        }
+
+        try (BufferedWriter writer = Files.newBufferedWriter(tempFile2,
+                Charset.defaultCharset())) {
+            writer.write("N1 4\n");
+            writer.write("N2 7\n");
+            writer.write("*\n");
+            writer.write("L1\n");
+            writer.write("L2\n");
+            writer.write("S3\n");
+            // program should print 28 as output
+            writer.write("P\n");
+        }
+
+        // write a program that includes the file with baseName
+        String withoutExtension = baseName.toString().replace(".ae", "");
+        try (BufferedWriter writer = Files.newBufferedWriter(tempProgram,
+                Charset.defaultCharset())) {
+            writer.write("A include from library cards for " + withoutExtension + "\n");
+        }
+
+        // list tempDir2 first, so we expect 8 as output
+        String[] argv = new String[] { "-s", tempDir2 + ":" + tempDir1,
+                tempProgram.toString() };
         Main.main(argv);
+        String output = this.stdout.toString().toLowerCase();
+        assertTrue(output.contains("4"));
+        assertTrue(output.contains("7"));
+        assertTrue(output.contains("28"));
+    }
+
+    /** Test for listing the cards only. */
+    @Test
+    public void testList() {
+        String[] argv = new String[] { "-l", TESTFILE };
+        Main.main(argv);
+        String output = this.stdout.toString().toLowerCase();
+        assertTrue(output.contains("number"));
+        assertTrue(output.contains("120"));
+        assertTrue(output.contains("10000"));
+        assertTrue(output.contains("121"));
+        assertTrue(output.contains("3"));
+        assertTrue(output.contains("divide"));
+        assertTrue(output.contains("load"));
+        assertTrue(output.contains("store"));
+    }
+
+    /** Test for no command-line arguments. */
+    @Test
+    public void testNoArguments() {
+        String[] argv = new String[] { TESTFILE };
+        Main.main(argv);
+    }
+
+    /** Test for stripping comments. */
+    @Test
+    public void testStripComments() {
+        String[] argv = new String[] { "-c", TESTFILE2 };
+        Main.main(argv);
+        String output = this.stdout.toString().toLowerCase();
+        assertFalse(output.contains("comment"));
+    }
+
+    /** Test for verbose information. */
+    @Test
+    public void testVerbose() {
+        String[] argv = new String[] { "-v", "1", TESTFILE };
+        Main.main(argv);
+        // TODO test something
+    }
+
+    /** Test for very verbose information. */
+    @Test
+    public void testVeryVerbose() {
+        String[] argv = new String[] { "-v", "2", TESTFILE };
+        Main.main(argv);
+        // TODO test something
     }
 }

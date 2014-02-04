@@ -26,9 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
-import com.beust.jcommander.converters.IParameterSplitter;
 
 /**
  * Stores arguments parsed from the command-line.
@@ -40,52 +38,6 @@ import com.beust.jcommander.converters.IParameterSplitter;
  * @since 0.0.1
  */
 public class Arguments {
-
-    /**
-     * Splits a colon-separated string on the colons.
-     * 
-     * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
-     * @since 0.0.1
-     */
-    private class ColonSplit implements IParameterSplitter {
-
-        /**
-         * Splits the specified string on colons and returns the resulting
-         * list.
-         * 
-         * @param value
-         *            A colon-separated list of strings.
-         * @return A list of strings that were separated by colons.
-         */
-        @Override
-        public List<String> split(final String value) {
-            return Arrays.asList(value.split(":"));
-        }
-
-    }
-
-    /**
-     * Converts a string containing a path to a path object.
-     * 
-     * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
-     * @since 0.0.1
-     */
-    private class PathConverter implements IStringConverter<Path> {
-
-        /**
-         * Converts a string to a path.
-         * 
-         * @param value
-         *            A string representation of a path.
-         * @return A path parsed from {@code value}.
-         * @see com.beust.jcommander.IStringConverter#convert(java.lang.String)
-         */
-        @Override
-        public Path convert(final String value) {
-            return Paths.get(value);
-        }
-
-    }
 
     /**
      * The list of all positional command-line arguments.

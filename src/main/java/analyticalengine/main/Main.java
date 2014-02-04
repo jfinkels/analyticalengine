@@ -149,5 +149,8 @@ public final class Main {
 
         // finally, run the analytical engine with the specified program
         engine.run();
+        
+        // print the attendant's report to standard output
+        System.out.println(attendant.finalReport());
     }
 }
