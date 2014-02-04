@@ -20,6 +20,7 @@
  */
 package analyticalengine.main;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -94,7 +95,29 @@ public class MainTest {
         System.setErr(this.oldStderr);
     }
 
-    /** Test for setting the library path. */
+    /** Test arithmetic operations. */
+    @Test
+    public void testArithmetic() {
+        String[] argv = {"src/test/resources/analyticalengine/test_arithmetic.ae"};
+        Main.main(argv);
+
+        String output = this.stdout.toString();
+        StringBuilder withoutLogging = new StringBuilder();
+        for (String line : output.split("\n")) {
+            if (!line.contains("DEBUG") && !line.contains("INFO")) {
+                withoutLogging.append(line + "\n");
+            }
+        }
+        assertEquals("8\n4\n6\n12\n", withoutLogging.toString());
+    }
+    
+    /**
+     * Test for setting the library path.
+     * 
+     * @throws IOException
+     *             if there is a problem opening or writing to a temporary
+     *             file.
+     */
     @Test
     public void testLibraryPath() throws IOException {
         // create a temporary file that will include a function from another
@@ -146,7 +169,8 @@ public class MainTest {
         String withoutExtension = baseName.toString().replace(".ae", "");
         try (BufferedWriter writer = Files.newBufferedWriter(tempProgram,
                 Charset.defaultCharset())) {
-            writer.write("A include from library cards for " + withoutExtension + "\n");
+            writer.write("A include from library cards for "
+                    + withoutExtension + "\n");
         }
 
         // list tempDir2 first, so we expect 8 as output
