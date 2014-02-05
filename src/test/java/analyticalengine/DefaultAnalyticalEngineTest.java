@@ -48,6 +48,26 @@ public class DefaultAnalyticalEngineTest {
     /** The attendant required to operate the Analytical Engine. */
     private Attendant attendant = null;
 
+    /**
+     * Loads and runs the program with the specified filename (relative to the
+     * test resources directory).
+     * 
+     * @param filename
+     *            The test file to run.
+     */
+    private final void runProgram(final String filename) {
+        try {
+            Path program = Paths.get("src/test/resources/analyticalengine")
+                    .resolve(filename);
+            List<Card> cards = analyticalengine.io.CardReader
+                    .fromPath(program);
+            this.attendant.loadProgram(cards);
+            this.engine.run();
+        } catch (BadCard | IOException | UnknownCard e) {
+            TestUtils.fail(e);
+        }
+    }
+
     /** Creates the Analytical Engine to test. */
     @Before
     public void setUp() {
@@ -81,83 +101,14 @@ public class DefaultAnalyticalEngineTest {
     /** Test arithmetic operations. */
     @Test
     public void testArithmetic() {
-        List<Card> cards = null;
-        try {
-            Path program = Paths
-                    .get("src/test/resources/analyticalengine/test_arithmetic.ae");
-            cards = analyticalengine.io.CardReader.fromPath(program);
-        } catch (IOException | UnknownCard e) {
-            TestUtils.fail(e);
-        }
-
-        try {
-            this.attendant.loadProgram(cards);
-        } catch (BadCard | IOException | UnknownCard e) {
-            TestUtils.fail(e);
-        }
-
-        this.engine.run();
-
+        runProgram("test_arithmetic.ae");
         assertEquals("8\n4\n6\n12\n", this.attendant.finalReport());
-    }
-
-    /**
-     * Tests the {@link analyticalengine.DefaultAnalyticalEngine#run()} method.
-     */
-    @Test
-    public void testRun() {
-        // First, load the cards specified in the filename given as an
-        // argument.
-        List<Card> cards = null;
-        try {
-            Path program = Paths
-                    .get("src/test/resources/analyticalengine/ex0.ae");
-            cards = analyticalengine.io.CardReader.fromPath(program);
-        } catch (IOException | UnknownCard e) {
-            TestUtils.fail(e);
-        }
-
-        // Second, instruct the attendant to load the card chain into the
-        // machine.
-        try {
-            this.attendant.loadProgram(cards);
-        } catch (BadCard | IOException | UnknownCard e) {
-            TestUtils.fail(e);
-        }
-
-        // Finally, run the Analytical Engine with the specified program.
-        this.engine.run();
-
-        // The final report should indicate a 3333, according to the program.
-        assertEquals("3333", this.attendant.finalReport());
     }
 
     /** Tests the division operator. */
     @Test
     public void testDivide() {
-        // First, load the cards specified in the filename given as an
-        // argument.
-        List<Card> cards = null;
-        try {
-            Path program = Paths
-                    .get("src/test/resources/analyticalengine/ex1.ae");
-            cards = analyticalengine.io.CardReader.fromPath(program);
-        } catch (IOException | UnknownCard e) {
-            TestUtils.fail(e);
-        }
-
-        // Second, instruct the attendant to load the card chain into the
-        // machine.
-        try {
-            this.attendant.loadProgram(cards);
-        } catch (BadCard | IOException | UnknownCard e) {
-            TestUtils.fail(e);
-        }
-
-        // Finally, run the Analytical Engine with the specified program.
-        this.engine.run();
-
-        // The final report should indicate a "357\n4"
+        runProgram("ex1.ae");
         assertEquals("357" + System.lineSeparator() + "4",
                 this.attendant.finalReport());
     }
@@ -165,53 +116,25 @@ public class DefaultAnalyticalEngineTest {
     /** Test arithmetic operations. */
     @Test
     public void testLoad() {
-        List<Card> cards = null;
-        try {
-            Path program = Paths
-                    .get("src/test/resources/analyticalengine/test_load.ae");
-            cards = analyticalengine.io.CardReader.fromPath(program);
-        } catch (IOException | UnknownCard e) {
-            TestUtils.fail(e);
-        }
-
-        try {
-            this.attendant.loadProgram(cards);
-        } catch (BadCard | IOException | UnknownCard e) {
-            TestUtils.fail(e);
-        }
-
-        this.engine.run();
-
+        runProgram("test_load.ae");
         BigInteger quotient = DefaultMill.MAX.divide(new BigInteger("2"));
         assertEquals("1\n0\n" + quotient + "\n1\n0\n0\n",
                 this.attendant.finalReport());
     }
 
+    /**
+     * Tests the {@link analyticalengine.DefaultAnalyticalEngine#run()} method.
+     */
+    @Test
+    public void testRun() {
+        runProgram("ex0.ae");
+        assertEquals("3333", this.attendant.finalReport());
+    }
+
     /** Test the shift operators. */
     @Test
     public void testShifts() {
-        // First, load the cards specified in the filename given as an
-        // argument.
-        List<Card> cards = null;
-        try {
-            Path program = Paths
-                    .get("src/test/resources/analyticalengine/ex2.ae");
-            cards = analyticalengine.io.CardReader.fromPath(program);
-        } catch (IOException | UnknownCard e) {
-            TestUtils.fail(e);
-        }
-
-        // Second, instruct the attendant to load the card chain into the
-        // machine.
-        try {
-            this.attendant.loadProgram(cards);
-        } catch (BadCard | IOException | UnknownCard e) {
-            TestUtils.fail(e);
-        }
-
-        // Finally, run the Analytical Engine with the specified program.
-        this.engine.run();
-
+        runProgram("ex2.ae");
         assertEquals("357142857" + System.lineSeparator() + "4000000",
                 this.attendant.finalReport());
     }
