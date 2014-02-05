@@ -23,6 +23,7 @@ package analyticalengine;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -75,6 +76,29 @@ public class DefaultAnalyticalEngineTest {
         // objects in set up code anyway
         this.attendant.reset();
         this.engine.reset();
+    }
+
+    /** Test arithmetic operations. */
+    @Test
+    public void testArithmetic() {
+        List<Card> cards = null;
+        try {
+            Path program = Paths
+                    .get("src/test/resources/analyticalengine/test_arithmetic.ae");
+            cards = analyticalengine.io.CardReader.fromPath(program);
+        } catch (IOException | UnknownCard e) {
+            TestUtils.fail(e);
+        }
+
+        try {
+            this.attendant.loadProgram(cards);
+        } catch (BadCard | IOException | UnknownCard e) {
+            TestUtils.fail(e);
+        }
+
+        this.engine.run();
+
+        assertEquals("8\n4\n6\n12\n", this.attendant.finalReport());
     }
 
     /**
@@ -135,6 +159,31 @@ public class DefaultAnalyticalEngineTest {
 
         // The final report should indicate a "357\n4"
         assertEquals("357" + System.lineSeparator() + "4",
+                this.attendant.finalReport());
+    }
+
+    /** Test arithmetic operations. */
+    @Test
+    public void testLoad() {
+        List<Card> cards = null;
+        try {
+            Path program = Paths
+                    .get("src/test/resources/analyticalengine/test_load.ae");
+            cards = analyticalengine.io.CardReader.fromPath(program);
+        } catch (IOException | UnknownCard e) {
+            TestUtils.fail(e);
+        }
+
+        try {
+            this.attendant.loadProgram(cards);
+        } catch (BadCard | IOException | UnknownCard e) {
+            TestUtils.fail(e);
+        }
+
+        this.engine.run();
+
+        BigInteger quotient = DefaultMill.MAX.divide(new BigInteger("2"));
+        assertEquals("1\n0\n" + quotient + "\n1\n0\n0\n",
                 this.attendant.finalReport());
     }
 

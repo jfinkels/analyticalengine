@@ -1,0 +1,59 @@
+  Test for loading, zero-loading, and storing variables.
+
+N1 99999999999999999999999999999999999999999999999999
+N2 2
+
+  Test load-then-zero.
+
++
+Z1
+Z2
+S3
+
+P
+A write new line
+
++
+L1
+L2
+S4
+
+P
+A write new line
+
+  Test load-then-zero prime (computing the quotient and remainder of
+    (10^50 + 1) divided by 2, which should be 5^50 remainder 1).
+
+N1 1
+N2 1
+N3 2
+
+/
+Z1
+Z2'
+Z3
+S4'
+
+P
+A write new line
+
+S5
+
+P
+A write new line
+
++
+L1
+L2
+S4
+
+P
+A write new line
+
++
+L3
+L4
+S5
+
+P
+A write new line

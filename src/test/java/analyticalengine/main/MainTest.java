@@ -20,7 +20,6 @@
  */
 package analyticalengine.main;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -93,22 +92,6 @@ public class MainTest {
         System.err.flush();
         System.setOut(this.oldStdout);
         System.setErr(this.oldStderr);
-    }
-
-    /** Test arithmetic operations. */
-    @Test
-    public void testArithmetic() {
-        String[] argv = {"src/test/resources/analyticalengine/test_arithmetic.ae"};
-        Main.main(argv);
-
-        String output = this.stdout.toString();
-        StringBuilder withoutLogging = new StringBuilder();
-        for (String line : output.split("\n")) {
-            if (!line.contains("DEBUG") && !line.contains("INFO")) {
-                withoutLogging.append(line + "\n");
-            }
-        }
-        assertEquals("8\n4\n6\n12\n", withoutLogging.toString());
     }
     
     /**

@@ -21,6 +21,10 @@
 package analyticalengine;
 
 import java.math.BigInteger;
+import java.util.Arrays;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Basic implementation of a mill, the arithmetic logic unit of the Analytical
@@ -30,6 +34,10 @@ import java.math.BigInteger;
  * @since 0.0.1
  */
 public class DefaultMill implements Mill {
+
+    /** The logger for this class. */
+    private static final transient Logger LOG = LoggerFactory
+            .getLogger(DefaultMill.class);
 
     /** The maximum value of an integer that can be stored in mill's axes. */
     public static final BigInteger MAX = BigInteger.TEN.pow(50);
@@ -46,12 +54,23 @@ public class DefaultMill implements Mill {
     /** The operation to apply to the next two numbers loaded into the mill. */
     private Operation currentOperation = null;
 
-    /** The outgoing axes, which store the result of the arithmetic operations. */
+    /**
+     * The outgoing axes, which store the result of the arithmetic operations.
+     * 
+     * The first element of this array is the main egress axis. The last
+     * element of this array is the prime egress axis, which represents the
+     * high-order bits of the main egress axis, if any.
+     * */
     private BigInteger[] egressAxes = new BigInteger[2];
 
     /**
      * The incoming axes, which store the operands of the arithmetic
      * operations.
+     * 
+     * The first two elements of this array are the main ingress axes. The last
+     * element of this array is the prime ingress axis, which represents the
+     * high-order bits of the first ingress axis (that is, the axis at index
+     * 0), if any.
      */
     private BigInteger[] ingressAxes = new BigInteger[3];
 
@@ -89,12 +108,16 @@ public class DefaultMill implements Mill {
      * flag will be set to {@code true}.
      */
     private void execute() {
+        LOG.debug("Executing operation: " + this.currentOperation);
+        LOG.debug("Ingress axes: " + Arrays.toString(this.ingressAxes));
         this.runUp = false;
         this.currentAxis = 0;
         BigInteger result = null;
         switch (this.currentOperation) {
         case ADD:
             result = this.ingressAxes[0].add(this.ingressAxes[1]);
+            LOG.debug("Adding " + this.ingressAxes[0] + " to "
+                    + this.ingressAxes[1]);
             /*
              * If the sum is greater than MAX, compensate for the overflow by
              * subtracting MAX from the sum (essentially computing the sum
@@ -108,38 +131,52 @@ public class DefaultMill implements Mill {
              * without knowing the addends.
              */
             if (result.compareTo(MAX) >= 0) {
+                LOG.debug("Run up lever set: compensating for overflow.");
                 this.runUp = true;
                 result = result.subtract(MAX);
             } else if (this.ingressAxes[0].signum() >= 0
                     && result.signum() < 0) {
+                LOG.debug("Run up lever set: change of sign.");
                 this.runUp = true;
             }
             this.egressAxes[0] = result;
             this.egressAxes[1] = BigInteger.ZERO;
+            LOG.debug("Sum: " + this.egressAxes[0]);
             break;
         case DIVIDE:
             BigInteger dividend = this.ingressAxes[0];
 
+            // check for division by zero
+            if (this.ingressAxes[1].signum() == 0) {
+                LOG.warn("Division by zero detected.");
+                this.egressAxes[0] = BigInteger.ZERO;
+                this.egressAxes[1] = BigInteger.ZERO;
+                this.runUp = true;
+                break;
+            }
+
+            // add the high-order digits to the dividend
             if (this.ingressAxes[2].signum() != 0) {
                 dividend = dividend.add(this.ingressAxes[2].multiply(MAX));
             }
-            if (this.ingressAxes[1].signum() == 0) {
-                this.egressAxes[0] = BigInteger.ZERO;
-                this.egressAxes[1] = BigInteger.ZERO;
-                this.runUp = true;
-                break;
-            }
+            LOG.debug("Computed dividend: " + dividend);
+
+            // compute the quotient and the remainder
             BigInteger[] quotientRemainder = dividend
                     .divideAndRemainder(this.ingressAxes[1]);
+
+            // overflow if the quotient is more than maximum number of digits
             if (quotientRemainder[0].abs().compareTo(MAX) > 0) {
-                // Overflow if quotient more than 50 digits
+                LOG.debug("Overflow detected.");
                 this.egressAxes[0] = BigInteger.ZERO;
                 this.egressAxes[1] = BigInteger.ZERO;
                 this.runUp = true;
                 break;
             }
+
             this.egressAxes[0] = quotientRemainder[1];
             this.egressAxes[1] = quotientRemainder[0];
+            LOG.debug("Quotient and remainder: " + Arrays.toString(this.egressAxes));
             break;
         case MULTIPLY:
             result = this.ingressAxes[0].multiply(this.ingressAxes[1]);
@@ -323,7 +360,7 @@ public class DefaultMill implements Mill {
     public void transferIn(final BigInteger value) {
         this.transferIn(value, false);
     }
-    
+
     /**
      * {@inheritDoc}
      * 
@@ -342,6 +379,7 @@ public class DefaultMill implements Mill {
         }
 
         this.ingressAxes[this.currentAxis] = value;
+        // TODO document this
         // When first ingress axis set, clear prime axis
         if (this.currentAxis == 0) {
             this.ingressAxes[2] = BigInteger.ZERO;
