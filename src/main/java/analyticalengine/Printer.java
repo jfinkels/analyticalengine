@@ -32,6 +32,9 @@ public interface Printer {
     /**
      * Converts the specified integer to a string.
      * 
+     * If {@code value} is {@code null}, then the printer may print the empty
+     * string.
+     * 
      * @param value
      *            The value to print.
      * @return The string representing the printed integer.

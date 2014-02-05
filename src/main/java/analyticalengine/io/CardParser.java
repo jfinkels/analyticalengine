@@ -179,6 +179,9 @@ public final class CardParser {
             } else if (rest.startsWith("write annotation")) {
                 return new Card(CardType.ANNOTATE,
                         new String[] { rest.substring(17) });
+            } else {
+                throw new UnknownCard("Unknown attendant request: "
+                        + cardString);
             }
         case '(':
             if (!rest.isEmpty() && rest.charAt(0) == '?') {

@@ -8,7 +8,6 @@ L1
 L2
 S3
 P
-A write new line
 
   Compute 8 / 2 = 4.
 
@@ -17,7 +16,6 @@ L3
 L2
 S4'
 P
-A write new line
 
   Compute 4 + 2 = 6.
 
@@ -26,7 +24,6 @@ L4
 L2
 S5
 P
-A write new line
 
   Compute 6 * 2 = 12.
 
@@ -35,4 +32,3 @@ L5
 L2
 S6
 P
-A write new line

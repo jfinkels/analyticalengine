@@ -1,7 +1,9 @@
+  Computes 6! using a loop.
+
 N0 6
 N1 1
 N2 1
-×
+*
 L1
 L0
 S1
@@ -12,3 +14,5 @@ S0
 L2
 L0
 CB?11
+L1
+P

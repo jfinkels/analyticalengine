@@ -111,8 +111,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             if (this.mill.hasRunUp()) {
                 numCards = Integer.parseInt(card.argument(0));
                 this.cardReader.advance(numCards);
-                break;
             }
+            break;
         case COMMENT:
             LOG.debug("Comment: " + card.argument(0));
             break;
@@ -152,7 +152,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 throw new BadCard("Failed to parse load address", card);
             }
             break;
-        case LSHIFT:
+        case LSHIFTN:
             try {
                 int shift = Integer.parseInt(card.argument(0));
                 if (shift < 0 || shift > 100) {
@@ -182,10 +182,14 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             break;
         case PRINT:
             value = this.mill.mostRecentValue();
+            if (value == null) {
+                LOG.error("No value is available for printing. Not printing.");
+                break;
+            }
             String printed = this.printer.print(value);
             this.attendant.receiveOutput(printed);
             break;
-        case RSHIFT:
+        case RSHIFTN:
             try {
                 int shift = Integer.parseInt(card.argument(0));
                 if (shift < 0 || shift > 100) {
@@ -265,6 +269,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case FORWARDSTART:
         case INCLUDE:
         case INCLUDELIB:
+        case LSHIFT:
+        case RSHIFT:
         case WRITEDECIMAL:
             // these should all be removed by attendant before loading cards
             throw new BadCard("Attendant failed to remove card", card);
@@ -275,9 +281,12 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
 
     /**
      * {@inheritDoc}
+     * 
+     * @throws BadCard
+     *             {@inheritDoc}
      */
     @Override
-    public void run() {
+    public void run() throws BadCard {
         try {
             while (true) {
                 Card currentCard = this.cardReader.readAndAdvance();
@@ -288,7 +297,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 }
             }
         } catch (BadCard e) {
-            LOG.error("Program error", e);
+            // LOG.error("Program error", e);
+            throw e;
         } catch (Halt e) {
             // This would print the stack trace for the Halt exception.
             // LOG.info("Program halted.", e);

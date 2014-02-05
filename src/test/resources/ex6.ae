@@ -1,6 +1,6 @@
     Extract square root by Newton's method
 
-    x² = N
+    x^2 = N
 
     x[k+1] = (N / x[k] + x[k]) / 2
 
@@ -41,7 +41,7 @@ H Cannot take square root of negative number (on printer)
 
     Calculate initial guess as N / 2
 
-÷
+/
 L000
 <20
 L001
@@ -60,7 +60,7 @@ S005
 
     Compute N/x[k]
 
-÷
+/
 L000
 <20
 L002
@@ -76,7 +76,7 @@ S003
     Divide by two (actually multiply by 1/2) to
     obtain next x[k+1]
 
-×
+*
 L003
 L001
 >20

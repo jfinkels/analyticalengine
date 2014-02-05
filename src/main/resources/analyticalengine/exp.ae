@@ -1,7 +1,7 @@
 
     Calculate exp x from series expansion
 
-    exp x = 1 + x/1! + x²/2! + x³/3! ...
+    exp x = 1 + x/1! + x^2/2! + x^3/3! ...
 
     Note that while the numerator is fixed point, the factorial
     in the denominator is not.  This allows a larger valid range
@@ -32,7 +32,7 @@ N012 5000000000
 
     Scale to use 10 more digits for computation
 
-×
+*
 L000
 L011
 S000
@@ -89,7 +89,7 @@ S000
 
     Scale to result
 
-÷
+/
 L000
 L011
 S000'

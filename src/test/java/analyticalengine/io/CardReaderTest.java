@@ -23,6 +23,8 @@ package analyticalengine.io;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -40,9 +42,6 @@ import analyticalengine.cards.CardType;
  * @since 0.0.1
  */
 public class CardReaderTest {
-
-    /** A file containing a simple Analytical Engine program. */
-    public static final String TESTFILE = "src/test/resources/analyticalengine/ex0.ae";
 
     /**
      * The program that should be parsed from the test file.
@@ -84,7 +83,8 @@ public class CardReaderTest {
      * @param actual
      *            The actual list of cards.
      */
-    private static void assertCardsEqual(final List<Card> expected, final List<Card> actual) {
+    private static void assertCardsEqual(final List<Card> expected,
+            final List<Card> actual) {
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
             Card expectedCard = expected.get(i);
@@ -103,9 +103,11 @@ public class CardReaderTest {
     @Test
     public void testFromFile() {
         try {
-            List<Card> cards = CardReader.fromPath(Paths.get(TESTFILE));
+            Path testfile = Paths.get(this.getClass().getResource("/ex0.ae")
+                    .toURI());
+            List<Card> cards = CardReader.fromPath(testfile);
             assertCardsEqual(EXPECTED, cards);
-        } catch (IOException | UnknownCard e) {
+        } catch (IOException | UnknownCard | URISyntaxException e) {
             TestUtils.fail(e);
         }
     }

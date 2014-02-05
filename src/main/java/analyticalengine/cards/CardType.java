@@ -52,7 +52,7 @@ public enum CardType {
     /** Go backward on the condition that the current axis is zero. */
     CBACKWARD(1),
     /** Go forward on the condition that the current axis is zero. */
-    CFORWARD(0),
+    CFORWARD(1),
     /** The start of a conditional forward loop. */
     CFORWARDSTART(0),
     /**
@@ -70,7 +70,7 @@ public enum CardType {
     /** Draw on the curve printer to the location previously specified. */
     DRAW(0),
     /** Go forward unconditionally. */
-    FORWARD(0),
+    FORWARD(1),
     /** The end of a forward loop. */
     FORWARDEND(0),
     /** The start of an unconditional forward loop. */

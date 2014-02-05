@@ -37,8 +37,11 @@ import analyticalengine.CardReader;
 import analyticalengine.CurvePrinter;
 import analyticalengine.DefaultAnalyticalEngine;
 import analyticalengine.DefaultAttendant;
+import analyticalengine.DefaultLibrary;
 import analyticalengine.DefaultMill;
 import analyticalengine.HashMapStore;
+import analyticalengine.Library;
+import analyticalengine.LibraryLookupException;
 import analyticalengine.Mill;
 import analyticalengine.Printer;
 import analyticalengine.Store;
@@ -93,12 +96,14 @@ public final class Main {
         Attendant attendant = new DefaultAttendant();
         CardReader reader = new ArrayListCardReader();
         CurvePrinter curvePrinter = new AWTCurvePrinter();
+        Library library = new DefaultLibrary();
         Mill mill = new DefaultMill();
         Printer printer = new StringPrinter();
         Store store = new HashMapStore();
 
         // hook up the components of the engine
         attendant.setCardReader(reader);
+        attendant.setLibrary(library);
 
         engine.setAttendant(attendant);
         engine.setCardReader(reader);
@@ -108,10 +113,10 @@ public final class Main {
         engine.setStore(store);
 
         // apply any configuration specified on command line
-        attendant.setStripComments(arguments.stripComments);
-        attendant.addLibraryPaths(arguments.libraryPath);
+        library.addLibraryPaths(arguments.libraryPath);
         // always search the current directory as well
-        attendant.addLibraryPath(Paths.get("."));
+        library.addLibraryPath(Paths.get("."));
+        attendant.setStripComments(arguments.stripComments);
 
         // load the file specified in the command-line argument
         List<Card> cards;
@@ -138,6 +143,9 @@ public final class Main {
         } catch (UnknownCard e) {
             LOG.error("Included file contains unknown card", e);
             return;
+        } catch (LibraryLookupException e) {
+            LOG.error("Attendant failed to load library file", e);
+            return;
         }
 
         if (arguments.listOnly) {
@@ -148,7 +156,12 @@ public final class Main {
         }
 
         // finally, run the analytical engine with the specified program
-        engine.run();
+        try {
+            engine.run();
+        } catch (BadCard e) {
+            LOG.error("Encountered invalid card", e);
+            return;
+        }
         
         // print the attendant's report to standard output
         System.out.println(attendant.finalReport());

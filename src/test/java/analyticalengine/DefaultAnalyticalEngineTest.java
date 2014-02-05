@@ -21,18 +21,17 @@
 package analyticalengine;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import analyticalengine.cards.Card;
+import analyticalengine.io.CardParser;
 import analyticalengine.io.UnknownCard;
 
 /**
@@ -41,76 +40,115 @@ import analyticalengine.io.UnknownCard;
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
  */
-public class DefaultAnalyticalEngineTest {
+public class DefaultAnalyticalEngineTest extends EngineTestBase {
 
-    /** The Analytical Engine instance to test. */
-    private AnalyticalEngine engine = null;
-    /** The attendant required to operate the Analytical Engine. */
-    private Attendant attendant = null;
-
-    /**
-     * Loads and runs the program with the specified filename (relative to the
-     * test resources directory).
-     * 
-     * @param filename
-     *            The test file to run.
-     */
-    private final void runProgram(final String filename) {
-        try {
-            Path program = Paths.get("src/test/resources/analyticalengine")
-                    .resolve(filename);
-            List<Card> cards = analyticalengine.io.CardReader
-                    .fromPath(program);
-            this.attendant.loadProgram(cards);
-            this.engine.run();
-        } catch (BadCard | IOException | UnknownCard e) {
-            TestUtils.fail(e);
-        }
-    }
-
-    /** Creates the Analytical Engine to test. */
-    @Before
-    public void setUp() {
-        this.engine = new DefaultAnalyticalEngine();
-        this.attendant = new DefaultAttendant();
-        CardReader reader = new ArrayListCardReader();
-        CurvePrinter curvePrinter = new AWTCurvePrinter();
-        Mill mill = new DefaultMill();
-        Printer printer = new StringPrinter();
-        Store store = new HashMapStore();
-
-        this.attendant.setCardReader(reader);
-
-        this.engine.setAttendant(attendant);
-        this.engine.setCardReader(reader);
-        this.engine.setCurvePrinter(curvePrinter);
-        this.engine.setMill(mill);
-        this.engine.setPrinter(printer);
-        this.engine.setStore(store);
-    }
-
-    /** Resets the Analytical Engine being tested. */
-    @After
-    public void tearDown() {
-        // this technically doesn't need to be done, since we are creating new
-        // objects in set up code anyway
-        this.attendant.reset();
-        this.engine.reset();
+    /** Tests attendant annotations. */
+    @Test
+    public void testAnnotation() {
+        runProgramString("A write annotation foo");
+        assertEquals("foo\n", this.attendant().finalReport());
     }
 
     /** Test arithmetic operations. */
     @Test
     public void testArithmetic() {
         runProgram("test_arithmetic.ae");
-        assertEquals("8\n4\n6\n12\n", this.attendant.finalReport());
+        assertEquals("8\n4\n6\n12\n", this.attendant().finalReport());
+    }
+
+    /** Test backward. */
+    @Test
+    public void testBackward() {
+        runProgramString("CF+1\nH\nN1 3\nL1\nP\nCB+5");
+        assertEquals("3\n", this.attendant().finalReport());
+    }
+
+    /** Test bad addresses. */
+    @Test
+    public void testBadAddress() {
+        for (String operator : Arrays.asList("L", "Z", "S")) {
+            for (String prime : Arrays.asList("", "'")) {
+                System.out.println("Testing " + operator + " " + prime);
+                List<Card> cards = null;
+                try {
+                    String badCard = operator + "1.1" + prime;
+                    cards = Arrays.asList(CardParser.toCard(badCard));
+                    this.attendant().loadProgram(cards);
+                } catch (BadCard | IOException | UnknownCard
+                        | LibraryLookupException e) {
+                    TestUtils.fail(e);
+                }
+
+                try {
+                    this.engine().run();
+                    TestUtils.shouldHaveThrownException();
+                } catch (BadCard e) {
+                    assertTrue(true);
+                }
+
+                // reset after each test
+                this.engine().reset();
+                this.attendant().reset();
+            }
+        }
+    }
+
+    /** Test bad shift arguments. */
+    @Test
+    public void testBadShift() {
+        for (String operator : Arrays.asList("<", ">")) {
+            for (String number : Arrays.asList("1.1", "-1", "101")) {
+                List<Card> cards = null;
+                try {
+                    String badCard = operator + number;
+                    cards = Arrays.asList(CardParser.toCard(badCard));
+                    this.attendant().loadProgram(cards);
+                } catch (BadCard | IOException | UnknownCard
+                        | LibraryLookupException e) {
+                    TestUtils.fail(e);
+                }
+
+                try {
+                    this.engine().run();
+                    TestUtils.shouldHaveThrownException();
+                } catch (BadCard e) {
+                    assertTrue(true);
+                }
+
+                // reset after each test
+                this.engine().reset();
+                this.attendant().reset();
+            }
+        }
+    }
+
+    /** Tests conditional back. */
+    @Test
+    public void testConditionalBackward() {
+        runProgram("ex5.ae");
+        assertEquals("720\n", this.attendant().finalReport());
+    }
+
+    /** Tests conditional forward. */
+    @Test
+    public void testConditionalForward() {
+        runProgram("ex6.ae");
+        assertEquals("141421356237309504880\n", this.attendant().finalReport());
     }
 
     /** Tests the division operator. */
     @Test
     public void testDivide() {
         runProgram("ex1.ae");
-        assertEquals("357" + System.lineSeparator() + "4",
-                this.attendant.finalReport());
+        assertEquals("357\n4\n", this.attendant().finalReport());
+    }
+
+    /** Test halt. */
+    @Test
+    public void testHalt() {
+        // should halt before any output is produced
+        runProgramString("H\nN1 3\nL1\nP");
+        assertEquals("", this.attendant().finalReport());
     }
 
     /** Test arithmetic operations. */
@@ -118,8 +156,38 @@ public class DefaultAnalyticalEngineTest {
     public void testLoad() {
         runProgram("test_load.ae");
         BigInteger quotient = DefaultMill.MAX.divide(new BigInteger("2"));
-        assertEquals("1\n0\n" + quotient + "\n1\n0\n0\n",
-                this.attendant.finalReport());
+        assertEquals("1\n0\n" + quotient + "\n1\n0\n0\n", this.attendant()
+                .finalReport());
+    }
+
+    /** Test for the bell. */
+    @Test
+    public void testBell() {
+        runProgramString("B");
+        // TODO assert that standard output contains indication of bell
+    }
+
+    /** Test for cards that should have been removed by the attendant. */
+    @Test
+    public void testShouldHaveBeenRemoved() {
+        List<Card> cards = null;
+        try {
+            cards = Arrays.asList(CardParser.toCard("}{"));
+            this.attendant().loadProgram(cards);
+        } catch (BadCard | IOException | UnknownCard | LibraryLookupException e) {
+            TestUtils.fail(e);
+        }
+
+        try {
+            this.engine().run();
+            TestUtils.shouldHaveThrownException();
+        } catch (BadCard e) {
+            assertTrue(true);
+        }
+
+        // reset after each test
+        this.engine().reset();
+        this.attendant().reset();
     }
 
     /**
@@ -128,15 +196,14 @@ public class DefaultAnalyticalEngineTest {
     @Test
     public void testRun() {
         runProgram("ex0.ae");
-        assertEquals("3333", this.attendant.finalReport());
+        assertEquals("3333\n", this.attendant().finalReport());
     }
 
     /** Test the shift operators. */
     @Test
     public void testShifts() {
         runProgram("ex2.ae");
-        assertEquals("357142857" + System.lineSeparator() + "4000000",
-                this.attendant.finalReport());
+        assertEquals("357142857\n4000000\n", this.attendant().finalReport());
     }
 
 }

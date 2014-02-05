@@ -28,6 +28,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import analyticalengine.cards.Card;
 import analyticalengine.cards.CardType;
 import analyticalengine.io.UnknownCard;
@@ -39,6 +42,10 @@ import analyticalengine.io.UnknownCard;
  * @since 0.0.1
  */
 public class DefaultAttendant implements Attendant {
+
+    /** The logger for this class. */
+    private static final transient Logger LOG = LoggerFactory
+            .getLogger(DefaultAttendant.class);
 
     /**
      * Returns {@code true} if and only if the cycle started by card
@@ -53,8 +60,8 @@ public class DefaultAttendant implements Attendant {
      */
     private static boolean cyclesMatch(final Card start, final Card end) {
         return ((start.type() == CardType.CBACKSTART || start.type() == CardType.BACKSTART
-                && end.type() != CardType.BACKEND)
-                || (start.type() == CardType.CFORWARDSTART || start.type() == CardType.FORWARDSTART)
+                && end.type() != CardType.BACKEND) || (start.type() == CardType.CFORWARDSTART || start
+                .type() == CardType.FORWARDSTART)
                 && (end.type() != CardType.FORWARDEND || end.type() != CardType.ALTERNATION));
     }
 
@@ -115,11 +122,8 @@ public class DefaultAttendant implements Attendant {
      */
     private String formatString = null;
 
-    /**
-     * A list of paths to search when a card requesting a library function is
-     * encountered.
-     */
-    private List<Path> libraryPaths = new ArrayList<Path>();
+    /** The library of built-in functions maintained by the attendant. */
+    private Library library = null;
 
     /** The cumulative formatted output from the printer. */
     private String report = "";
@@ -140,38 +144,15 @@ public class DefaultAttendant implements Attendant {
     /**
      * {@inheritDoc}
      * 
-     * @param path
-     *            {@inheritDoc}
-     */
-    @Override
-    public void addLibraryPath(final Path path) {
-        this.libraryPaths.add(path);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @param paths
-     *            {@inheritDoc}
-     */
-    @Override
-    public void addLibraryPaths(final List<Path> paths) {
-        this.libraryPaths.addAll(paths);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
      * @param message
      *            {@inheritDoc}
      */
     @Override
     public void annotate(final String message) {
+        this.report += message;
+        // TODO this makes no sense, but this is how the original code did it
         if (this.writeInRows) {
-            this.report += message;
-        } else {
-            throw new UnsupportedOperationException(
-                    "No implementation available for writing in columns.");
+            this.report += System.lineSeparator();
         }
     }
 
@@ -363,22 +344,19 @@ public class DefaultAttendant implements Attendant {
      *         the specified number of decimal places.
      */
     private Card expandShift(final int decimalPlace, final Card card) {
-
-        String newArg = null;
         CardType newType = null;
         if (card.type() == CardType.LSHIFT) {
-            newArg = "<";
             newType = CardType.LSHIFTN;
         } else {
-            newArg = ">";
             newType = CardType.RSHIFTN;
         }
 
-        newArg += String.valueOf(decimalPlace);
-        if (!this.stripComments) {
-            newArg += " . Step count added by attendant";
+        String newArg = String.valueOf(decimalPlace);
+        if (this.stripComments) {
+            return new Card(newType, new String[] { newArg });
         }
-        return new Card(newType, new String[] { newArg });
+        return new Card(newType, new String[] { newArg },
+                "Step count added by attendant");
     }
 
     /**
@@ -529,17 +507,23 @@ public class DefaultAttendant implements Attendant {
      *             {@inheritDoc}
      * @throws UnknownCard
      *             {@inheritDoc}
+     * @throws LibraryLookupException
+     *             {@inheritDoc}
      */
     @Override
     public void loadProgram(final List<Card> cards) throws BadCard,
-            IOException, UnknownCard {
+            IOException, UnknownCard, LibraryLookupException {
+        LOG.debug("Examining cards before loading: " + cards);
         List<Card> result = cards;
         // Note: "A write numbers as ..." cards remain in the card chain.
         result = this.transcludeLibraryCards(result);
-        result = strippedComments(result);
+        if (this.stripComments) {
+            result = strippedComments(result);
+        }
         result = this.expandDecimal(result);
         // TODO this method should return a new list like the others do
         translateCombinatorics(result);
+        LOG.debug("Mounting cards in reader: " + result);
         this.cardReader.mountCards(result);
     }
 
@@ -551,12 +535,10 @@ public class DefaultAttendant implements Attendant {
      */
     @Override
     public void receiveOutput(final String printed) {
-        String toWrite = this.formatted(printed);
+        this.report += this.formatted(printed);
+        // TODO this makes no sense, but this is how the original code did it
         if (this.writeInRows) {
-            this.report += toWrite;
-        } else {
-            throw new UnsupportedOperationException(
-                    "No implementation available for writing in columns.");
+            this.report += System.lineSeparator();
         }
     }
 
@@ -567,7 +549,7 @@ public class DefaultAttendant implements Attendant {
     public void reset() {
         this.report = "";
         this.cardReader.unmountCards();
-        this.libraryPaths.clear();
+        this.library.clear();
     }
 
     /**
@@ -590,6 +572,17 @@ public class DefaultAttendant implements Attendant {
     @Override
     public void setFormat(final String formatString) {
         this.formatString = formatString;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @param library
+     *            {@inheritDoc}
+     */
+    @Override
+    public void setLibrary(final Library library) {
+        this.library = library;
     }
 
     /**
@@ -621,9 +614,13 @@ public class DefaultAttendant implements Attendant {
      * @throws UnknownCard
      *             if there was a syntax error in the file containing the
      *             requested function.
+     * @throws LibraryLookupException
+     *             if there was a problem reading the requested library
+     *             function.
      */
     private List<Card> transcludeLibraryCards(final List<Card> cards)
-            throws BadCard, IOException, UnknownCard {
+            throws BadCard, IOException, UnknownCard, LibraryLookupException {
+
         List<Card> result = new ArrayList<Card>();
         for (Card card : cards) {
             /*
@@ -656,32 +653,15 @@ public class DefaultAttendant implements Attendant {
                  * library request.
                  */
             } else if (card.type() == CardType.INCLUDELIB) {
-                // we assume library files have the .ae file extension
-                String filename = card.argument(0) + ".ae";
-
-                // look for the file in the known paths
-                Path libraryFile = null;
-                for (Path path : this.libraryPaths) {
-                    libraryFile = path.resolve(filename);
-                    if (Files.exists(libraryFile)) {
-                        break;
-                    }
-                    libraryFile = null;
-                }
-
-                // raise an exception if the requested library file could not
-                // be found in any of the known paths
-                if (libraryFile == null) {
-                    throw new BadCard("Could not find library file: "
-                            + filename, card);
-                }
+                String filename = card.argument(0);
+                List<Card> newCards;
+                newCards = this.library.find(filename);
 
                 result.add(Card.commentCard("Begin interpolation of "
-                        + libraryFile + " from library by attendant"));
-                result.addAll(analyticalengine.io.CardReader
-                        .fromPath(libraryFile));
-                result.add(Card.commentCard("End interpolation of "
-                        + libraryFile + " from library by attendant"));
+                        + filename + " from library by attendant"));
+                result.addAll(newCards);
+                result.add(Card.commentCard("End interpolation of " + filename
+                        + " from library by attendant"));
             } else {
                 result.add(card);
             }
@@ -705,6 +685,8 @@ public class DefaultAttendant implements Attendant {
     private void translateCombinatorics(final List<Card> cards) throws BadCard {
         for (int i = 0; i < cards.size(); i++) {
             if (isCycleStart(cards.get(i).type())) {
+                LOG.debug("Translating cycle starting from " + cards.get(i)
+                        + " at index " + i);
                 this.translateCycle(cards, i);
             }
         }
@@ -730,6 +712,7 @@ public class DefaultAttendant implements Attendant {
         Card c = cards.get(startIndex);
         boolean depends = false;
         int i;
+        LOG.debug("Translating cycle starting at " + c);
 
         depends = c.type() == CardType.CBACKSTART
                 || c.type() == CardType.CFORWARDSTART;
@@ -739,8 +722,7 @@ public class DefaultAttendant implements Attendant {
             start--;
         } else {
             cards.remove(start);
-            cards.add(start,
-                    Card.commentCard(". " + c + " Translated by attendant"));
+            cards.add(start, Card.commentCard(c + " Translated by attendant"));
         }
 
         /*
@@ -750,26 +732,27 @@ public class DefaultAttendant implements Attendant {
 
         for (i = start + 1; i < cards.size(); i++) {
             Card u = cards.get(i);
-
+            LOG.debug("looking at card " + u);
             if (isCycleStart(u.type())) {
+                LOG.debug("Making a recursive call from new start index " + i);
                 translateCycle(cards, i);
             }
             if (isCycleEnd(u.type())) {
+                LOG.debug("  Found end of cycle starting with " + c);
                 boolean isElse = u.type() == CardType.ALTERNATION;
 
-                if (cyclesMatch(c, u)) {
+                if (!cyclesMatch(c, u)) {
                     throw new BadCard("End of cycle does not match " + c
                             + " beginning on card " + start, u);
                 }
                 cards.remove(i);
                 if (!this.stripComments) {
-                    cards.remove(i);
-                    cards.add(
-                            start,
-                            Card.commentCard(". " + u
-                                    + " Translated by attendant"));
+                    // cards.remove(i);
+                    cards.add(i,
+                            Card.commentCard(u + " Translated by attendant"));
                 }
-                if (c.type() == CardType.BACKSTART) {
+                if (c.type() == CardType.BACKSTART
+                        || c.type() == CardType.CBACKSTART) {
                     // It's a loop
                     CardType newType;
                     if (depends) {
@@ -779,74 +762,80 @@ public class DefaultAttendant implements Attendant {
                     }
                     String[] newArgs = { Integer.toString(i - start) };
                     cards.add(i, new Card(newType, newArgs));
+                    LOG.debug("  (replaced with " + cards.get(i) + ")");
+                    return;
+                }
+
+                // If we've reached this point, it's a forward skip, possibly
+                // with an else clause
+                CardType newType;
+                if (depends) {
+                    newType = CardType.CFORWARD;
                 } else {
-                    // It's a forward skip, possibly with an else clause
-                    CardType newType;
-                    if (depends) {
-                        newType = CardType.CFORWARD;
+                    newType = CardType.FORWARD;
+                }
+
+                int argument;
+                if (isElse) {
+                    if (this.stripComments) {
+                        argument = 0;
                     } else {
-                        newType = CardType.FORWARD;
+                        argument = 1;
                     }
-
-                    int argument;
-                    if (isElse) {
-                        if (this.stripComments) {
-                            argument = 0;
-                        } else {
-                            argument = 1;
-                        }
+                } else {
+                    if (this.stripComments) {
+                        argument = -1;
                     } else {
-                        if (this.stripComments) {
-                            argument = -1;
-                        } else {
-                            argument = 0;
-                        }
+                        argument = 0;
                     }
-                    argument += Math.abs(i - start);
-                    String[] newArgs = { Integer.toString(argument) };
-                    cards.add(start + 1, new Card(newType, newArgs));
+                }
+                argument += Math.abs(i - start);
+                String[] newArgs = { Integer.toString(argument) };
+                cards.add(start + 1, new Card(newType, newArgs));
 
-                    // Translate else branch of conditional, if present
-                    if (isElse) {
-                        int j;
+                // Translate else branch of conditional, if present
+                if (isElse) {
+                    int j;
 
-                        for (j = i + 1; j < cards.size(); j++) {
-                            u = cards.get(j);
+                    for (j = i + 1; j < cards.size(); j++) {
+                        u = cards.get(j);
 
-                            if (isCycleStart(u.type())) {
-                                translateCycle(cards, j);
+                        if (isCycleStart(u.type())) {
+                            translateCycle(cards, j);
+                        }
+                        if (isCycleEnd(u.type())) {
+                            if (u.type() != CardType.FORWARDEND
+                                    || u.type() != CardType.ALTERNATION) {
+                                throw new BadCard(
+                                        "End of else cycle does not match "
+                                                + c + " beginning on card "
+                                                + i, u);
                             }
-                            if (isCycleEnd(u.type())) {
-                                if (u.type() != CardType.FORWARDEND
-                                        || u.type() != CardType.ALTERNATION) {
-                                    throw new BadCard(
-                                            "End of else cycle does not match "
-                                                    + c
-                                                    + " beginning on card "
-                                                    + i, u);
-                                }
-                                cards.remove(j);
-                                if (!this.stripComments) {
-                                    cards.add(j, Card.commentCard(u
-                                            + " Translated by attendant"));
-                                }
-                                CardType newType2 = CardType.FORWARD;
-                                String[] newArgs2 = { Integer.toString(Math
-                                        .abs(j - i) - 1) };
-                                int location = i;
-                                if (this.stripComments) {
-                                    location += 1;
-                                } else {
-                                    location += 2;
-                                }
-                                cards.add(location, new Card(newType2,
-                                        newArgs2));
-                                return;
+                            cards.remove(j);
+                            if (!this.stripComments) {
+                                cards.add(
+                                        j,
+                                        Card.commentCard(u
+                                                + " Translated by attendant"));
                             }
+                            CardType newType2 = CardType.FORWARD;
+                            String[] newArgs2 = { Integer.toString(Math.abs(j
+                                    - i) - 1) };
+                            int location = i;
+                            if (this.stripComments) {
+                                location += 1;
+                            } else {
+                                location += 2;
+                            }
+                            cards.add(location, new Card(newType2, newArgs2));
+                            return;
                         }
                     }
                 }
             }
+        }
+        for (Card card : cards) {
+            LOG.debug(card.toString());
         }
         throw new BadCard("No matching end of cycle.", c);
     }

@@ -86,7 +86,9 @@ public final class CardReader {
         try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
             String currentLine = reader.readLine();
             while (currentLine != null) {
-                if (!currentLine.isEmpty()) {
+                if (currentLine.isEmpty()) {
+                    cards.add(Card.commentCard(""));
+                } else {
                     cards.add(CardParser.toCard(currentLine));
                 }
                 currentLine = reader.readLine();

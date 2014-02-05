@@ -114,6 +114,10 @@ public interface AnalyticalEngine {
      * The mill, store, card reader, printer, and attendant properties must all
      * be set before invoking this method. Furthermore, the attendant must have
      * loaded a program into the card reader before invoking this method.
+     * 
+     * @throws BadCard
+     *             if the Engine encounters an invalid card as it is processing
+     *             the card chain.
      */
-    void run();
+    void run() throws BadCard;
 }

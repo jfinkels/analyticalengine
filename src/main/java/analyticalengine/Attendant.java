@@ -21,7 +21,6 @@
 package analyticalengine;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
 import analyticalengine.cards.Card;
@@ -52,31 +51,6 @@ import analyticalengine.io.UnknownCard;
  * @since 0.0.1
  */
 public interface Attendant {
-
-    /**
-     * Adds the specified path to the list of paths to search when including
-     * external functions.
-     * 
-     * Multiple invocations of this method append new paths to the end of the
-     * list, so paths added first will be searched first.
-     * 
-     * @param path
-     *            A path to search for included functions.
-     */
-    void addLibraryPath(Path path);
-
-    /**
-     * Adds each of the specified paths to the list of paths to search when
-     * including external functions.
-     * 
-     * The paths will be searched in the order specified by the iterator.
-     * Multiple invocations of this method append new paths to the end of the
-     * list.
-     * 
-     * @param paths
-     *            A list of paths to search for included functions.
-     */
-    void addLibraryPaths(List<Path> paths);
 
     /**
      * Instructs the attendant to annotate the final report with the specified
@@ -114,9 +88,11 @@ public interface Attendant {
      * @throws UnknownCard
      *             if a card specified in an "included" file has incorrect
      *             syntax.
+     * @throws LibraryLookupException
+     *             if a request to load a function from a library file fails.
      */
     void loadProgram(List<Card> cards) throws BadCard, IOException,
-            UnknownCard;
+            UnknownCard, LibraryLookupException;
 
     /**
      * Instructs the attendant to record the printed output from the Engine's
@@ -151,6 +127,15 @@ public interface Attendant {
      *            The format in which to write the ouput from the printer.
      */
     void setFormat(String argument);
+
+    /**
+     * Specifies the library to use when interpreting requests to include
+     * built-in functions.
+     * 
+     * @param library
+     *            The library containing built-in functions.
+     */
+    void setLibrary(Library library);
 
     /**
      * Instructs the attendant to remove comment cards when loading a program

@@ -28,13 +28,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import analyticalengine.TestUtils;
 
 /**
  * Tests for {@link analyticalengine.main.Main}.
@@ -43,12 +47,6 @@ import org.junit.Test;
  * @since 0.0.1
  */
 public class MainTest {
-
-    /** A file containing an example Analytical Engine program. */
-    public static final String TESTFILE = "src/test/resources/analyticalengine/ex0.ae";
-
-    /** A file containing an example Analytical Engine program with comments. */
-    public static final String TESTFILE2 = "src/test/resources/analyticalengine/ex1.ae";
 
     /** The original standard error. */
     private PrintStream oldStderr;
@@ -93,7 +91,7 @@ public class MainTest {
         System.setOut(this.oldStdout);
         System.setErr(this.oldStderr);
     }
-    
+
     /**
      * Test for setting the library path.
      * 
@@ -169,7 +167,16 @@ public class MainTest {
     /** Test for listing the cards only. */
     @Test
     public void testList() {
-        String[] argv = new String[] { "-l", TESTFILE };
+        String testfile;
+        try {
+            testfile = Paths
+                    .get(this.getClass().getResource("/ex0.ae").toURI())
+                    .toString();
+        } catch (URISyntaxException e) {
+            TestUtils.fail(e);
+            return;
+        }
+        String[] argv = new String[] { "-l", testfile };
         Main.main(argv);
         String output = this.stdout.toString().toLowerCase();
         assertTrue(output.contains("number"));
@@ -185,23 +192,51 @@ public class MainTest {
     /** Test for no command-line arguments. */
     @Test
     public void testNoArguments() {
-        String[] argv = new String[] { TESTFILE };
+        String testfile;
+        try {
+            testfile = Paths
+                    .get(this.getClass().getResource("/ex0.ae").toURI())
+                    .toString();
+        } catch (URISyntaxException e) {
+            TestUtils.fail(e);
+            return;
+        }
+        String[] argv = new String[] { testfile };
         Main.main(argv);
     }
 
     /** Test for stripping comments. */
     @Test
     public void testStripComments() {
-        String[] argv = new String[] { "-c", TESTFILE2 };
+        String testfile;
+        try {
+            testfile = Paths
+                    .get(this.getClass().getResource("/ex1.ae").toURI())
+                    .toString();
+        } catch (URISyntaxException e) {
+            TestUtils.fail(e);
+            return;
+        }
+        String[] argv = new String[] { "-c", testfile };
         Main.main(argv);
-        String output = this.stdout.toString().toLowerCase();
-        assertFalse(output.contains("comment"));
+        String output = this.stdout.toString();
+        this.oldStdout.println(output);
+        assertFalse(output.contains("Executing card COMMENT"));
     }
 
     /** Test for verbose information. */
     @Test
     public void testVerbose() {
-        String[] argv = new String[] { "-v", "1", TESTFILE };
+        String testfile;
+        try {
+            testfile = Paths
+                    .get(this.getClass().getResource("/ex0.ae").toURI())
+                    .toString();
+        } catch (URISyntaxException e) {
+            TestUtils.fail(e);
+            return;
+        }
+        String[] argv = new String[] { "-v", "1", testfile };
         Main.main(argv);
         // TODO test something
     }
@@ -209,7 +244,16 @@ public class MainTest {
     /** Test for very verbose information. */
     @Test
     public void testVeryVerbose() {
-        String[] argv = new String[] { "-v", "2", TESTFILE };
+        String testfile;
+        try {
+            testfile = Paths
+                    .get(this.getClass().getResource("/ex0.ae").toURI())
+                    .toString();
+        } catch (URISyntaxException e) {
+            TestUtils.fail(e);
+            return;
+        }
+        String[] argv = new String[] { "-v", "2", testfile };
         Main.main(argv);
         // TODO test something
     }

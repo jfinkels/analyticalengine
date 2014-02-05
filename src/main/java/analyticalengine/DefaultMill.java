@@ -176,7 +176,8 @@ public class DefaultMill implements Mill {
 
             this.egressAxes[0] = quotientRemainder[1];
             this.egressAxes[1] = quotientRemainder[0];
-            LOG.debug("Quotient and remainder: " + Arrays.toString(this.egressAxes));
+            LOG.debug("Remainder and quotient: "
+                    + Arrays.toString(this.egressAxes));
             break;
         case MULTIPLY:
             result = this.ingressAxes[0].multiply(this.ingressAxes[1]);
@@ -239,7 +240,7 @@ public class DefaultMill implements Mill {
      */
     @Override
     public void leftShift(final int shift) {
-
+        LOG.debug("Performing left shift by " + shift);
         /*
          * A left shift is performed before a fixed point division, so the two
          * ingress axes containing the dividend are shifted.
@@ -248,9 +249,12 @@ public class DefaultMill implements Mill {
         if (this.ingressAxes[2].signum() != 0) {
             value = value.add(this.ingressAxes[2].multiply(MAX));
         }
+        LOG.debug("Value to shift: " + value);
 
         BigInteger sf = BigInteger.TEN.pow(shift);
         BigInteger pr = value.multiply(sf);
+
+        LOG.debug("Shifted to: " + pr);
 
         if (pr.compareTo(MAX) != 0) {
             BigInteger[] pq = pr.divideAndRemainder(MAX);
@@ -260,7 +264,7 @@ public class DefaultMill implements Mill {
             this.ingressAxes[0] = pr;
             this.ingressAxes[2] = BigInteger.ZERO;
         }
-
+        LOG.debug("Set new ingress axes: " + Arrays.toString(this.ingressAxes));
         this.mostRecentValue = this.ingressAxes[0];
     }
 
