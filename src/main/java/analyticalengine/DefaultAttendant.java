@@ -60,9 +60,9 @@ public class DefaultAttendant implements Attendant {
      *         {@code start} matches the cycle end specified by {code end}.
      */
     private static boolean cyclesMatch(final Card start, final Card end) {
-        return ((start.type() == CardType.CBACKSTART || start.type() == CardType.BACKSTART
-                && end.type() != CardType.BACKEND) || (start.type() == CardType.CFORWARDSTART || start
-                .type() == CardType.FORWARDSTART)
+        return ((isIn(start.type(), CardType.CBACKSTART, CardType.BACKSTART) && end
+                .type() != CardType.BACKEND) || isIn(start.type(),
+                CardType.CFORWARDSTART, CardType.FORWARDSTART)
                 && (end.type() != CardType.FORWARDEND || end.type() != CardType.ALTERNATION));
     }
 
@@ -76,8 +76,8 @@ public class DefaultAttendant implements Attendant {
      *         cycle block (including an alternation).
      */
     private static boolean isCycleEnd(final CardType type) {
-        return type == CardType.BACKEND || type == CardType.ALTERNATION
-                || type == CardType.FORWARDEND;
+        return isIn(type, CardType.BACKEND, CardType.ALTERNATION,
+                CardType.FORWARDEND);
     }
 
     /**
@@ -90,9 +90,29 @@ public class DefaultAttendant implements Attendant {
      *         a cycle block.
      */
     private static boolean isCycleStart(final CardType type) {
-        return type == CardType.BACKSTART || type == CardType.CBACKSTART
-                || type == CardType.FORWARDSTART
-                || type == CardType.CFORWARDSTART;
+        return isIn(type, CardType.BACKSTART, CardType.CBACKSTART,
+                CardType.FORWARDSTART, CardType.CFORWARDSTART);
+    }
+
+    /**
+     * Returns {@code true} if and only if any of the elements of
+     * {@code haystack} are equal to {@code needle}, according to the
+     * {@link Object#equals(Object)} method.
+     * 
+     * @param needle
+     *            The element to look for.
+     * @param haystack
+     *            The array in which to search for the element.
+     * @return {@code true} if and only if the element is found somewhere in
+     *         the given array.
+     */
+    private static boolean isIn(final Object needle, final Object... haystack) {
+        for (Object element : haystack) {
+            if (element.equals(needle)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
