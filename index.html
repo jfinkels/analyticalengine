@@ -11,32 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" href="css/bootstrap.min.css">
-        <style type="text/css">
-          h4 {
-            margin-top: 2em;
-          }
-
-          /** These styles are from GitHub. **/
-          pre.command-line {
-            border: 2px solid #dddddd;
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
-            -webkit-font-smoothing: auto;
-          }
-
-          pre.command-line .command:before {
-            content: "$ ";
-          }
-
-          pre.command-line .comment {
-            color: #ccc;
-          }
-
-          pre.command-line .output {
-            color: #63E463;
-          }
-        </style>
+        <link rel="stylesheet" href="css/analyticalengine.css">
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -78,17 +53,13 @@
           see <a href="http://www.fourmilab.ch/babbage/cards.html">this
           website</a>.
 
-          <div class="row">
-            <div class="col-md-6">Store the number 123 in memory location
-            1.</div>
-            <div class="col-md-6">
-              <pre>N1 123</pre>
-            </div>
+          <div class="ae-example">
+            Store the number 123 in memory location 1.
+            <pre>N1 123</pre>
           </div>
-          <div class="row">
-            <div class="col-md-6">Add two numbers from memory locations 1 and 2
-            and store the result in memory location 3.</div>
-            <div class="col-md-6">
+          <div class="ae-example">
+            Add two numbers from memory locations 1 and 2 and store the result
+            in memory location 3.
               <pre>
 N1 123
 N2 456
@@ -98,7 +69,6 @@ L1
 L2
 S3
 </pre>
-            </div>
           </div>
 
           <h4>Building from source</h4>
