@@ -1,5 +1,5 @@
 /**
- * CardReaderTest.java - tests for CardReader
+ * ProgramReaderTest.java - tests for ProgramReader
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -36,12 +36,12 @@ import analyticalengine.cards.Card;
 import analyticalengine.cards.CardType;
 
 /**
- * Tests for {@link analyticalengine.io.CardReader}.
+ * Tests for {@link analyticalengine.io.ProgramReader}.
  * 
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
  */
-public class CardReaderTest {
+public class ProgramReaderTest {
 
     /**
      * The program that should be parsed from the test file.
@@ -105,7 +105,7 @@ public class CardReaderTest {
         try {
             Path testfile = Paths.get(this.getClass().getResource("/ex0.ae")
                     .toURI());
-            List<Card> cards = CardReader.fromPath(testfile);
+            List<Card> cards = ProgramReader.fromPath(testfile);
             assertCardsEqual(EXPECTED, cards);
         } catch (IOException | UnknownCard | URISyntaxException e) {
             TestUtils.fail(e);
@@ -119,7 +119,7 @@ public class CardReaderTest {
                 + "N120 10000\n" + "N121 3\n" + "/\n" + "L120\n" + "L121\n"
                 + "S122'\n" + "P\n";
         try {
-            List<Card> cards = CardReader.fromString(program);
+            List<Card> cards = ProgramReader.fromString(program);
             assertCardsEqual(EXPECTED, cards);
         } catch (UnknownCard e) {
             TestUtils.fail(e);

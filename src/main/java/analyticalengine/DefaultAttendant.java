@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import analyticalengine.cards.Card;
 import analyticalengine.cards.CardType;
+import analyticalengine.io.ProgramReader;
 import analyticalengine.io.UnknownCard;
 
 /**
@@ -639,7 +640,7 @@ public class DefaultAttendant implements Attendant {
 
                 result.add(Card.commentCard("Begin interpolation of " + card
                         + " by attendant"));
-                result.addAll(analyticalengine.io.CardReader.fromPath(path));
+                result.addAll(ProgramReader.fromPath(path));
                 result.add(Card.commentCard("Endinterpolation of " + card
                         + " by attendant"));
                 /*

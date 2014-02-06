@@ -1,5 +1,5 @@
 /**
- * CardReader.java - reads a sequence of cards from a text file
+ * ProgramReader.java - reads a sequence of cards from a text file
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -37,10 +37,10 @@ import analyticalengine.cards.Card;
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
  */
-public final class CardReader {
+public final class ProgramReader {
 
     /** Instantiation disallowed. */
-    private CardReader() {
+    private ProgramReader() {
         // intentionally unimplemented
     }
 

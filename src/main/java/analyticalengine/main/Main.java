@@ -47,6 +47,7 @@ import analyticalengine.Printer;
 import analyticalengine.Store;
 import analyticalengine.StringPrinter;
 import analyticalengine.cards.Card;
+import analyticalengine.io.ProgramReader;
 import analyticalengine.io.UnknownCard;
 
 import com.beust.jcommander.JCommander;
@@ -122,7 +123,7 @@ public final class Main {
         List<Card> cards;
         try {
             Path program = Paths.get(arguments.args.get(0));
-            cards = analyticalengine.io.CardReader.fromPath(program);
+            cards = ProgramReader.fromPath(program);
         } catch (IOException e) {
             LOG.error("Failed to load specified program", e);
             return;

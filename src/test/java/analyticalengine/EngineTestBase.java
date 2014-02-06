@@ -30,6 +30,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import analyticalengine.cards.Card;
+import analyticalengine.io.ProgramReader;
 import analyticalengine.io.UnknownCard;
 
 /**
@@ -74,11 +75,11 @@ public class EngineTestBase {
         try {
             Path program = Paths.get(this.getClass()
                     .getResource("/" + filename).toURI());
-            List<Card> cards = analyticalengine.io.CardReader
-                    .fromPath(program);
+            List<Card> cards = ProgramReader.fromPath(program);
             this.attendant.loadProgram(cards);
             this.engine.run();
-        } catch (BadCard | IOException | UnknownCard | URISyntaxException | LibraryLookupException e) {
+        } catch (BadCard | IOException | UnknownCard | URISyntaxException
+                | LibraryLookupException e) {
             TestUtils.fail(e);
         }
     }
@@ -92,8 +93,7 @@ public class EngineTestBase {
      */
     void runProgramString(final String program) {
         try {
-            List<Card> cards = analyticalengine.io.CardReader
-                    .fromString(program);
+            List<Card> cards = ProgramReader.fromString(program);
             this.attendant.loadProgram(cards);
             this.engine.run();
         } catch (BadCard | IOException | UnknownCard | LibraryLookupException e) {
@@ -115,7 +115,7 @@ public class EngineTestBase {
 
         this.attendant.setCardReader(reader);
         this.attendant.setLibrary(library);
-        
+
         this.engine.setAttendant(this.attendant);
         this.engine.setCardReader(reader);
         this.engine.setCurvePrinter(curvePrinter);

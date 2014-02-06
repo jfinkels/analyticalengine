@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 
 import analyticalengine.cards.Card;
+import analyticalengine.io.ProgramReader;
 import analyticalengine.io.UnknownCard;
 
 /**
@@ -135,13 +136,11 @@ public class DefaultLibrary implements Library {
                     try (FileSystem zipFs = FileSystems.newFileSystem(zipUri,
                             Collections.<String, Object> emptyMap())) {
                         programPath = Paths.get(uri);
-                        cardsFromFile = analyticalengine.io.CardReader
-                                .fromPath(programPath);
+                        cardsFromFile = ProgramReader.fromPath(programPath);
                     }
                 } else {
                     programPath = Paths.get(new URI(scheme, spec, null)); // .toAbsolutePath();
-                    cardsFromFile = analyticalengine.io.CardReader
-                            .fromPath(programPath);
+                    cardsFromFile = ProgramReader.fromPath(programPath);
                 }
                 result.addAll(cardsFromFile);
             } catch (URISyntaxException | IOException e) {
