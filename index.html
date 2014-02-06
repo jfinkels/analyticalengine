@@ -67,8 +67,29 @@ N2 456
 +
 L1
 L2
+S3</pre>
+            <p>The operation is automatically executed once two operands are
+            loaded.
+          </div>
+          <div class="ae-example">
+            <p>Print a number to the printer.
+            <pre>
+N1 123
+N2 456
+
++
+L1
+L2
 S3
-</pre>
+P</pre>
+            <p>The <code>P</code> instruction does not print directly to
+            standard output; the attendant receives all printed strings and
+            makes them all available at once after the program has terminated.
+          </div>
+          <div class="ae-example">
+            <p>Loop back to previously performed instructions, depending on
+            whether the overflow (or sign change) flag has been set.
+            <pre>...</pre>
           </div>
 
           <h4>Building from source</h4>
