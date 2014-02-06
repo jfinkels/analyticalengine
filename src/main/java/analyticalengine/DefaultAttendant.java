@@ -49,21 +49,44 @@ public class DefaultAttendant implements Attendant {
             .getLogger(DefaultAttendant.class);
 
     /**
-     * Returns {@code true} if and only if the cycle started by card
-     * {@code start} matches the cycle end specified by {code end}.
+     * Returns {@code true} if and only if the cycle started by card of type
+     * {@code start} matches the cycle end specified by card of type {code
+     * end}.
      * 
      * @param start
-     *            A card representing the start of a cycle.
+     *            A card type representing the start of a cycle.
      * @param end
-     *            A card representing the end of a cycle.
-     * @return {@code true} if and only if the cycle started by card
-     *         {@code start} matches the cycle end specified by {code end}.
+     *            A card type representing the end of a cycle.
+     * @return {@code true} if and only if the cycle started by card with type
+     *         {@code start} matches the cycle end specified by type {code
+     *         end}.
      */
-    private static boolean cyclesMatch(final Card start, final Card end) {
-        return ((isIn(start.type(), CardType.CBACKSTART, CardType.BACKSTART) && end
-                .type() != CardType.BACKEND) || isIn(start.type(),
-                CardType.CFORWARDSTART, CardType.FORWARDSTART)
-                && (end.type() != CardType.FORWARDEND || end.type() != CardType.ALTERNATION));
+    private static boolean cyclesMatch(final CardType start, final CardType end) {
+        switch (start) {
+        case CBACKSTART:
+        case BACKSTART:
+            // A ( or (? must be closed by a ).
+            switch (end) {
+            case BACKEND:
+                return true;
+            default:
+                return false;
+            }
+        case FORWARDSTART:
+        case CFORWARDSTART:
+            // A { or {? must be closed by a } or }{
+            switch (end) {
+            case FORWARDEND:
+            case ALTERNATION:
+                return true;
+            default:
+                return false;
+            }
+        default:
+            throw new IllegalArgumentException(
+                    "Cannot check cycle matching for cards " + start + " and "
+                            + end);
+        }
     }
 
     /**
@@ -108,6 +131,8 @@ public class DefaultAttendant implements Attendant {
      */
     private static boolean isIn(final Object needle, final Object... haystack) {
         for (Object element : haystack) {
+            System.out.println("Comparing " + element + " to " + needle + ": "
+                    + element.equals(needle));
             if (element.equals(needle)) {
                 return true;
             }
@@ -760,9 +785,8 @@ public class DefaultAttendant implements Attendant {
             }
             if (isCycleEnd(u.type())) {
                 LOG.debug("  Found end of cycle starting with " + c);
-                boolean isElse = u.type() == CardType.ALTERNATION;
 
-                if (!cyclesMatch(c, u)) {
+                if (!cyclesMatch(c.type(), u.type())) {
                     throw new BadCard("End of cycle does not match " + c
                             + " beginning on card " + start, u);
                 }
@@ -796,6 +820,7 @@ public class DefaultAttendant implements Attendant {
                     newType = CardType.FORWARD;
                 }
 
+                boolean isElse = u.type() == CardType.ALTERNATION;
                 int argument;
                 if (isElse) {
                     if (this.stripComments) {
