@@ -131,8 +131,6 @@ public class DefaultAttendant implements Attendant {
      */
     private static boolean isIn(final Object needle, final Object... haystack) {
         for (Object element : haystack) {
-            System.out.println("Comparing " + element + " to " + needle + ": "
-                    + element.equals(needle));
             if (element.equals(needle)) {
                 return true;
             }
