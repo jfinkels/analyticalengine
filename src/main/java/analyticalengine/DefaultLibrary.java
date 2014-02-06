@@ -74,6 +74,80 @@ public class DefaultLibrary implements Library {
     }
 
     /**
+     * Returns the cards contained in the program at the specified URL.
+     * 
+     * @param fileurl
+     *            The URL of the file containing the cards to return.
+     * @return The cards contained in the program at the specified URL.
+     * @throws URISyntaxException
+     *             if the given URL has an unknown or invalid syntax.
+     * @throws IOException
+     *             if there is a problem reading the library file, or the JAR
+     *             containing the library file.
+     * @throws UnknownCard
+     *             if the requested library file has a syntax error.
+     * @throws IllegalArgumentException
+     *             if the requested URL indicates a JAR file instead of a file
+     *             within a JAR file.
+     */
+    private List<Card> cardsFromResource(final URL fileurl)
+            throws URISyntaxException, IOException, UnknownCard,
+            IllegalArgumentException {
+        // Create some cards which will be placed at the beginning and end of
+        // the card chain to indicate to the user that the intermediate cards
+        // come from an included library file.
+        Card initialComment = Card.commentCard("Begin interpolation of "
+                + fileurl + " from library by attendant");
+        Card terminalComment = Card.commentCard("End interpolation of "
+                + fileurl + " from library by attendant");
+
+        // Get the scheme and scheme-specific part of the given URL. Getting
+        // the raw scheme-specific part (that is, without URL-encoded
+        // characters) seems to be necessary due to limitations in Java.
+        URI uri = fileurl.toURI();
+        String scheme = uri.getScheme();
+        String spec = uri.getRawSchemeSpecificPart();
+
+        // If the scheme indicates that the file is inside a JAR file, as
+        // might happen if this code is running from an executable JAR and the
+        // requested library file is contained within the JAR, do some black
+        // magic to open the JAR file and read the program from a file
+        // contained within it.
+        if (scheme.equals("jar")) {
+
+            // The part after the "!/" is the path to the requested file
+            // relative to the root of the JAR file (which is just a zipped
+            // directory).
+            int sep = spec.indexOf("!/");
+
+            if (sep == -1) {
+                throw new IllegalArgumentException(
+                        "Cannot load a JAR file directly.");
+            }
+            URI zipUri = new URI(scheme, spec.substring(0, sep), null);
+
+            try (FileSystem zipFs = FileSystems.newFileSystem(zipUri,
+                    Collections.<String, Object> emptyMap())) {
+                Path programPath = Paths.get(uri);
+                List<Card> result = new ArrayList<Card>();
+                result.add(initialComment);
+                result.addAll(ProgramReader.fromPath(programPath));
+                result.add(terminalComment);
+                return result;
+            }
+        }
+
+        // The scheme did not indicate a JAR file, so we get the path to the
+        // file as usual, without any black magic.
+        Path programPath = Paths.get(new URI(scheme, spec, null));
+        List<Card> result = new ArrayList<Card>();
+        result.add(initialComment);
+        result.addAll(ProgramReader.fromPath(programPath));
+        result.add(terminalComment);
+        return result;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -91,16 +165,15 @@ public class DefaultLibrary implements Library {
      *             {@inheritDoc}
      */
     public List<Card> find(String filename) throws LibraryLookupException {
-        List<Card> result = new ArrayList<Card>();
-
         // we assume library files have the .ae file extension
         if (!filename.endsWith(".ae")) {
             filename += ".ae";
         }
 
         /*
-         * Get the URL of the file to load. If this class lives in an
-         * executable JAR, the URL will be something like
+         * Check if the file to load lives in the current JAR file, or the
+         * current directory in which this code is being executed. If this
+         * class lives in an executable JAR, the URL will be something like
          * 
          * jar:file:/path/to/analyticalengine.jar!/analyticalengine/filename.ae
          * 
@@ -112,66 +185,52 @@ public class DefaultLibrary implements Library {
         URL fileurl = this.getClass().getClassLoader()
                 .getResource("analyticalengine/" + filename);
 
-        // if this file exists in the package, use it
+        // If the file exists as a resource available to the class loader, then
+        // load the cards from that location.
         if (fileurl != null) {
-            result.add(Card.commentCard("Begin interpolation of " + fileurl
-                    + " from library by attendant"));
             try {
-                URI uri = fileurl.toURI();
-                String scheme = uri.getScheme();
-                String spec = uri.getRawSchemeSpecificPart();
-
-                List<Card> cardsFromFile;
-                Path programPath;
-                if (scheme.equals("jar")) {
-                    int sep = spec.indexOf("!/");
-
-                    URI zipUri = null;
-                    if (sep == -1) {
-                        // TODO this should never happen
-                    } else {
-                        zipUri = new URI(scheme, spec.substring(0, sep), null);
-                    }
-
-                    try (FileSystem zipFs = FileSystems.newFileSystem(zipUri,
-                            Collections.<String, Object> emptyMap())) {
-                        programPath = Paths.get(uri);
-                        cardsFromFile = ProgramReader.fromPath(programPath);
-                    }
-                } else {
-                    programPath = Paths.get(new URI(scheme, spec, null)); // .toAbsolutePath();
-                    cardsFromFile = ProgramReader.fromPath(programPath);
-                }
-                result.addAll(cardsFromFile);
-            } catch (URISyntaxException | IOException e) {
+                return this.cardsFromResource(fileurl);
+            } catch (URISyntaxException | IOException | UnknownCard e) {
                 throw new LibraryLookupException(
-                        "Failed to open built-in file", e);
-            } catch (UnknownCard e) {
-                throw new LibraryLookupException(
-                        "Syntax error in requested file", e);
+                        "Failed to load library file", e);
             }
-            result.add(Card.commentCard("End interpolation of " + fileurl
-                    + " from library by attendant"));
-            return result;
         }
 
-        // look for the file in the known paths
-        Path libraryFile = null;
-        for (Path path : this.paths) {
-            libraryFile = path.resolve(filename);
-            if (Files.exists(libraryFile)) {
-                break;
-            }
-            libraryFile = null;
-        }
+        // If the above resource did not exist, look for the file in the list
+        // of known paths.
+        Path filePath = this.findInPath(filename);
 
-        // raise an exception if the requested library file could
-        // not
-        // be found in any of the known paths
-        if (libraryFile == null) {
+        // Raise an exception if the requested library file could not be found
+        // in any of the known paths.
+        if (filePath == null) {
             throw new LibraryLookupException("Could not find library file: "
                     + filename);
         }
-        return result;
+
+        // If the file was found somewhere in one of the library paths, load
+        // the program directly from that file.
+        try {
+            return ProgramReader.fromPath(filePath);
+        } catch (IOException | UnknownCard e) {
+            throw new LibraryLookupException("Failed to load library file", e);
+        }
+    }
+
+    /**
+     * Searches the known library directories for file with the specified name.
+     * 
+     * @param filename
+     *            The basename of the file to search for.
+     * @return The path to the first occurrence of a file with the specified
+     *         name, or {@code null} if no such file could be found.
+     */
+    private Path findInPath(final String filename) {
+        for (Path path : this.paths) {
+            Path libraryFile = path.resolve(filename);
+            if (Files.exists(libraryFile)) {
+                return libraryFile;
+            }
+        }
+        return null;
     }
 }
