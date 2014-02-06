@@ -1,0 +1,21 @@
+*~
+
+# Eclipse configuration files
+.classpath
+.settings
+.project
+.eclipse/
+.checkstyle
+
+# Compiled class files and target directory
+target/
+bin/
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
