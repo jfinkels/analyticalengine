@@ -199,138 +199,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>3.3</version>
-        <configuration>
-          <reportPlugins>
-
-            <!--<plugin>  changelog generation from SCM 
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-changelog-plugin</artifactId>
-                <version>2.2</version>
-                </plugin>-->
-
-            <plugin> <!-- Checkstyle coding style violations report -->
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-checkstyle-plugin</artifactId>
-              <version>2.11</version>
-              <configuration>
-                <configLocation>${basedir}/checkstyle.xml</configLocation>
-                <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                <enableRSS>false</enableRSS>
-                <enableRulesSummary>false</enableRulesSummary>
-              </configuration>
-            </plugin>
-            
-            <plugin> <!-- Javadoc generation -->
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-javadoc-plugin</artifactId>
-              <version>${version.plugin.javadoc}</version>
-            </plugin>
-
-            <plugin> <!-- Java code cross-reference links -->
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-jxr-plugin</artifactId>
-              <version>2.4</version>
-            </plugin>
-
-            <plugin> <!-- PMD code analysis report -->
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-pmd-plugin</artifactId>
-              <version>3.0.1</version>
-              <configuration>
-                <targetJdk>${version.java.target}</targetJdk>
-              </configuration>
-            </plugin>
-
-            <!-- <plugin> project information reports -->
-            <!--   <groupId>org.apache.maven.plugins</groupId> -->
-            <!--   <artifactId>maven-project-info-reports-plugin</artifactId> -->
-            <!--   <version>2.3.1</version> -->
-            <!-- </plugin> -->
-
-            <plugin> <!-- Surefire test report -->
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-surefire-report-plugin</artifactId>
-              <version>${version.plugin.surefire}</version>
-              <reportSets>
-                <reportSet>
-                  <reports> <!-- only run tests once -->
-                    <report>report-only</report>
-                  </reports>
-                </reportSet>
-              </reportSets>
-            </plugin>
-            
-            <!-- <plugin> API version compatibility checks
-                 <groupId>org.codehaus.mojo</groupId>
-                 <artifactId>clirr-maven-plugin</artifactId>
-                 <version>2.2.2</version>
-                 </plugin> -->
-            
-            <plugin> <!-- Cobertura test coverage report -->
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>cobertura-maven-plugin</artifactId>
-              <version>2.6</version>
-            </plugin>
-
-            <plugin> <!-- FindBugs report -->
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>findbugs-maven-plugin</artifactId>
-              <version>2.5.3</version>
-              <configuration>
-                <threshold>Low</threshold>
-                <effort>Max</effort>
-              </configuration>
-            </plugin>
-
-            <!-- <plugin> NCSS metrics -->
-            <!--   <groupId>org.codehaus.mojo</groupId> -->
-            <!--   <artifactId>javancss-maven-plugin</artifactId> -->
-            <!--   <version>2.0</version> -->
-            <!-- </plugin> -->
-
-            <plugin> <!-- dependency cycle checks -->
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>jdepend-maven-plugin</artifactId>
-              <version>2.0-beta-2</version>
-            </plugin>
-            
-            <!-- <plugin> TODO tag extraction -->
-            <!--   <groupId>org.codehaus.mojo</groupId> -->
-            <!--   <artifactId>taglist-maven-plugin</artifactId> -->
-            <!--   <version>2.4</version> -->
-            <!--   <configuration> -->
-            <!--     <tagListOptions> -->
-            <!--       <tagClasses> -->
-            <!--         <tagClass> -->
-            <!--           <displayName>Todo</displayName> -->
-            <!--           <tags> -->
-            <!--             <tag> -->
-            <!--               <matchString>todo</matchString> -->
-            <!--               <matchType>ignoreCase</matchType> -->
-            <!--             </tag> -->
-            <!--           </tags> -->
-            <!--         </tagClass> -->
-            <!--       </tagClasses> -->
-            <!--     </tagListOptions> -->
-            <!--   </configuration> -->
-            <!-- </plugin> -->
-
-            <plugin> <!-- dependency and plugin versions -->
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>versions-maven-plugin</artifactId>
-              <version>2.1</version>
-              <reportSets>
-                <reportSet>
-                  <reports>
-                    <report>dependency-updates-report</report>
-                    <report>plugin-updates-report</report>
-                    <report>property-updates-report</report>
-                  </reports>
-                </reportSet>
-              </reportSets>
-            </plugin>
-          </reportPlugins>
-        </configuration>
       </plugin>
       <plugin> <!-- for generating executable scripts -->
         <groupId>org.codehaus.mojo</groupId>
@@ -361,6 +229,139 @@
       </plugin>
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+
+      <!--<plugin>  changelog generation from SCM 
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-changelog-plugin</artifactId>
+          <version>2.2</version>
+          </plugin>-->
+
+      <plugin> <!-- Checkstyle coding style violations report -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.11</version>
+        <configuration>
+          <configLocation>${basedir}/checkstyle.xml</configLocation>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <enableRSS>false</enableRSS>
+          <enableRulesSummary>false</enableRulesSummary>
+        </configuration>
+      </plugin>
+      
+      <plugin> <!-- Javadoc generation -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${version.plugin.javadoc}</version>
+      </plugin>
+
+      <plugin> <!-- Java code cross-reference links -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>2.4</version>
+      </plugin>
+
+      <plugin> <!-- PMD code analysis report -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.0.1</version>
+        <configuration>
+          <targetJdk>${version.java.target}</targetJdk>
+        </configuration>
+      </plugin>
+
+      <plugin> <!-- project information reports -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.7</version>
+      </plugin>
+
+      <plugin> <!-- Surefire test report -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>${version.plugin.surefire}</version>
+        <reportSets>
+          <reportSet>
+            <reports> <!-- only run tests once -->
+              <report>report-only</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      
+      <!-- <plugin> API version compatibility checks
+           <groupId>org.codehaus.mojo</groupId>
+           <artifactId>clirr-maven-plugin</artifactId>
+           <version>2.2.2</version>
+           </plugin> -->
+      
+      <plugin> <!-- Cobertura test coverage report -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.6</version>
+      </plugin>
+
+      <plugin> <!-- FindBugs report -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>2.5.3</version>
+        <configuration>
+          <threshold>Low</threshold>
+          <effort>Max</effort>
+        </configuration>
+      </plugin>
+
+      <!-- <plugin> NCSS metrics -->
+      <!--   <groupId>org.codehaus.mojo</groupId> -->
+      <!--   <artifactId>javancss-maven-plugin</artifactId> -->
+      <!--   <version>2.0</version> -->
+      <!-- </plugin> -->
+
+      <plugin> <!-- dependency cycle checks -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jdepend-maven-plugin</artifactId>
+        <version>2.0-beta-2</version>
+      </plugin>
+      
+      <!-- <plugin> TODO tag extraction -->
+      <!--   <groupId>org.codehaus.mojo</groupId> -->
+      <!--   <artifactId>taglist-maven-plugin</artifactId> -->
+      <!--   <version>2.4</version> -->
+      <!--   <configuration> -->
+      <!--     <tagListOptions> -->
+      <!--       <tagClasses> -->
+      <!--         <tagClass> -->
+      <!--           <displayName>Todo</displayName> -->
+      <!--           <tags> -->
+      <!--             <tag> -->
+      <!--               <matchString>todo</matchString> -->
+      <!--               <matchType>ignoreCase</matchType> -->
+      <!--             </tag> -->
+      <!--           </tags> -->
+      <!--         </tagClass> -->
+      <!--       </tagClasses> -->
+      <!--     </tagListOptions> -->
+      <!--   </configuration> -->
+      <!-- </plugin> -->
+
+      <plugin> <!-- dependency and plugin versions -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.1</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>dependency-updates-report</report>
+              <report>plugin-updates-report</report>
+              <report>property-updates-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
 
   <profiles> <!-- Only sign when releasing. -->
     <!-- from https://docs.sonatype.org/display/Repository/How+To+Generate+PGP+Signatures+With+Maven -->
