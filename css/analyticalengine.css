@@ -71,6 +71,6 @@ pre.command-line .output {
   }
 }
 
-.bs-example>p: last-child {
+.ae-example>p:last-child {
   margin-bottom: 0;
 }
