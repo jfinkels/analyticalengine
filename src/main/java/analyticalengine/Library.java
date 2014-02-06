@@ -1,3 +1,23 @@
+/**
+ * Library.java - a library of built-in functions
+ * 
+ * Copyright 2014 Jeffrey Finkelstein.
+ * 
+ * This file is part of analyticalengine.
+ * 
+ * analyticalengine is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ * 
+ * analyticalengine is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
+ */
 package analyticalengine;
 
 import java.nio.file.Path;
@@ -5,6 +25,13 @@ import java.util.List;
 
 import analyticalengine.cards.Card;
 
+/**
+ * A library containing built-in functions that can be included by user
+ * programs.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public interface Library {
 
     /**
@@ -32,6 +59,9 @@ public interface Library {
      */
     void addLibraryPaths(List<Path> paths);
 
+    /** Empties the known library search paths. */
+    void clear();
+
     /**
      * Returns the list of cards stored in the library file with the specified
      * name.
@@ -50,7 +80,4 @@ public interface Library {
      *             if the specified file is not found.
      */
     List<Card> find(String filename) throws LibraryLookupException;
-
-    /** Empties the known library search paths. */
-    void clear();
 }

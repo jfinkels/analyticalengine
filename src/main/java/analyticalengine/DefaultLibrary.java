@@ -1,3 +1,23 @@
+/**
+ * DefaultLibrary.java - basic implementation of library of built-in functions
+ * 
+ * Copyright 2014 Jeffrey Finkelstein.
+ * 
+ * This file is part of analyticalengine.
+ * 
+ * analyticalengine is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ * 
+ * analyticalengine is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
+ */
 package analyticalengine;
 
 import java.io.IOException;
@@ -13,13 +33,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import analyticalengine.cards.Card;
 import analyticalengine.io.UnknownCard;
 
+/**
+ * A basic implementation of a library of built-in functions.
+ * 
+ * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @since 0.0.1
+ */
 public class DefaultLibrary implements Library {
+
+    /**
+     * A list of paths to search when a card requesting a library function is
+     * encountered.
+     */
+    private List<Path> paths = new ArrayList<Path>();
 
     /**
      * {@inheritDoc}
@@ -44,40 +73,22 @@ public class DefaultLibrary implements Library {
     }
 
     /**
-     * A list of paths to search when a card requesting a library function is
-     * encountered.
+     * {@inheritDoc}
      */
-    private List<Path> paths = new ArrayList<Path>();
-
-    /** The logger for this class. */
-    private static final transient Logger LOG = LoggerFactory
-            .getLogger(Library.class);
-
-    static Path uriToPath(URI uri) throws URISyntaxException, IOException {
-        String scheme = uri.getScheme();
-        String spec = uri.getRawSchemeSpecificPart();
-        LOG.warn("SCHEME: " + scheme);
-        LOG.warn("SPEC: " + spec);
-
-        if (scheme.equals("jar")) {
-            int sep = spec.indexOf("!/");
-
-            URI zipUri = null;
-            if (sep == -1) {
-                // TODO this should never happen
-            } else {
-                zipUri = new URI(scheme, spec.substring(0, sep), null);
-            }
-
-            try (FileSystem zipFs = FileSystems.newFileSystem(zipUri,
-                    Collections.<String, Object> emptyMap())) {
-                return Paths.get(uri);
-            }
-        } else {
-            return Paths.get(new URI(scheme, spec, null)); // .toAbsolutePath();
-        }
+    @Override
+    public void clear() {
+        this.paths.clear();
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @param filename
+     *            {@inheritDoc}
+     * @return {@inheritDoc}
+     * @throws LibraryLookupException
+     *             {@inheritDoc}
+     */
     public List<Card> find(String filename) throws LibraryLookupException {
         List<Card> result = new ArrayList<Card>();
 
@@ -86,15 +97,17 @@ public class DefaultLibrary implements Library {
             filename += ".ae";
         }
 
-        // Get the URL of the file to load. If this class lives in an
-        // executable JAR, the URL will be something like
-        //
-        // jar:file:/path/to/analyticalengine.jar!/analyticalengine/filename.ae
-        //
-        // If this class lives on a real filesystem, the URL will be something
-        // like
-        //
-        // file:/path/to/analyticalengine/filename.ae
+        /*
+         * Get the URL of the file to load. If this class lives in an
+         * executable JAR, the URL will be something like
+         * 
+         * jar:file:/path/to/analyticalengine.jar!/analyticalengine/filename.ae
+         * 
+         * If this class lives on a real filesystem, the URL will be something
+         * like
+         * 
+         * file:/path/to/analyticalengine/filename.ae
+         */
         URL fileurl = this.getClass().getClassLoader()
                 .getResource("analyticalengine/" + filename);
 
@@ -161,11 +174,5 @@ public class DefaultLibrary implements Library {
                     + filename);
         }
         return result;
-    }
-
-    @Override
-    public void clear() {
-        // TODO Auto-generated method stub
-
     }
 }
