@@ -42,6 +42,48 @@ import analyticalengine.io.UnknownCard;
  */
 public class DefaultAnalyticalEngineTest extends EngineTestBase {
 
+    /**
+     * Joins all the elements of {@code args} with new line characters in
+     * between each one.
+     * 
+     * @param endingNewLine
+     *            Whether to place a new line character at the end of the
+     *            resulting string.
+     * @param args
+     *            The strings to join.
+     * @return The given strings joined with new line characters.
+     */
+    private static String join(boolean endingNewLine, String... args) {
+        if (args.length == 0) {
+            if (endingNewLine) {
+                return System.lineSeparator();
+            }
+            return "";
+        }
+        if (args.length == 1) {
+            if (endingNewLine) {
+                return args[0] + System.lineSeparator();
+            }
+            return args[0];
+        }
+        String[] newArgs = new String[args.length - 1];
+        System.arraycopy(args, 1, newArgs, 0, args.length - 1);
+        return args[0] + System.lineSeparator() + join(endingNewLine, newArgs);
+    }
+
+    /**
+     * Convenience method for {@link #join(boolean, String...)} with first
+     * argument set to {@code true}.
+     * 
+     * @param args
+     *            The strings to join.
+     * @return The given strings joined with new line characters, plus another
+     *         new line at the end of the string.
+     */
+    private static String join(String... args) {
+        return join(true, args);
+    }
+
     /** Tests attendant annotations. */
     @Test
     public void testAnnotation() {
@@ -53,13 +95,13 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     @Test
     public void testArithmetic() {
         runProgram("test_arithmetic.ae");
-        assertEquals("8\n4\n6\n12\n", this.attendant().finalReport());
+        assertEquals(join("8", "4", "6", "12"), this.attendant().finalReport());
     }
 
     /** Test backward. */
     @Test
     public void testBackward() {
-        runProgramString("CF+1\nH\nN1 3\nL1\nP\nCB+5");
+        runProgramString(join("CF+1", "H", "N1 3", "L1", "P", "CB+5"));
         assertEquals("3\n", this.attendant().finalReport());
     }
 
@@ -122,6 +164,13 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         }
     }
 
+    /** Test for the bell. */
+    @Test
+    public void testBell() {
+        runProgramString("B");
+        // TODO assert that standard output contains indication of bell
+    }
+
     /** Tests conditional back. */
     @Test
     public void testConditionalBackward() {
@@ -140,14 +189,14 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     @Test
     public void testDivide() {
         runProgram("ex1.ae");
-        assertEquals("357\n4\n", this.attendant().finalReport());
+        assertEquals(join("357", "4"), this.attendant().finalReport());
     }
 
     /** Test halt. */
     @Test
     public void testHalt() {
         // should halt before any output is produced
-        runProgramString("H\nN1 3\nL1\nP");
+        runProgramString(join(false, "H", "N1 3", "L1", "P"));
         assertEquals("", this.attendant().finalReport());
     }
 
@@ -156,15 +205,25 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     public void testLoad() {
         runProgram("test_load.ae");
         BigInteger quotient = DefaultMill.MAX.divide(new BigInteger("2"));
-        assertEquals("1\n0\n" + quotient + "\n1\n0\n0\n", this.attendant()
-                .finalReport());
+        assertEquals(join("1", "0", quotient.toString(), "1", "0", "0"), this
+                .attendant().finalReport());
     }
 
-    /** Test for the bell. */
+    /**
+     * Tests the {@link analyticalengine.DefaultAnalyticalEngine#run()} method.
+     */
     @Test
-    public void testBell() {
-        runProgramString("B");
-        // TODO assert that standard output contains indication of bell
+    public void testRun() {
+        runProgram("ex0.ae");
+        assertEquals("3333\n", this.attendant().finalReport());
+    }
+
+    /** Test the shift operators. */
+    @Test
+    public void testShifts() {
+        runProgram("ex2.ae");
+        assertEquals(join("357142857", "4000000"), this.attendant()
+                .finalReport());
     }
 
     /** Test for cards that should have been removed by the attendant. */
@@ -188,22 +247,6 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         // reset after each test
         this.engine().reset();
         this.attendant().reset();
-    }
-
-    /**
-     * Tests the {@link analyticalengine.DefaultAnalyticalEngine#run()} method.
-     */
-    @Test
-    public void testRun() {
-        runProgram("ex0.ae");
-        assertEquals("3333\n", this.attendant().finalReport());
-    }
-
-    /** Test the shift operators. */
-    @Test
-    public void testShifts() {
-        runProgram("ex2.ae");
-        assertEquals("357142857\n4000000\n", this.attendant().finalReport());
     }
 
 }
