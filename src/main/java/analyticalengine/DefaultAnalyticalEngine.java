@@ -178,6 +178,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             if (value.compareTo(this.mill.maxValue()) > 0) {
                 throw new BadCard("Value too large to store: " + value, card);
             }
+            LOG.debug("Loading number " + value + " into address " + address);
             this.store.put(address, value);
             break;
         case PRINT:
