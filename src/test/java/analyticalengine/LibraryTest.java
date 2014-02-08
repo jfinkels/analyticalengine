@@ -22,7 +22,11 @@ package analyticalengine;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.junit.Test;
+
+import analyticalengine.io.UnknownCard;
 
 /**
  * Test for built-in library functions.
@@ -32,9 +36,13 @@ import org.junit.Test;
  */
 public class LibraryTest extends EngineTestBase {
 
-    /** Simple test for exponential function. */
+    /** Simple test for exponential function. 
+     * @throws LibraryLookupException 
+     * @throws IOException 
+     * @throws UnknownCard 
+     * @throws BadCard */
     @Test
-    public void testSimpleExp() {
+    public void testSimpleExp() throws BadCard, UnknownCard, IOException, LibraryLookupException {
         runProgramString("A set decimal places to 20\nN0 2\nA include from library cards for exp\nL0\nP");
         System.out.println(this.attendant().finalReport());
     }

@@ -45,6 +45,10 @@ public class EngineTestBase {
     private Attendant attendant = null;
     /** The Analytical Engine instance to test. */
     private AnalyticalEngine engine = null;
+    /** The mill used by the Analytical Engine. */
+    private Mill mill = null;
+    /** The store used by the Analytical Engine. */
+    private Store store = null;
 
     /**
      * Gets the attendant that operates the Analytical Engine under test.
@@ -62,6 +66,15 @@ public class EngineTestBase {
      */
     AnalyticalEngine engine() {
         return this.engine;
+    }
+
+    /**
+     * Gets the mill of the Analytical Engine.
+     * 
+     * @return The mill of the Analytical Engine.
+     */
+    Mill mill() {
+        return this.mill;
     }
 
     /**
@@ -90,15 +103,16 @@ public class EngineTestBase {
      * 
      * @param program
      *            The program to run.
+     * @throws UnknownCard
+     * @throws LibraryLookupException
+     * @throws IOException
+     * @throws BadCard
      */
-    void runProgramString(final String program) {
-        try {
-            List<Card> cards = ProgramReader.fromString(program);
-            this.attendant.loadProgram(cards);
-            this.engine.run();
-        } catch (BadCard | IOException | UnknownCard | LibraryLookupException e) {
-            TestUtils.fail(e);
-        }
+    void runProgramString(final String program) throws UnknownCard, BadCard,
+            IOException, LibraryLookupException {
+        List<Card> cards = ProgramReader.fromString(program);
+        this.attendant.loadProgram(cards);
+        this.engine.run();
     }
 
     /** Creates the Analytical Engine to test. */
@@ -106,12 +120,12 @@ public class EngineTestBase {
     public void setUp() {
         this.engine = new DefaultAnalyticalEngine();
         this.attendant = new DefaultAttendant();
+        this.store = new HashMapStore();
+        this.mill = new DefaultMill();
         Library library = new DefaultLibrary();
         CardReader reader = new ArrayListCardReader();
         CurvePrinter curvePrinter = new AWTCurvePrinter();
-        Mill mill = new DefaultMill();
         Printer printer = new StringPrinter();
-        Store store = new HashMapStore();
 
         this.attendant.setCardReader(reader);
         this.attendant.setLibrary(library);
@@ -119,9 +133,18 @@ public class EngineTestBase {
         this.engine.setAttendant(this.attendant);
         this.engine.setCardReader(reader);
         this.engine.setCurvePrinter(curvePrinter);
-        this.engine.setMill(mill);
+        this.engine.setMill(this.mill);
         this.engine.setPrinter(printer);
-        this.engine.setStore(store);
+        this.engine.setStore(this.store);
+    }
+
+    /**
+     * Gets the store used by the Analytical Engine.
+     * 
+     * @return The store used by the Analytical Engine.
+     */
+    Store store() {
+        return this.store;
     }
 
     /** Resets the Analytical Engine being tested. */

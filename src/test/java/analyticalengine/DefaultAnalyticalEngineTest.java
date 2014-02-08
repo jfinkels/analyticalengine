@@ -84,9 +84,17 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         return join(true, args);
     }
 
-    /** Tests attendant annotations. */
+    /**
+     * Tests attendant annotations.
+     * 
+     * @throws LibraryLookupException
+     * @throws IOException
+     * @throws UnknownCard
+     * @throws BadCard
+     */
     @Test
-    public void testAnnotation() {
+    public void testAnnotation() throws BadCard, UnknownCard, IOException,
+            LibraryLookupException {
         runProgramString("A write annotation foo");
         assertEquals("foo\n", this.attendant().finalReport());
     }
@@ -98,9 +106,17 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         assertEquals(join("8", "4", "6", "12"), this.attendant().finalReport());
     }
 
-    /** Test backward. */
+    /**
+     * Test backward.
+     * 
+     * @throws LibraryLookupException
+     * @throws IOException
+     * @throws UnknownCard
+     * @throws BadCard
+     */
     @Test
-    public void testBackward() {
+    public void testBackward() throws BadCard, UnknownCard, IOException,
+            LibraryLookupException {
         runProgramString(join("CF+1", "H", "N1 3", "L1", "P", "CB+5"));
         assertEquals("3\n", this.attendant().finalReport());
     }
@@ -135,6 +151,69 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         }
     }
 
+    /**
+     * Test for advancing or reversing beyond the bounds of the card chain.
+     * 
+     * @throws BadCard
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws LibraryLookupException
+     */
+    @Test
+    public void testBadAdvance() throws BadCard, UnknownCard, IOException,
+            LibraryLookupException {
+        try {
+            runProgramString("CF+1");
+            TestUtils.shouldHaveThrownException();
+        } catch (IndexOutOfBoundsException e) {
+            assertTrue(true);
+        }
+
+        this.engine().reset();
+        this.attendant().reset();
+
+        try {
+            runProgramString("CB+2");
+            TestUtils.shouldHaveThrownException();
+        } catch (IndexOutOfBoundsException e) {
+            assertTrue(true);
+        }
+    }
+
+    /** Test bad number arguments. */
+    @Test
+    public void testBadNumber() throws UnknownCard, IOException,
+            LibraryLookupException {
+        int badAddress = this.store().maxAddress() + 1;
+        try {
+            runProgramString("N" + badAddress + " 0");
+            TestUtils.shouldHaveThrownException();
+        } catch (BadCard e) {
+            assertTrue(true);
+        }
+
+        this.engine().reset();
+        this.attendant().reset();
+
+        try {
+            runProgramString("N-1 0");
+            TestUtils.shouldHaveThrownException();
+        } catch (BadCard e) {
+            assertTrue(true);
+        }
+
+        this.engine().reset();
+        this.attendant().reset();
+
+        BigInteger badValue = this.mill().maxValue().add(BigInteger.ONE);
+        try {
+            runProgramString("N1 " + badValue);
+            TestUtils.shouldHaveThrownException();
+        } catch (BadCard e) {
+            assertTrue(true);
+        }
+    }
+
     /** Test bad shift arguments. */
     @Test
     public void testBadShift() {
@@ -164,9 +243,17 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         }
     }
 
-    /** Test for the bell. */
+    /**
+     * Test for the bell.
+     * 
+     * @throws LibraryLookupException
+     * @throws IOException
+     * @throws UnknownCard
+     * @throws BadCard
+     */
     @Test
-    public void testBell() {
+    public void testBell() throws BadCard, UnknownCard, IOException,
+            LibraryLookupException {
         runProgramString("B");
         // TODO assert that standard output contains indication of bell
     }
@@ -192,9 +279,17 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         assertEquals(join("357", "4"), this.attendant().finalReport());
     }
 
-    /** Test halt. */
+    /**
+     * Test halt.
+     * 
+     * @throws LibraryLookupException
+     * @throws IOException
+     * @throws UnknownCard
+     * @throws BadCard
+     */
     @Test
-    public void testHalt() {
+    public void testHalt() throws BadCard, UnknownCard, IOException,
+            LibraryLookupException {
         // should halt before any output is produced
         runProgramString(join(false, "H", "N1 3", "L1", "P"));
         assertEquals("", this.attendant().finalReport());
@@ -207,6 +302,21 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         BigInteger quotient = DefaultMill.MAX.divide(new BigInteger("2"));
         assertEquals(join("1", "0", quotient.toString(), "1", "0", "0"), this
                 .attendant().finalReport());
+    }
+
+    /**
+     * Tests for printing a null value.
+     * 
+     * @throws LibraryLookupException
+     * @throws IOException
+     * @throws UnknownCard
+     * @throws BadCard
+     */
+    @Test
+    public void testPrintNull() throws BadCard, UnknownCard, IOException,
+            LibraryLookupException {
+        runProgramString("P");
+        // TODO capture stderr
     }
 
     /**
