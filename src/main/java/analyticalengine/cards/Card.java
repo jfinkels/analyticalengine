@@ -72,6 +72,19 @@ public class Card {
     }
 
     /**
+     * Creates a new card of the specified type with the specified comment, but
+     * no arguments.
+     * 
+     * @param type
+     *            The type of the card.
+     * @param comment
+     *            The comment on the card.
+     */
+    public Card(final CardType type, final String comment) {
+        this(type, new String[] {}, comment);
+    }
+
+    /**
      * Creates a new card of the specified type with the specified arguments
      * but no additional comments.
      * 
