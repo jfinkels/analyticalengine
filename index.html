@@ -23,7 +23,7 @@
           <header class="page-header">
             <h1>Analytical Engine</h1>
           </header>
-          <p class="lead">A Java simulation of the Analytical Engine, a mechanical computer devised by Charles Babbage in the mid-1800s but never built.
+          <p class="lead">A Java simulation of the <a href="https://en.wikipedia.org/wiki/Analytical_Engine">Analytical Engine</a>, a mechanical computer devised by Charles Babbage in the mid-1800s but never built.
 
           <p>The original source code for this package was written
           by <a href="//www.fourmilab.ch">John Walker</a>, and is available
@@ -34,12 +34,26 @@
           <p>This package is distributed under the terms of the GNU General
           Public License version 3.
 
-          <h4>Getting the program</h4>
+          <h4>Getting the simulator</h4>
 
           <p>The source code for the Analytical Engine simulator is available
           from <a href="//github.com/jfinkels/analyticalengine">GitHub</a>.
 
           <pre class="command-line"><span class="command">git clone https://github.com/jfinkels/analyticalengine</span></pre>
+
+          <h4>Building from source</h4>
+
+          <p>This project uses <a href="//maven.apache.org/">Maven</a> for
+          build management and requires Java 1.7 to compile.
+
+          <p>To create a shell script that runs the simulator, run
+
+          <pre class="command-line"><span class="command">mvn package appassembler:assemble</span></pre>
+
+          <p>This produces a script that executes the simulator
+          at <code>target/appassembler/bin/analyticalengine</code>.
+
+          <p>For more information, visit the <a href="//github.com/jfinkels/analyticalengine">GitHub page</a>.
 
           <h4>Running an Analytical Engine program</h4>
 
@@ -53,9 +67,24 @@
           see <a href="http://www.fourmilab.ch/babbage/cards.html">this
           website</a>.
 
+          <p>Each instruction is called a "card", since the original Analytical
+          Engine would have programmed with punched cards.
+
           <div class="ae-example">
             <p>Store the number 123 in memory location 1.
             <pre>N1 123</pre>
+          </div>
+          <div class="ae-example">
+            <p>Lines beginning with a space or a period are comments. A period
+            after another instruction indicates a comment.
+            <pre>
+   This program does foo and bar.
+
+N1 123
+
+. This is another comment
+
+N2 456</pre>
           </div>
           <div class="ae-example">
             <p>Add two numbers from memory locations 1 and 2 and store the
@@ -70,6 +99,22 @@ L2
 S3</pre>
             <p>The operation is automatically executed once two operands are
             loaded.
+          </div>
+          <div class="ae-example">
+            <p>Performing the same operation twice does not require
+            re-specifying the operation.
+            <pre>
+N1 2
+N2 2
+
+*
+L1
+L2
+S1
+L1
+L2
+S1</pre>
+            <p>Memory address 1 now contains value 8.
           </div>
           <div class="ae-example">
             <p>Print a number to the printer.
@@ -89,22 +134,32 @@ P</pre>
           <div class="ae-example">
             <p>Loop back to previously performed instructions, depending on
             whether the overflow (or sign change) flag has been set.
-            <pre>...</pre>
+            <pre>
+  Computes 6! using a loop.
+
+  Address 0 is the current value of n.
+  Address 1 is the accumulator for the cumulative product.
+  Address 2 represents the constant 1.
+
+N0 6
+N1 1
+N2 1
+
+*
+L1
+L0
+S1
+-
+L0
+L2
+S0
+   If 1 - n is less than 0, go back 12 cards (including this comment card).
+L2
+L0
+CB?12
+L1
+P</pre>
           </div>
-
-          <h4>Building from source</h4>
-
-          <p>This project uses <a href="//maven.apache.org/">Maven</a> for
-          build management and requires Java 1.7 to compile.
-
-          <p>To create a shell script that runs the simulator, run
-
-          <pre class="command-line"><span class="command">mvn package appassembler:assemble</span></pre>
-
-          <p>This produces a script that executes the simulator
-          at <code>target/appassembler/bin/analyticalengine</code>.
-
-          <p>For more information, visit the <a href="//github.com/jfinkels/analyticalengine">GitHub page</a>.
 
           <hr>
 
