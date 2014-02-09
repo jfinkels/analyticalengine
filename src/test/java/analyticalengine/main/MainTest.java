@@ -170,7 +170,7 @@ public class MainTest {
         String testfile;
         try {
             testfile = Paths
-                    .get(this.getClass().getResource("/ex0.ae").toURI())
+                    .get(this.getClass().getResource("/test_basic.ae").toURI())
                     .toString();
         } catch (URISyntaxException e) {
             TestUtils.fail(e);
@@ -195,7 +195,7 @@ public class MainTest {
         String testfile;
         try {
             testfile = Paths
-                    .get(this.getClass().getResource("/ex0.ae").toURI())
+                    .get(this.getClass().getResource("/test_basic.ae").toURI())
                     .toString();
         } catch (URISyntaxException e) {
             TestUtils.fail(e);
@@ -211,7 +211,7 @@ public class MainTest {
         String testfile;
         try {
             testfile = Paths
-                    .get(this.getClass().getResource("/ex1.ae").toURI())
+                    .get(this.getClass().getResource("/test_divide.ae").toURI())
                     .toString();
         } catch (URISyntaxException e) {
             TestUtils.fail(e);
@@ -230,7 +230,7 @@ public class MainTest {
         String testfile;
         try {
             testfile = Paths
-                    .get(this.getClass().getResource("/ex0.ae").toURI())
+                    .get(this.getClass().getResource("/test_basic.ae").toURI())
                     .toString();
         } catch (URISyntaxException e) {
             TestUtils.fail(e);
@@ -247,7 +247,7 @@ public class MainTest {
         String testfile;
         try {
             testfile = Paths
-                    .get(this.getClass().getResource("/ex0.ae").toURI())
+                    .get(this.getClass().getResource("/test_basic.ae").toURI())
                     .toString();
         } catch (URISyntaxException e) {
             TestUtils.fail(e);

@@ -103,7 +103,7 @@ public class ProgramReaderTest {
     @Test
     public void testFromFile() {
         try {
-            Path testfile = Paths.get(this.getClass().getResource("/ex0.ae")
+            Path testfile = Paths.get(this.getClass().getResource("/test_basic.ae")
                     .toURI());
             List<Card> cards = ProgramReader.fromPath(testfile);
             assertCardsEqual(EXPECTED, cards);

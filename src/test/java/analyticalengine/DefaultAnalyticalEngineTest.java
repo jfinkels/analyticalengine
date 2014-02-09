@@ -261,21 +261,21 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     /** Tests conditional back. */
     @Test
     public void testConditionalBackward() {
-        runProgram("ex5.ae");
+        runProgram("test_cback.ae");
         assertEquals("720\n", this.attendant().finalReport());
     }
 
     /** Tests conditional forward. */
     @Test
     public void testConditionalForward() {
-        runProgram("ex6.ae");
+        runProgram("test_cforward.ae");
         assertEquals("141421356237309504880\n", this.attendant().finalReport());
     }
 
     /** Tests the division operator. */
     @Test
     public void testDivide() {
-        runProgram("ex1.ae");
+        runProgram("test_divide.ae");
         assertEquals(join("357", "4"), this.attendant().finalReport());
     }
 
@@ -313,6 +313,16 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
                 .finalReport());
     }
 
+    @Test
+    public void testBackLoop() {
+        runProgram("test_backloop.ae");
+        String[] squares = new String[10];
+        for (int i = 1; i < 11; i++) {
+            squares[i - 1] = String.valueOf(i * i);
+        }
+        assertEquals(join(squares), this.attendant().finalReport());
+    }
+
     /**
      * Tests for printing a null value.
      * 
@@ -334,14 +344,14 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      */
     @Test
     public void testRun() {
-        runProgram("ex0.ae");
+        runProgram("test_basic.ae");
         assertEquals("3333\n", this.attendant().finalReport());
     }
 
     /** Test the shift operators. */
     @Test
     public void testShifts() {
-        runProgram("ex2.ae");
+        runProgram("test_shift.ae");
         assertEquals(join("357142857", "4000000"), this.attendant()
                 .finalReport());
     }
@@ -372,7 +382,7 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     /** Tests the "A write numbers as" instruction. */
     @Test
     public void testWriteAs() {
-        runProgram("ex15.ae");
+        runProgram("test_writeas.ae");
         assertEquals(
                 "Total price for 337 items is 1,114 pounds, 18 shillings, 2 pence.\n",
                 this.attendant().finalReport());
