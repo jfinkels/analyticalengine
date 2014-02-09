@@ -35,33 +35,67 @@ import analyticalengine.cards.Card;
  */
 public class DefaultAnalyticalEngine implements AnalyticalEngine {
 
-    /** The attendant that operates the Analytical Engine. */
-    private Attendant attendant = null;
-    /** The mill that performs the arithmetic logic for the Engine. */
-    private Mill mill = null;
-    /** The memory for the Engine. */
-    private Store store = null;
-    /** The device that maintains the sequence of cards being read. */
-    private CardReader cardReader = null;
-    /** The device that prints numbers as output. */
-    private Printer printer = null;
-    /** The device that plots curves as output. */
-    private CurvePrinter curvePrinter = null;
-
     /**
      * The logger for this class.
      */
     private static final transient Logger LOG = LoggerFactory
             .getLogger(DefaultAnalyticalEngine.class);
+    /** The attendant that operates the Analytical Engine. */
+    private Attendant attendant = null;
+    /** The device that maintains the sequence of cards being read. */
+    private CardReader cardReader = null;
+    /** The device that plots curves as output. */
+    private CurvePrinter curvePrinter = null;
+    /** The mill that performs the arithmetic logic for the Engine. */
+    private Mill mill = null;
+    /** The device that prints numbers as output. */
+    private Printer printer = null;
+
+    /** The memory for the Engine. */
+    private Store store = null;
 
     /**
-     * {@inheritDoc}
+     * Performs the advance or reverse specified by the given card.
+     * 
+     * This includes conditional and unconditional advances and reverses.
+     * 
+     * @param card
+     *            A combinatorial card.
+     * @throws IllegalArgumentException
+     *             if the card is not a combinatorial card.
      */
-    @Override
-    public void reset() {
-        this.mill.reset();
-        this.store.reset();
-        this.curvePrinter.reset();
+    private void applyCombinatorialCard(final Card card) {
+        int numCards = Integer.parseInt(card.argument(0));
+        boolean hasRunUp = this.mill.hasRunUp();
+        switch (card.type()) {
+        case CBACKWARD:
+            if (hasRunUp) {
+                LOG.debug("Reversing (due to run-up) by {} cards", numCards);
+                this.cardReader.reverse(numCards);
+            } else {
+                LOG.debug("Skipped reversing due to no run-up");
+            }
+            break;
+        case CFORWARD:
+            if (hasRunUp) {
+                LOG.debug("Advancing (due to run-up) by {} cards", numCards);
+                this.cardReader.advance(numCards);
+            } else {
+                LOG.debug("Skipped advancing due to no run-up");
+            }
+            break;
+        case FORWARD:
+            LOG.debug("Advancing card reader by {} cards", numCards);
+            this.cardReader.advance(numCards);
+            break;
+        case BACKWARD:
+            LOG.debug("Reversing by {} cards", numCards);
+            this.cardReader.reverse(numCards);
+            break;
+        default:
+            throw new IllegalArgumentException(
+                    "Expected combinatorial card, not " + card);
+        }
     }
 
     /**
@@ -156,33 +190,6 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
     }
 
     /**
-     * Handles Analytical Engine debugging cards, including comment and trace
-     * cards.
-     * 
-     * @param card
-     *            A debugging card.
-     * @throws IllegalArgumentException
-     *             if the specified card is not a debugging card.
-     */
-    private void handleDebuggingCard(final Card card) {
-        switch (card.type()) {
-        case COMMENT:
-            LOG.debug("Comment: " + card.argument(0));
-            break;
-        case TRACEON:
-            // TODO this should just change the logging level or something
-            break;
-        case TRACEOFF:
-            // TODO this should just change the logging level or something
-            break;
-        default:
-            throw new IllegalArgumentException("Expected debugging card, not "
-                    + card);
-        }
-
-    }
-
-    /**
      * Performs the Analytical Engine action specified by the given card.
      * 
      * This includes ringing the bell to attract the attention of the
@@ -260,6 +267,70 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         default:
             throw new IllegalArgumentException(
                     "Expected attendant action card, not " + card);
+        }
+
+    }
+
+    /**
+     * Performs the specified action on the curve drawing device.
+     * 
+     * This includes setting the coordinates of the stylus and drawing with it.
+     * 
+     * @param card
+     *            A curve drawing card.
+     * @throws IllegalArgumentException
+     *             if the card is not a curve drawing card.
+     */
+    private void handleCurveDrawing(final Card card) {
+        BigInteger value;
+        switch (card.type()) {
+        case DRAW:
+            LOG.debug("Drawing on the curve printer");
+            this.curvePrinter.draw();
+            break;
+        case MOVE:
+            LOG.debug("Moving curve printer's stylus.");
+            this.curvePrinter.move();
+            break;
+        case SETX:
+            value = this.mill.mostRecentValue();
+            LOG.debug("Setting the x value of the curve printer: {}", value);
+            this.curvePrinter.setX(value);
+            break;
+        case SETY:
+            value = this.mill.mostRecentValue();
+            LOG.debug("Setting the y value of the curve printer: {}", value);
+            this.curvePrinter.setY(value);
+            break;
+        default:
+            throw new IllegalArgumentException(
+                    "Expected curve drawing card, not " + card);
+        }
+    }
+
+    /**
+     * Handles Analytical Engine debugging cards, including comment and trace
+     * cards.
+     * 
+     * @param card
+     *            A debugging card.
+     * @throws IllegalArgumentException
+     *             if the specified card is not a debugging card.
+     */
+    private void handleDebuggingCard(final Card card) {
+        switch (card.type()) {
+        case COMMENT:
+            LOG.debug("Comment: " + card.argument(0));
+            break;
+        case TRACEON:
+            // TODO this should just change the logging level or something
+            break;
+        case TRACEOFF:
+            // TODO this should just change the logging level or something
+            break;
+        default:
+            throw new IllegalArgumentException("Expected debugging card, not "
+                    + card);
         }
 
     }
@@ -361,125 +432,88 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
     }
 
     /**
-     * Performs the specified action on the curve drawing device.
-     * 
-     * This includes setting the coordinates of the stylus and drawing with it.
-     * 
-     * @param card
-     *            A curve drawing card.
-     * @throws IllegalArgumentException
-     *             if the card is not a curve drawing card.
+     * {@inheritDoc}
      */
-    private void handleCurveDrawing(final Card card) {
-        BigInteger value;
-        switch (card.type()) {
-        case DRAW:
-            LOG.debug("Drawing on the curve printer");
-            this.curvePrinter.draw();
-            break;
-        case MOVE:
-            LOG.debug("Moving curve printer's stylus.");
-            this.curvePrinter.move();
-            break;
-        case SETX:
-            value = this.mill.mostRecentValue();
-            LOG.debug("Setting the x value of the curve printer: {}", value);
-            this.curvePrinter.setX(value);
-            break;
-        case SETY:
-            value = this.mill.mostRecentValue();
-            LOG.debug("Setting the y value of the curve printer: {}", value);
-            this.curvePrinter.setY(value);
-            break;
-        default:
-            throw new IllegalArgumentException(
-                    "Expected curve drawing card, not " + card);
-        }
+    @Override
+    public void reset() {
+        this.mill.reset();
+        this.store.reset();
+        this.curvePrinter.reset();
     }
 
     /**
-     * Performs the advance or reverse specified by the given card.
+     * {@inheritDoc}
      * 
-     * This includes conditional and unconditional advances and reverses.
-     * 
-     * @param card
-     *            A combinatorial card.
-     * @throws IllegalArgumentException
-     *             if the card is not a combinatorial card.
-     */
-    private void applyCombinatorialCard(final Card card) {
-        int numCards = Integer.parseInt(card.argument(0));
-        boolean hasRunUp = this.mill.hasRunUp();
-        switch (card.type()) {
-        case CBACKWARD:
-            if (hasRunUp) {
-                LOG.debug("Reversing (due to run-up) by {} cards", numCards);
-                this.cardReader.reverse(numCards);
-            } else {
-                LOG.debug("Skipped reversing due to no run-up");
-            }
-            break;
-        case CFORWARD:
-            if (hasRunUp) {
-                LOG.debug("Advancing (due to run-up) by {} cards", numCards);
-                this.cardReader.advance(numCards);
-            } else {
-                LOG.debug("Skipped advancing due to no run-up");
-            }
-            break;
-        case FORWARD:
-            LOG.debug("Advancing card reader by {} cards", numCards);
-            this.cardReader.advance(numCards);
-            break;
-        case BACKWARD:
-            LOG.debug("Reversing by {} cards", numCards);
-            this.cardReader.reverse(numCards);
-            break;
-        default:
-            throw new IllegalArgumentException(
-                    "Expected combinatorial card, not " + card);
-        }
-    }
-
-    /**
-     * Performs the left or right shift specified by the given card.
-     * 
-     * @param card
-     *            A left or right shift card.
      * @throws BadCard
-     *             if there is a syntax error on the card.
-     * @throws IllegalArgumentException
-     *             if the card is not a shift card.
+     *             {@inheritDoc}
      */
-    private void setShift(final Card card) throws BadCard {
-        int shift;
+    @Override
+    public void run() throws BadCard {
         try {
-            shift = Integer.parseInt(card.argument(0));
-        } catch (NumberFormatException e) {
-            throw new BadCard("Failed to parse step up value", card, e);
+            while (true) {
+                Card currentCard = this.cardReader.readAndAdvance();
+                try {
+                    this.executeCard(currentCard);
+                } catch (Bell bell) {
+                    LOG.info("Bell!");
+                }
+            }
+        } catch (BadCard e) {
+            // LOG.error("Program error", e);
+            throw e;
+        } catch (Halt e) {
+            // This would print the stack trace for the Halt exception.
+            // LOG.info("Program halted.", e);
+            LOG.info("Program halted.");
+        } catch (IndexOutOfBoundsException e) {
+            // LOG.error("Advance or reverse beyond boundary of card chain.",
+            // e);
+            throw e;
         }
+    }
 
-        switch (card.type()) {
-        case LSHIFTN:
-            LOG.debug("Performing left shift on mill by {}", shift);
-            try {
-                this.mill.leftShift(shift);
-            } catch (IllegalArgumentException e) {
-                throw new BadCard("Shift value is out of bounds", card, e);
-            }
-            break;
-        case RSHIFTN:
-            LOG.debug("Performing right shift on mill by {}", shift);
-            try {
-                this.mill.rightShift(shift);
-            } catch (IllegalArgumentException e) {
-                throw new BadCard("Shift value is out of bounds", card, e);
-            }
-            break;
-        default:
-            throw new IllegalArgumentException("Expected shift card, not "
-                    + card);
-        }
+    /**
+     * {@inheritDoc}
+     * 
+     * @param attendant
+     *            {@inheritDoc}
+     */
+    @Override
+    public void setAttendant(final Attendant attendant) {
+        this.attendant = attendant;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @param reader
+     *            {@inheritDoc}
+     */
+    @Override
+    public void setCardReader(final CardReader reader) {
+        this.cardReader = reader;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @param printer
+     *            {@inheritDoc}
+     */
+    @Override
+    public void setCurvePrinter(final CurvePrinter printer) {
+        this.curvePrinter = printer;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @param mill
+     *            {@inheritDoc}
+     */
+    @Override
+    public void setMill(final Mill mill) {
+        this.mill = mill;
     }
 
     /**
@@ -528,54 +562,53 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
     /**
      * {@inheritDoc}
      * 
+     * @param printer
+     *            {@inheritDoc}
+     */
+    @Override
+    public void setPrinter(final Printer printer) {
+        this.printer = printer;
+    }
+
+    /**
+     * Performs the left or right shift specified by the given card.
+     * 
+     * @param card
+     *            A left or right shift card.
      * @throws BadCard
-     *             {@inheritDoc}
+     *             if there is a syntax error on the card.
+     * @throws IllegalArgumentException
+     *             if the card is not a shift card.
      */
-    @Override
-    public void run() throws BadCard {
+    private void setShift(final Card card) throws BadCard {
+        int shift;
         try {
-            while (true) {
-                Card currentCard = this.cardReader.readAndAdvance();
-                try {
-                    this.executeCard(currentCard);
-                } catch (Bell bell) {
-                    LOG.info("Bell!");
-                }
-            }
-        } catch (BadCard e) {
-            // LOG.error("Program error", e);
-            throw e;
-        } catch (Halt e) {
-            // This would print the stack trace for the Halt exception.
-            // LOG.info("Program halted.", e);
-            LOG.info("Program halted.");
-        } catch (IndexOutOfBoundsException e) {
-            // LOG.error("Advance or reverse beyond boundary of card chain.",
-            // e);
-            throw e;
+            shift = Integer.parseInt(card.argument(0));
+        } catch (NumberFormatException e) {
+            throw new BadCard("Failed to parse step up value", card, e);
         }
-    }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @param attendant
-     *            {@inheritDoc}
-     */
-    @Override
-    public void setAttendant(final Attendant attendant) {
-        this.attendant = attendant;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @param mill
-     *            {@inheritDoc}
-     */
-    @Override
-    public void setMill(final Mill mill) {
-        this.mill = mill;
+        switch (card.type()) {
+        case LSHIFTN:
+            LOG.debug("Performing left shift on mill by {}", shift);
+            try {
+                this.mill.leftShift(shift);
+            } catch (IllegalArgumentException e) {
+                throw new BadCard("Shift value is out of bounds", card, e);
+            }
+            break;
+        case RSHIFTN:
+            LOG.debug("Performing right shift on mill by {}", shift);
+            try {
+                this.mill.rightShift(shift);
+            } catch (IllegalArgumentException e) {
+                throw new BadCard("Shift value is out of bounds", card, e);
+            }
+            break;
+        default:
+            throw new IllegalArgumentException("Expected shift card, not "
+                    + card);
+        }
     }
 
     /**
@@ -587,38 +620,5 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
     @Override
     public void setStore(final Store store) {
         this.store = store;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @param reader
-     *            {@inheritDoc}
-     */
-    @Override
-    public void setCardReader(final CardReader reader) {
-        this.cardReader = reader;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @param printer
-     *            {@inheritDoc}
-     */
-    @Override
-    public void setPrinter(final Printer printer) {
-        this.printer = printer;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @param printer
-     *            {@inheritDoc}
-     */
-    @Override
-    public void setCurvePrinter(final CurvePrinter printer) {
-        this.curvePrinter = printer;
     }
 }
