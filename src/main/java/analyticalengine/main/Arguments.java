@@ -62,11 +62,6 @@ public class Arguments {
             converter = PathConverter.class, splitter = ColonSplit.class)
     private List<Path> libraryPath = Arrays.asList(Paths.get("."));
 
-    // TODO isn't this basically the same as listOnly?
-    // @Parameter(names = { "-n", "--dont-run" }, description =
-    // "mount but don't run the program")
-    // boolean mountOnly = false;
-
     /**
      * Whether to list (and not run) the cards mounted by the attendant.
      */
