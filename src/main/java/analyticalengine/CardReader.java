@@ -36,12 +36,12 @@ public interface CardReader {
      * Make the card {@code n} cards ahead of the current card to be the next
      * card read.
      * 
-     * Calling code must ensure that {@code n} does not advance the current
-     * card pointer beyond the last card in the chain.
-     * 
      * @param n
      *            The number of cards by which to advance the index of the
      *            current card.
+     * @throws IndexOutOfBoundsException
+     *             if the specified advance amount would rewind the card reader
+     *             beyond the end of the card chain.
      */
     void advance(int n);
 
@@ -74,12 +74,12 @@ public interface CardReader {
      * Make the card {@code n} cards behind the current card to be the next
      * card read.
      * 
-     * Calling code must ensure that {@code n} does not rewind the current card
-     * pointer beyond the last card in the chain.
-     * 
      * @param n
      *            The number of cards by which to decrease the index of the
      *            current card.
+     * @throws IndexOutOfBoundsException
+     *             if the specified reverse amount would rewind the card reader
+     *             beyond the beginning of the card chain.
      */
     void reverse(int n);
 

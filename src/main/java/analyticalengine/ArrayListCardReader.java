@@ -58,6 +58,8 @@ public class ArrayListCardReader implements CardReader {
      * 
      * @param n
      *            {@inheritDoc}
+     * @throws IndexOutOfBoundsException
+     *             {@inheritDoc}
      * @see analyticalengine.CardReader#advance(int)
      */
     @Override
@@ -114,6 +116,8 @@ public class ArrayListCardReader implements CardReader {
      * 
      * @param n
      *            {@inheritDoc}
+     * @throws IndexOutOfBoundsException
+     *             {@inheritDoc}
      * @see analyticalengine.CardReader#advance(int)
      */
     @Override
