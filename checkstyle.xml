@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
-
-<!--
-    This configuration file was written by the eclipse-cs plugin configuration editor
--->
-<!--
-    Checkstyle-Configuration: analyticalengine-checkstyle
-    Description: none
--->
 <module name="Checker">
   <property name="severity" value="warning"/>
   <module name="TreeWalker">
     <property name="tabWidth" value="4"/>
     <module name="JavadocMethod">
+      <property name="logLoadErrors" value="true"/>
       <property name="suppressLoadErrors" value="true"/>
     </module>
     <module name="JavadocType"/>
@@ -33,7 +26,6 @@
     <module name="UnusedImports"/>
     <module name="LineLength">
       <property name="severity" value="ignore"/>
-      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="MethodLength"/>
     <module name="ParameterNumber"/>
@@ -58,19 +50,22 @@
     <module name="NeedBraces"/>
     <module name="RightCurly"/>
     <module name="AvoidInlineConditionals"/>
+    <!-- <module name="DoubleCheckedLocking"/> -->
     <module name="EmptyStatement"/>
     <module name="EqualsHashCode"/>
+    <!-- <module name="HiddenField"/> -->
     <module name="IllegalInstantiation"/>
     <module name="InnerAssignment"/>
+    <!-- <module name="MagicNumber"/> -->
     <module name="MissingSwitchDefault"/>
     <module name="RedundantThrows">
+      <property name="logLoadErrors" value="true"/>
       <property name="suppressLoadErrors" value="true"/>
     </module>
     <module name="SimplifyBooleanExpression"/>
     <module name="SimplifyBooleanReturn"/>
     <module name="DesignForExtension">
       <property name="severity" value="ignore"/>
-      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="FinalClass"/>
     <module name="HideUtilityClassConstructor"/>
@@ -80,27 +75,13 @@
     <module name="FinalParameters"/>
     <module name="TodoComment">
       <property name="severity" value="ignore"/>
-      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="UpperEll"/>
-    <module name="AvoidHidingCauseException"/>
-    <module name="AvoidConstantAsFirstOperandInConditionCheck">
-      <property name="targetConstantTypes" value="LITERAL_NULL,LITERAL_TRUE,LITERAL_FALSE,NUM_INT,NUM_DOUBLE,NUM_LONG,NUM_FLOAT"/>
-    </module>
-    <module name="AvoidDefaultSerializableInInnerClasses"/>
-    <module name="AvoidNotShortCircuitOperatorsForBoolean"/>
-    <module name="ConfusingConditionCheck"/>
-    <module name="LogicConditionNeedOptimizationCheck"/>
-    <module name="MultipleVariableDeclarationsExtended"/>
-    <module name="NoNullForCollectionReturnCheck"/>
-    <module name="OverridableMethodInConstructor"/>
-    <module name="EitherLogOrThrowCheck"/>
-    <module name="VariableDeclarationUsageDistance"/>
-    <module name="CauseParameterInException"/>
-    <module name="LineLengthExtended">
-      <property name="max" value="79"/>
-    </module>
   </module>
   <module name="NewlineAtEndOfFile"/>
   <module name="Translation"/>
+<!--  <module name="RegexpHeader">
+    <property name="headerFile" value="misc/header_template.txt"/>
+    <property name="multiLines" value="1"/>
+  </module> -->
 </module>
