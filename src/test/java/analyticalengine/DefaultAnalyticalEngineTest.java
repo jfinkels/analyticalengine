@@ -106,6 +106,17 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         assertEquals(join("8", "4", "6", "12"), this.attendant().finalReport());
     }
 
+    /** Test for loop with condition check at the end (a "do-while" loop). */
+    @Test
+    public void testBackLoop() {
+        runProgram("test_backloop.ae");
+        String[] squares = new String[10];
+        for (int i = 1; i < 11; i++) {
+            squares[i - 1] = String.valueOf(i * i);
+        }
+        assertEquals(join(squares), this.attendant().finalReport());
+    }
+
     /**
      * Test backward.
      * 
@@ -279,6 +290,13 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         assertEquals(join("357", "4"), this.attendant().finalReport());
     }
 
+    /** Test for loop with condition check at the beginning (a "while" loop). */
+    @Test
+    public void testForwardLoop() {
+        runProgram("test_forwardloop.ae");
+        assertEquals("10\n", this.attendant().finalReport());
+    }
+
     /**
      * Test halt.
      * 
@@ -311,16 +329,6 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         BigInteger quotient = DefaultMill.MAX.divide(new BigInteger("2"));
         assertEquals(join(quotient.toString(), "1"), this.attendant()
                 .finalReport());
-    }
-
-    @Test
-    public void testBackLoop() {
-        runProgram("test_backloop.ae");
-        String[] squares = new String[10];
-        for (int i = 1; i < 11; i++) {
-            squares[i - 1] = String.valueOf(i * i);
-        }
-        assertEquals(join(squares), this.attendant().finalReport());
     }
 
     /**

@@ -876,6 +876,7 @@ public class DefaultAttendant implements Attendant {
                         }
                     }
                 }
+                return;
             }
         }
         for (Card card : cards) {
