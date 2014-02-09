@@ -20,7 +20,7 @@ S4
 P
 
   Test load-then-zero prime (computing the quotient and remainder of
-    (10^50 + 1) divided by 2, which should be 5^50 remainder 1).
+    (10^50 + 1) divided by 2, which should be 5^50 remainder 0).
 
 N1 1
 N2 1

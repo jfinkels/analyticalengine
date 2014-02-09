@@ -1,9 +1,9 @@
 
     Calculate square root by Newton's method
 
-    x² = N
+    x^2 = N
 
-    x[k+1] = (N ÷ x[k] + x[k]) ÷ 2
+    x[k+1] = (N / x[k] + x[k]) / 2
 
     V0  N (Input), x (Output)
     V1  0.5f
@@ -32,14 +32,14 @@ N008 5
 
     Scale to perform calculation with 1 more decimal places
 
-×
+*
 L000
 L007
 S000
 
-    Calculate initial guess as N ÷ 2
+    Calculate initial guess as N / 2
 
-×
+*
 L000
 L001
 >
@@ -58,15 +58,15 @@ L002
 L004
 S005
 
-    Compute N÷x[k]
+    Compute N/x[k]
 
-÷
+/
 L000
 <
 L002
 S003'
 
-    Add x[k] to yield N÷x[k] + x[k]
+    Add x[k] to yield N/x[k] + x[k]
 
 +
 L003
@@ -76,7 +76,7 @@ S003
     Divide by two (actually multiply by 0.5) to
     obtain next x[k+1]
 
-×
+*
 L003
 L001
 >
@@ -112,7 +112,7 @@ S000
 
     Scale result and leave in V0
 
-÷
+/
 L000
 L007
 S000'

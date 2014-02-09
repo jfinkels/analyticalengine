@@ -1,13 +1,13 @@
 
     Calculate cos x from series expansion
 
-    cos x = 1 - x^2÷2! + x^4÷4! - x^6÷6! +
+    cos x = 1 - x^2/2! + x^4/4! - x^6/6! +
 
     V0      x (Input), cos x (Output)
     V1      i
     V2      j
     V3      sign of term    s
-    V4      x²              x2
+    V4      x^2              x2
     V5      current term    term
     V6      scratch
     V7      denominator     fact
@@ -54,15 +54,15 @@ S000
 
 (?
 
-    term = term × x2
+    term = term * x2
 
-×
+*
 L005
 L004
 >
 S005
 
-    fact = fact × j
+    fact = fact * j
 
 L002
 L007
@@ -75,9 +75,9 @@ L002
 L008
 S002
 
-    fact = fact × j
+    fact = fact * j
 
-×
+*
 L002
 L007
 S007
@@ -96,16 +96,16 @@ L009
 L003
 S003
 
-    temp = term ÷ fact
+    temp = term / fact
 
-÷
+/
 L005
 L007
 S010'
 
-    temp2 = s × term
+    temp2 = s * term
 
-×
+*
 L003
 L010
 S006
@@ -133,7 +133,7 @@ S000
 
     Scale to result
 
-÷
+/
 L000
 L011
 S000'

@@ -26,19 +26,19 @@ L000
 P
 A write annotation  = 
 
-A include cards fixn/cosine.ae
+A include from library cards for cosine
 
 +
 L000
 P
 
-A include cards fixn/arccosine.ae
+  A include from library cards for arccosine
 
-A write annotation   Arccosine = 
+  A write annotation   Arccosine = 
 
-+
-L000
-P
+  +
+  L000
+  P
 
 A write new line
 

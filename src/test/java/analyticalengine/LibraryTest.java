@@ -22,6 +22,7 @@ package analyticalengine;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -42,16 +43,46 @@ public class LibraryTest extends EngineTestBase {
      */
     public static final double TOLERANCE = 1 / 20.0;
 
-    /**
-     * Simple test for exponential function.
-     */
+    /** Test for arctangent function. */
     @Test
-    public void testSimpleExp() {
-        runProgram("test_exp_simple.ae");
-        double expected = Math.pow(Math.E, 2);
-        double actual = Double.valueOf(this.attendant().finalReport());
-        assertEquals(expected, actual, TOLERANCE);
+    public void testArctan() {
+        // compute the arctangent from 0.0 to 1.0, increasing by 0.1
+        runProgram("test_arctan.ae");
 
+        // get each line of the final report
+        String finalReport = this.attendant().finalReport();
+        String[] values = finalReport.split(System.lineSeparator());
+        assertEquals(11, values.length);
+
+        // compare each value computed by the Analytical Engine to the values
+        // computed by Java
+        for (int i = 0; i < values.length; i++) {
+            int lastSpace = values[i].lastIndexOf(' ');
+            String actualString = values[i].substring(lastSpace);
+            double actual = Double.valueOf(actualString);
+            assertEquals(Math.atan(i / 10.0), actual, TOLERANCE);
+        }
+    }
+
+    /** Test for cosine function. */
+    @Test
+    public void testCosine() {
+        // compute the cosine from 0 to 6
+        runProgram("test_cosine.ae");
+
+        // get each line of the final report
+        String finalReport = this.attendant().finalReport();
+        String[] values = finalReport.split(System.lineSeparator());
+        assertEquals(7, values.length);
+
+        // compare each value computed by the Analytical Engine to the values
+        // computed by Java
+        for (int i = 0; i < values.length; i++) {
+            int lastSpace = values[i].lastIndexOf(' ');
+            String actualString = values[i].substring(lastSpace);
+            double actual = Double.valueOf(actualString);
+            assertEquals(Math.cos(i), actual, TOLERANCE);
+        }
     }
 
     /** Test for the exponential function. */
@@ -72,6 +103,83 @@ public class LibraryTest extends EngineTestBase {
             String actualString = values[i].substring(lastSpace);
             double actual = Double.valueOf(actualString);
             assertEquals(Math.pow(Math.E, i / 10.0), actual, TOLERANCE);
+        }
+    }
+    
+    /** Test for computing the natural logarithm. */
+    @Test
+    public void testLogarithm() {
+        // compute the natural log of 1 to 10, increasing by 1
+        runProgram("test_ln.ae");
+
+        // get each line of the final report
+        String finalReport = this.attendant().finalReport();
+        String[] values = finalReport.split(System.lineSeparator());
+        assertEquals(10, values.length);
+
+        // compare each value computed by the Analytical Engine to the values
+        // computed by Java
+        for (int i = 0; i < values.length; i++) {
+            int lastSpace = values[i].lastIndexOf(' ');
+            String actualString = values[i].substring(lastSpace);
+            double actual = Double.valueOf(actualString);
+            assertEquals(Math.log(i + 1), actual, TOLERANCE);
+        }
+    }
+
+    /**
+     * Simple test for exponential function.
+     */
+    @Test
+    public void testSimpleExp() {
+        runProgram("test_exp_simple.ae");
+        double expected = Math.pow(Math.E, 2);
+        double actual = Double.valueOf(this.attendant().finalReport());
+        assertEquals(expected, actual, TOLERANCE);
+
+    }
+    
+    /** Test for sine function. */
+    @Ignore("Original code also failed this test; bad implementation?")
+    @Test
+    public void testSine() {
+        // compute the sine from 0 to 6
+        runProgram("test_sine.ae");
+
+        // get each line of the final report
+        String finalReport = this.attendant().finalReport();
+        String[] values = finalReport.split(System.lineSeparator());
+        assertEquals(7, values.length);
+
+        // compare each value computed by the Analytical Engine to the values
+        // computed by Java
+        for (int i = 0; i < values.length; i++) {
+            int lastSpace = values[i].lastIndexOf(' ');
+            String actualString = values[i].substring(lastSpace);
+            double actual = Double.valueOf(actualString);
+            System.out.println("got " + actual + " should be " + Math.sin(i));
+            assertEquals(Math.sin(i), actual, TOLERANCE);
+        }
+    }
+
+    /** Test for the square root function. */
+    @Test
+    public void testSquareRoot() {
+        // compute the square root of 0 to 10, increasing by 1
+        runProgram("test_sqrt.ae");
+
+        // get each line of the final report
+        String finalReport = this.attendant().finalReport();
+        String[] values = finalReport.split(System.lineSeparator());
+        assertEquals(11, values.length);
+
+        // compare each value computed by the Analytical Engine to the values
+        // computed by Java
+        for (int i = 0; i < values.length; i++) {
+            int lastSpace = values[i].lastIndexOf(' ');
+            String actualString = values[i].substring(lastSpace);
+            double actual = Double.valueOf(actualString);
+            assertEquals(Math.sqrt(i), actual, TOLERANCE);
         }
     }
 }

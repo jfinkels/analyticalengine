@@ -26,19 +26,19 @@ L000
 P
 A write annotation  = 
 
-A include cards fixn/sine.ae
+A include from library cards for sine
 
 +
 L000
 P
 
-A include cards fixn/arcsine.ae
+  A include from library cards for arcsine
 
-A write annotation   Arcsine = 
+  A write annotation   Arcsine = 
 
-+
-L000
-P
+  +
+  L000
+  P
 
 A write new line
 

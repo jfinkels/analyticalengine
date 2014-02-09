@@ -144,7 +144,6 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     public void testBadAddress() {
         for (String operator : Arrays.asList("L", "Z", "S")) {
             for (String prime : Arrays.asList("", "'")) {
-                System.out.println("Testing " + operator + " " + prime);
                 List<Card> cards = null;
                 try {
                     String badCard = operator + "1.1" + prime;
@@ -324,7 +323,7 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     @Test
     public void testLoad() {
         runProgram("test_load.ae");
-        BigInteger quotient = DefaultMill.MAX.divide(new BigInteger("2"));
+        BigInteger quotient = DefaultMill.MAX.add(BigInteger.ONE).divide(new BigInteger("2"));
         assertEquals(join("1", "0", quotient.toString(), "1", "0", "0"), this
                 .attendant().finalReport());
     }
@@ -333,7 +332,7 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     @Test
     public void testLoadPrime() {
         runProgram("test_loadprime.ae");
-        BigInteger quotient = DefaultMill.MAX.divide(new BigInteger("2"));
+        BigInteger quotient = DefaultMill.MAX.add(BigInteger.ONE).divide(new BigInteger("2"));
         assertEquals(join(quotient.toString(), "1"), this.attendant()
                 .finalReport());
     }

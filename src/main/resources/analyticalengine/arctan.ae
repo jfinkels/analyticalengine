@@ -1,10 +1,10 @@
 
     Calculate arctan x from series expansion
 
-    arctan x = (x / (1 + x²)) * (1 + ((2/3)*(x²/(1+x²))) + ((2/3)*(4/5)*(x²/(1+x²))² + ...)
+    arctan x = (x / (1 + x^2)) * (1 + ((2/3)*(x^2/(1+x^2))) + ((2/3)*(4/5)*(x^2/(1+x^2))^2 + ...)
 
     V0      x (Input), arctan x (Output)
-    V1      x²
+    V1      x^2
     V2      prod
     V3      sum (initally 1.)
     V4      factor
@@ -31,20 +31,20 @@ N013 2.0
 
     Scale input to add 5 decimal places for computation
 
-×
+*
 L000
 L011
 S000
 
-    x² = x × x
+    x^2 = x * x
 
-×
+*
 L000
 L000
 >
 S001
 
-    prod = x / (x² + 1)
+    prod = x / (x^2 + 1)
 
 +
 L001
@@ -57,7 +57,7 @@ L000
 L004
 S002'
 
-    factor = term = x² / (x² + 1)
+    factor = term = x^2 / (x^2 + 1)
 
 /
 L001
@@ -138,7 +138,7 @@ S000
 
     Scale to result, lopping off 5 guard digits
 
-÷
+/
 L000
 L011
 S000'

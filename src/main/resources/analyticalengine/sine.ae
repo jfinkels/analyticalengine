@@ -1,13 +1,13 @@
 
     Calculate sin x from series expansion
 
-    sin x = x - x^3÷3! + x^5÷5! - x^7÷7! +
+    sin x = x - x^3/3! + x^5/5! - x^7/7! +
 
     V0      x (Input), sin x (Output)
     V1      i
     V2      j
     V3      sign of term    s
-    V4      x²              x2
+    V4      x^2              x2
     V5      current term    term
     V6      scratch
     V7      denominator     fact
@@ -30,7 +30,7 @@ N012 50000
 
     Scale input to use 5 more digits for computation
 
-×
+*
 L000
 L011
 S000
@@ -42,9 +42,9 @@ L000
 L001
 S005
 
-    x2 = x × x
+    x2 = x * x
 
-×
+*
 L000
 L000
 >
@@ -52,15 +52,15 @@ S004
 
 (?
 
-    term = term × x2
+    term = term * x2
 
-×
+*
 L005
 L004
 >
 S005
 
-    fact = fact × j
+    fact = fact * j
 
 L002
 L007
@@ -73,9 +73,9 @@ L002
 L008
 S002
 
-    fact = fact × j
+    fact = fact * j
 
-×
+*
 L002
 L007
 S007
@@ -94,16 +94,16 @@ L009
 L003
 S003
 
-    temp = term ÷ fact
+    temp = term / fact
 
-÷
+/
 L005
 L007
 S010'
 
-    temp2 = s × term
+    temp2 = s * term
 
-×
+*
 L003
 L010
 S006
@@ -131,7 +131,7 @@ S000
 
     Scale result
 
-÷
+/
 L000
 L011
 S000'
