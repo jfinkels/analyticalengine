@@ -84,6 +84,13 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         return join(true, args);
     }
 
+    /** Test for alternation (the "if-else" control statement). */
+    @Test
+    public void testAlternation() {
+        runProgram("test_alternation.ae");
+        assertEquals("900\n", this.attendant().finalReport());
+    }
+
     /**
      * Tests attendant annotations.
      * 

@@ -63,8 +63,8 @@ public class DefaultAttendant implements Attendant {
      */
     private static boolean cyclesMatch(final CardType start, final CardType end) {
         switch (start) {
-        case CBACKSTART:
         case BACKSTART:
+        case CBACKSTART:
             // A ( or (? must be closed by a ).
             switch (end) {
             case BACKEND:
@@ -794,8 +794,8 @@ public class DefaultAttendant implements Attendant {
                     cards.add(i,
                             Card.commentCard(u + " Translated by attendant"));
                 }
-                if (c.type() == CardType.BACKSTART
-                        || c.type() == CardType.CBACKSTART) {
+                if (c.type().equals(CardType.BACKSTART)
+                        || c.type().equals(CardType.CBACKSTART)) {
                     // It's a loop
                     CardType newType;
                     if (depends) {
@@ -818,7 +818,7 @@ public class DefaultAttendant implements Attendant {
                     newType = CardType.FORWARD;
                 }
 
-                boolean isElse = u.type() == CardType.ALTERNATION;
+                boolean isElse = u.type().equals(CardType.ALTERNATION);
                 int argument;
                 if (isElse) {
                     if (this.stripComments) {
@@ -848,8 +848,8 @@ public class DefaultAttendant implements Attendant {
                             translateCycle(cards, j);
                         }
                         if (isCycleEnd(u.type())) {
-                            if (u.type() != CardType.FORWARDEND
-                                    || u.type() != CardType.ALTERNATION) {
+                            if (!u.type().equals(CardType.FORWARDEND)
+                                    && !u.type().equals(CardType.ALTERNATION)) {
                                 throw new BadCard(
                                         "End of else cycle does not match "
                                                 + c + " beginning on card "
