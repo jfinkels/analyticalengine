@@ -34,8 +34,8 @@ public interface Store {
      * @param address
      *            A memory location.
      * @return The value stored at the memory location.
-     * @param IndexOutOfBoundsException
-     *            if the address is negative or too large for the store.
+     * @throws IndexOutOfBoundsException
+     *             if the address is negative or too large for the store.
      */
     BigInteger get(long address);
 
@@ -47,8 +47,8 @@ public interface Store {
      *            A memory location.
      * @param value
      *            A value to store in {@code address}.
-     * @param IndexOutOfBoundsException
-     *            if the address is negative or too large for the store.
+     * @throws IndexOutOfBoundsException
+     *             if the address is negative or too large for the store.
      */
     void put(long address, BigInteger value);
 

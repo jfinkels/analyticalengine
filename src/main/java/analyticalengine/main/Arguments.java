@@ -67,11 +67,6 @@ public class Arguments {
     // "mount but don't run the program")
     // boolean mountOnly = false;
 
-    // TODO what is this?
-    // @Parameter(names = { "-p", "--punch" }, description =
-    // "punch copy of program as mounted by attendant")
-    // boolean punch = false;
-
     /**
      * Whether to list (and not run) the cards mounted by the attendant.
      */

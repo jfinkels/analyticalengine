@@ -44,6 +44,7 @@ import analyticalengine.LibraryLookupException;
 import analyticalengine.StringPrinter;
 import analyticalengine.cards.Card;
 import analyticalengine.io.ProgramReader;
+import analyticalengine.io.ProgramWriter;
 import analyticalengine.io.UnknownCard;
 
 import com.beust.jcommander.JCommander;
@@ -125,9 +126,11 @@ public final class Main {
             cards = ProgramReader.fromPath(program);
         } catch (IOException e) {
             LOG.error("Failed to load specified program", e);
+            System.exit(-1);
             return;
         } catch (UnknownCard e) {
             LOG.error("Unknown card in file", e);
+            System.exit(-1);
             return;
         }
 
@@ -136,21 +139,28 @@ public final class Main {
             attendant.loadProgram(cards);
         } catch (BadCard e) {
             LOG.error("Attendant encountered bad card", e);
+            System.exit(-1);
             return;
         } catch (IOException e) {
             LOG.error("Attendant could not locate library file", e);
+            System.exit(-1);
             return;
         } catch (UnknownCard e) {
             LOG.error("Included file contains unknown card", e);
+            System.exit(-1);
             return;
         } catch (LibraryLookupException e) {
             LOG.error("Attendant failed to load library file", e);
+            System.exit(-1);
             return;
         }
 
         if (arguments.listOnly()) {
-            for (Card card : reader.cards()) {
-                System.out.println(card);
+            try {
+                ProgramWriter.write(reader.cards());
+            } catch (UnknownCard e) {
+                LOG.error("Encountered unknown card", e);
+                System.exit(-1);
             }
             return;
         }
@@ -160,6 +170,7 @@ public final class Main {
             engine.run();
         } catch (BadCard e) {
             LOG.error("Encountered invalid card", e);
+            System.exit(-1);
             return;
         }
 

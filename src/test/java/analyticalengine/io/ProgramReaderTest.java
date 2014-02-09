@@ -1,5 +1,5 @@
 /**
- * ProgramReaderTest.java - tests for ProgramReader
+ * ProgramIOTest.java - tests for ProgramReader and ProgramWriter
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -22,7 +22,10 @@ package analyticalengine.io;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -37,7 +40,8 @@ import analyticalengine.cards.Card;
 import analyticalengine.cards.CardType;
 
 /**
- * Tests for {@link analyticalengine.io.ProgramReader}.
+ * Tests for {@link analyticalengine.io.ProgramReader} and
+ * {@link analyticalengine.io.ProgramWriter}.
  * 
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
@@ -63,8 +67,9 @@ public class ProgramReaderTest {
      * </code>
      * </pre>
      * 
+     * This is the card representation of the program given by {@link #STRING}.
      */
-    public static final List<Card> EXPECTED = Arrays.asList(new Card(
+    public static final List<Card> CARDS = Arrays.asList(new Card(
             CardType.WRITEROWS), new Card(CardType.WRITEPICTURE,
             new String[] { "9" }), new Card(CardType.NUMBER, new String[] {
             "120", "10000" }), new Card(CardType.NUMBER, new String[] { "121",
@@ -72,6 +77,13 @@ public class ProgramReaderTest {
             new String[] { "120" }), new Card(CardType.LOAD,
             new String[] { "121" }), new Card(CardType.STOREPRIME,
             new String[] { "122" }), new Card(CardType.PRINT));
+
+    /**
+     * The string representation of the cards in {@link #CARDS}.
+     */
+    public static final String STRING = "A write in rows\n"
+            + "A write numbers as 9\n" + "N120 10000\n" + "N121 3\n" + "/\n"
+            + "L120\n" + "L121\n" + "S122'\n" + "P\n";
 
     /**
      * Asserts that the two specified lists have the same sequence of cards.
@@ -108,7 +120,7 @@ public class ProgramReaderTest {
                     .toURI();
             Path testfile = Paths.get(fileUri);
             List<Card> cards = ProgramReader.fromPath(testfile);
-            assertCardsEqual(EXPECTED, cards);
+            assertCardsEqual(CARDS, cards);
         } catch (IOException | UnknownCard | URISyntaxException e) {
             TestUtils.fail(e);
         }
@@ -117,15 +129,59 @@ public class ProgramReaderTest {
     /** Tests reading a sequence of cards from a string. */
     @Test
     public void testFromString() {
-        String program = "A write in rows\n" + "A write numbers as 9\n"
-                + "N120 10000\n" + "N121 3\n" + "/\n" + "L120\n" + "L121\n"
-                + "S122'\n" + "P\n";
         try {
-            List<Card> cards = ProgramReader.fromString(program);
-            assertCardsEqual(EXPECTED, cards);
+            List<Card> cards = ProgramReader.fromString(STRING);
+            assertCardsEqual(CARDS, cards);
         } catch (UnknownCard e) {
             TestUtils.fail(e);
         }
     }
 
+    /**
+     * Tests that reading and writing are inverses.
+     * 
+     * @throws IOException
+     *             if there is a problem writing to a string output stream.
+     * @throws UnknownCard
+     *             if there is an unknown card in the test.
+     */
+    @Test
+    public void testInverses() throws UnknownCard, IOException {
+        // first: string -> cards -> string
+        //
+        // read from string to list of cards
+        List<Card> cards = ProgramReader.fromString(STRING);
+
+        // write from list of cards to print stream
+        OutputStream stream = new ByteArrayOutputStream();
+        ProgramWriter.write(cards, new PrintStream(stream));
+
+        // compare string to string
+        assertEquals(STRING, stream.toString());
+
+        // second: cards -> string -> cards
+        //
+        // write from list of cards to string
+        stream = new ByteArrayOutputStream();
+        ProgramWriter.write(CARDS, new PrintStream(stream));
+
+        // read from string to list of cards
+        cards = ProgramReader.fromString(stream.toString());
+
+        // compare cards to cards
+        assertCardsEqual(CARDS, cards);
+    }
+
+    /**
+     * Tests writing a list of cards to a print stream.
+     * 
+     * @throws UnknownCard
+     *             if there is an unknown card in the test.
+     */
+    @Test
+    public void testToStream() throws UnknownCard {
+        OutputStream stream = new ByteArrayOutputStream();
+        ProgramWriter.write(CARDS, new PrintStream(stream));
+        assertEquals(STRING, stream.toString());
+    }
 }
