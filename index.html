@@ -101,6 +101,38 @@ S3</pre>
             loaded.
           </div>
           <div class="ae-example">
+            <p>Division can be performed on a dividend of "double width" by
+            loading the lower-order digits of the dividend in the first main
+            ingress axis and the higher-order digits of the dividend into the
+            "prime" ingress axis. The prime axis must be loaded after the main
+            axis.
+            <p>The quotient of a division can be accessed from the prime egress
+            axis, and the remainder from the main egress axis.
+            <pre>
+     Compute (10^50 + 1) / 2
+
+N1 1
+N2 1
+N3 2
+
+/
+L2
+L1'
+L3
+
+  Print the quotient.
+
+S3'
+P
+
+  Print the remainder.
+
+S4
+P</pre>
+            <p>If the quotient is too large for the main axis, the run-up lever
+            is set, and the quotient and remainder will be set to 0.
+          </div>
+          <div class="ae-example">
             <p>Performing the same operation twice does not require
             re-specifying the operation.
             <pre>
