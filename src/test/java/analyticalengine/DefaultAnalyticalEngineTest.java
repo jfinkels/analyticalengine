@@ -220,15 +220,17 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      *             if there is a problem reading a list of cards from a file.
      * @throws UnknownCard
      *             if the specified program includes an unknown card.
+     * @throws BadCard
+     *             if the specified program includes a syntax error
      */
     @Test
     public void testBadNumber() throws UnknownCard, IOException,
-            LibraryLookupException {
-        int badAddress = this.store().maxAddress() + 1;
+            LibraryLookupException, BadCard {
+        int badAddress = HashMapStore.MAX_ADDRESS + 1;
         try {
             runProgramString("N" + badAddress + " 0");
             TestUtils.shouldHaveThrownException();
-        } catch (BadCard e) {
+        } catch (IndexOutOfBoundsException e) {
             assertTrue(true);
         }
 
@@ -238,18 +240,29 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         try {
             runProgramString("N-1 0");
             TestUtils.shouldHaveThrownException();
-        } catch (BadCard e) {
+        } catch (IndexOutOfBoundsException e) {
             assertTrue(true);
         }
 
         this.engine().reset();
         this.attendant().reset();
 
-        BigInteger badValue = this.mill().maxValue().add(BigInteger.ONE);
+        BigInteger badValue = HashMapStore.MAX_VALUE.add(BigInteger.ONE);
         try {
             runProgramString("N1 " + badValue);
             TestUtils.shouldHaveThrownException();
-        } catch (BadCard e) {
+        } catch (IllegalArgumentException e) {
+            assertTrue(true);
+        }
+
+        this.engine().reset();
+        this.attendant().reset();
+
+        badValue = HashMapStore.MIN_VALUE.subtract(BigInteger.ONE);
+        try {
+            runProgramString("N1 " + badValue);
+            TestUtils.shouldHaveThrownException();
+        } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
     }
@@ -417,8 +430,7 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         try {
             cards = Arrays.asList(CardParser.toCard("}{"));
             this.attendant().loadProgram(cards);
-        } catch (BadCard | IOException | UnknownCard
-                 | LibraryLookupException e) {
+        } catch (BadCard | IOException | UnknownCard | LibraryLookupException e) {
             TestUtils.fail(e);
         }
 

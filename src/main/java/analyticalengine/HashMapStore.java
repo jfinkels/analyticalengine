@@ -28,6 +28,11 @@ import java.util.Map;
  * A memory store for the Analytical Engine backed by a
  * {@link java.util.HashMap}.
  * 
+ * The {@link #MAX_VALUE} and {@value #MIN_VALUE} fields of this store should
+ * agree with the {@link analyticalengine.DefaultMill#MAX} and
+ * {@link analyticalengine.DefaultMill#MIN} fields of
+ * {@link analyticalengine.DefaultMill}.
+ * 
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
  */
@@ -36,15 +41,15 @@ public class HashMapStore implements Store {
     /** The maximum number of cells in the store. */
     public static final int MAX_ADDRESS = 1000;
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @return {@inheritDoc}
-     */
-    @Override
-    public int maxAddress() {
-        return MAX_ADDRESS;
-    }
+    /** The width (number of digits) of an integer that can be stored. */
+    public static final int WIDTH = 50;
+
+    /** The maximum value of an integer that can be stored. */
+    public static final BigInteger MAX_VALUE = BigInteger.TEN.pow(WIDTH)
+            .subtract(BigInteger.ONE);
+
+    /** The minimum value of an integer that can be stored. */
+    public static final BigInteger MIN_VALUE = MAX_VALUE.negate();
 
     /** The hash map that provides the addressable, random-access storage. */
     private Map<Long, BigInteger> rack = new HashMap<Long, BigInteger>();
@@ -56,9 +61,19 @@ public class HashMapStore implements Store {
      *            {@inheritDoc}
      * @param value
      *            {@inheritDoc}
+     * @throws IndexOutOfBoundsException
+     *             {@inheritDoc}
      */
     @Override
     public void put(final long address, final BigInteger value) {
+        if (address < 0 || address > MAX_ADDRESS) {
+            throw new IndexOutOfBoundsException("Address " + address
+                    + " must be between " + 0 + " and " + MAX_ADDRESS);
+        }
+        if (value.compareTo(MIN_VALUE) < 0 || value.compareTo(MAX_VALUE) > 0) {
+            throw new IllegalArgumentException("Value " + value
+                    + " must be between " + MIN_VALUE + " and " + MAX_VALUE);
+        }
         this.rack.put(address, value);
     }
 
@@ -68,9 +83,14 @@ public class HashMapStore implements Store {
      * @param address
      *            {@inheritDoc}
      * @return {@inheritDoc}
+     * @throws IndexOutOfBoundsException
+     *             {@inheritDoc}
      */
     @Override
     public BigInteger get(final long address) {
+        if (address < 0 || address > MAX_ADDRESS) {
+            throw new IndexOutOfBoundsException("Bad address: " + address);
+        }
         return this.rack.get(address);
     }
 

@@ -126,20 +126,6 @@ public interface Mill {
     void leftShift(int shift);
 
     /**
-     * The maximum integer that the mill can store in one of its axes.
-     * 
-     * @return The maximum integer that the mill can store in one of its axes.
-     */
-    BigInteger maxValue();
-
-    /**
-     * The minimum integer that the mill can store in one of its axes.
-     * 
-     * @return The minimum integer that the mill can store in one of its axes.
-     */
-    BigInteger minValue();
-
-    /**
      * Performs a right shift on the egress axes by the specified number of
      * digits.
      * 
@@ -184,6 +170,9 @@ public interface Mill {
      * 
      * @param value
      *            The value to load into the currently available ingress axis.
+     * @throws IllegalArgumentException
+     *             if the value is too large or too small to be loaded into the
+     *             mill.
      */
     void transferIn(BigInteger value);
 
@@ -205,6 +194,9 @@ public interface Mill {
      * @param prime
      *            If this is {@code true} the prime ingress axis is set instead
      *            of one of the main ingress axes.
+     * @throws IllegalArgumentException
+     *             if the value is too large or too small to be loaded into the
+     *             mill.
      */
     void transferIn(BigInteger value, boolean prime);
 

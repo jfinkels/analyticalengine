@@ -40,14 +40,19 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
      */
     private static final transient Logger LOG = LoggerFactory
             .getLogger(DefaultAnalyticalEngine.class);
+
     /** The attendant that operates the Analytical Engine. */
     private Attendant attendant = null;
+
     /** The device that maintains the sequence of cards being read. */
     private CardReader cardReader = null;
+
     /** The device that plots curves as output. */
     private CurvePrinter curvePrinter = null;
+
     /** The mill that performs the arithmetic logic for the Engine. */
     private Mill mill = null;
+
     /** The device that prints numbers as output. */
     private Printer printer = null;
 
@@ -358,71 +363,37 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         BigInteger value;
         switch (card.type()) {
         case LOAD:
-            try {
-                value = this.store.get(address);
-                LOG.debug("Loading from {} into ingress axis: {}", address,
-                        value);
-                this.mill.transferIn(value);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse load address", card, e);
-            }
+            value = this.store.get(address);
+            LOG.debug("Loading from {} into ingress axis: {}", address, value);
+            this.mill.transferIn(value);
             break;
         case LOADPRIME:
-            try {
-                value = this.store.get(address);
-                LOG.debug("Loading from {} into prime axis: {}", address,
-                        value);
-                this.mill.transferIn(value, true);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse load address", card, e);
-            }
+            value = this.store.get(address);
+            LOG.debug("Loading from {} into prime axis: {}", address, value);
+            this.mill.transferIn(value, true);
             break;
         case NUMBER:
-            // TODO move this bounds checking into store
-            if (address < 0 || address >= this.store.maxAddress()) {
-                throw new BadCard("Address out of bounds: " + address, card);
-            }
             value = new BigInteger(card.argument(1));
-            // TODO move this bounds checking into mill
-            if (value.compareTo(this.mill.maxValue()) > 0) {
-                throw new BadCard("Value too large to store: " + value, card);
-            }
             LOG.debug("Loading number {} into address {}", value, address);
             this.store.put(address, value);
             break;
         case STORE:
-            try {
-                value = this.mill.transferOut();
-                this.store.put(address, value);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse store address", card, e);
-            }
+            value = this.mill.transferOut();
+            this.store.put(address, value);
             break;
         case STOREPRIME:
-            try {
-                value = this.mill.transferOut(true);
-                this.store.put(address, value);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse store address", card, e);
-            }
+            value = this.mill.transferOut(true);
+            this.store.put(address, value);
             break;
         case ZLOAD:
-            try {
-                value = this.store.get(address);
-                this.store.put(address, BigInteger.ZERO);
-                this.mill.transferIn(value);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse zload address", card, e);
-            }
+            value = this.store.get(address);
+            this.store.put(address, BigInteger.ZERO);
+            this.mill.transferIn(value);
             break;
         case ZLOADPRIME:
-            try {
-                value = this.store.get(address);
-                this.store.put(address, BigInteger.ZERO);
-                this.mill.transferIn(value, true);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse zload address", card, e);
-            }
+            value = this.store.get(address);
+            this.store.put(address, BigInteger.ZERO);
+            this.mill.transferIn(value, true);
             break;
         default:
             throw new IllegalArgumentException(

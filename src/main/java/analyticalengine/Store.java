@@ -34,15 +34,10 @@ public interface Store {
      * @param address
      *            A memory location.
      * @return The value stored at the memory location.
+     * @param IndexOutOfBoundsException
+     *            if the address is negative or too large for the store.
      */
     BigInteger get(long address);
-
-    /**
-     * Returns the maximum address that this store recognizes.
-     * 
-     * @return The maximum address that this store recognizes.
-     */
-    int maxAddress();
 
     /**
      * Stores {@code value} in the memory location specified by {@code address}
@@ -52,6 +47,8 @@ public interface Store {
      *            A memory location.
      * @param value
      *            A value to store in {@code address}.
+     * @param IndexOutOfBoundsException
+     *            if the address is negative or too large for the store.
      */
     void put(long address, BigInteger value);
 

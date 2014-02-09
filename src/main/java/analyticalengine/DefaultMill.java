@@ -30,6 +30,10 @@ import org.slf4j.LoggerFactory;
  * Basic implementation of a mill, the arithmetic logic unit of the Analytical
  * Engine.
  * 
+ * The {@link #MAX} and {@link #MIN} bounds for integers in this mill should
+ * agree with the {@link #MAX_VALUE} and {@link #MIN_VALUE} fields of
+ * {@link analyticalengine.HashMapStore}.
+ * 
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
  */
@@ -294,26 +298,6 @@ public class DefaultMill implements Mill {
      * @return {@inheritDoc}
      */
     @Override
-    public BigInteger maxValue() {
-        return MAX;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @return {@inheritDoc}
-     */
-    @Override
-    public BigInteger minValue() {
-        return MIN;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @return {@inheritDoc}
-     */
-    @Override
     public BigInteger mostRecentValue() {
         return this.mostRecentValue;
     }
@@ -386,6 +370,8 @@ public class DefaultMill implements Mill {
      * 
      * @param value
      *            {@inheritDoc}
+     * @throws IllegalArgumentException
+     *             {@inheritDoc}
      */
     @Override
     public void transferIn(final BigInteger value) {
@@ -399,9 +385,19 @@ public class DefaultMill implements Mill {
      *            {@inheritDoc}
      * @param prime
      *            {@inheritDoc}
+     * @throws IllegalArgumentException
+     *             {@inheritDoc}
      */
     @Override
     public void transferIn(final BigInteger value, final boolean prime) {
+        if (value.compareTo(MAX) > 0) {
+            throw new IllegalArgumentException("Value too large to load: "
+                    + value);
+        } else if (value.compareTo(MIN) < 0) {
+            throw new IllegalArgumentException("Value too small to load: "
+                    + value);
+        }
+
         this.mostRecentValue = value;
 
         if (prime) {
