@@ -1,0 +1,20 @@
+     Compute (10^50 + 1) / 2
+
+N1 1
+N2 1
+N3 2
+
+/
+L2
+L1'
+L3
+
+  Print the quotient.
+
+S3'
+P
+
+  Print the remainder.
+
+S4
+P

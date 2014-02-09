@@ -295,13 +295,22 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         assertEquals("", this.attendant().finalReport());
     }
 
-    /** Test arithmetic operations. */
+    /** Test loading numbers operations. */
     @Test
     public void testLoad() {
         runProgram("test_load.ae");
         BigInteger quotient = DefaultMill.MAX.divide(new BigInteger("2"));
         assertEquals(join("1", "0", quotient.toString(), "1", "0", "0"), this
                 .attendant().finalReport());
+    }
+
+    /** Test loading a number into the prime axis. */
+    @Test
+    public void testLoadPrime() {
+        runProgram("test_loadprime.ae");
+        BigInteger quotient = DefaultMill.MAX.divide(new BigInteger("2"));
+        assertEquals(join(quotient.toString(), "1"), this.attendant()
+                .finalReport());
     }
 
     /**
