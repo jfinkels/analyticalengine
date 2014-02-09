@@ -39,8 +39,20 @@ public class DefaultMill implements Mill {
     private static final transient Logger LOG = LoggerFactory
             .getLogger(DefaultMill.class);
 
+    /**
+     * The width (number of digits) of an integer on which this mill can
+     * operate.
+     */
+    public static final int WIDTH = 50;
+
+    /**
+     * One more than the maximum value of an integer that can be stored in
+     * mill's axes.
+     */
+    private static final BigInteger MAXPLUSONE = BigInteger.TEN.pow(WIDTH);
+
     /** The maximum value of an integer that can be stored in mill's axes. */
-    public static final BigInteger MAX = BigInteger.TEN.pow(50);
+    public static final BigInteger MAX = MAXPLUSONE.subtract(BigInteger.ONE);
 
     /** The minimum value of an integer that can be stored in mill's axes. */
     public static final BigInteger MIN = MAX.negate();
@@ -130,10 +142,10 @@ public class DefaultMill implements Mill {
              * sign, and it is not possible to distinguish which has happened
              * without knowing the addends.
              */
-            if (result.compareTo(MAX) >= 0) {
+            if (result.compareTo(MAXPLUSONE) >= 0) {
                 LOG.debug("Run up lever set: compensating for overflow.");
                 this.runUp = true;
-                result = result.subtract(MAX);
+                result = result.subtract(MAXPLUSONE);
             } else if (this.ingressAxes[0].signum() >= 0
                     && result.signum() < 0) {
                 LOG.debug("Run up lever set: change of sign.");
@@ -157,7 +169,8 @@ public class DefaultMill implements Mill {
 
             // add the high-order digits to the dividend
             if (this.ingressAxes[2].signum() != 0) {
-                dividend = dividend.add(this.ingressAxes[2].multiply(MAX));
+                dividend = dividend.add(this.ingressAxes[2]
+                        .multiply(MAXPLUSONE));
             }
             LOG.debug("Computed dividend: " + dividend);
 
@@ -186,7 +199,7 @@ public class DefaultMill implements Mill {
              * egress axis to the upper part.
              */
             if (result.abs().compareTo(MAX) > 0) {
-                BigInteger[] qr = result.divideAndRemainder(MAX);
+                BigInteger[] qr = result.divideAndRemainder(MAXPLUSONE);
                 this.egressAxes[0] = qr[1];
                 this.egressAxes[1] = qr[0];
             } else {
@@ -200,9 +213,9 @@ public class DefaultMill implements Mill {
              * Check for passage through negative infinity (borrow) and set run
              * up and trim value as a result.
              */
-            if (result.compareTo(MIN) <= 0) {
+            if (result.compareTo(MIN) < 0) {
                 this.runUp = true;
-                result = result.add(MAX).negate();
+                result = result.add(MAXPLUSONE).negate();
             } else if (this.ingressAxes[0].signum() >= 0
                     && result.signum() < 0) {
                 /*
@@ -247,7 +260,7 @@ public class DefaultMill implements Mill {
          */
         BigInteger value = this.ingressAxes[0];
         if (this.ingressAxes[2].signum() != 0) {
-            value = value.add(this.ingressAxes[2].multiply(MAX));
+            value = value.add(this.ingressAxes[2].multiply(MAXPLUSONE));
         }
         LOG.debug("Value to shift: " + value);
 
@@ -257,7 +270,7 @@ public class DefaultMill implements Mill {
         LOG.debug("Shifted to: " + pr);
 
         if (pr.compareTo(MAX) != 0) {
-            BigInteger[] pq = pr.divideAndRemainder(MAX);
+            BigInteger[] pq = pr.divideAndRemainder(MAXPLUSONE);
             this.ingressAxes[0] = pq[1];
             this.ingressAxes[2] = pq[0];
         } else {
@@ -324,14 +337,14 @@ public class DefaultMill implements Mill {
          */
         BigInteger value = this.egressAxes[0];
         if (this.egressAxes[1].signum() != 0) {
-            value = value.add(this.egressAxes[1].multiply(MAX));
+            value = value.add(this.egressAxes[1].multiply(MAXPLUSONE));
         }
 
         BigInteger shiftFactor = BigInteger.TEN.pow(shift);
         BigInteger[] qr = value.divideAndRemainder(shiftFactor);
 
         if (qr[0].compareTo(MAX) != 0) {
-            qr = qr[0].divideAndRemainder(MAX);
+            qr = qr[0].divideAndRemainder(MAXPLUSONE);
             this.egressAxes[0] = qr[1];
             this.egressAxes[1] = qr[0];
         } else {
@@ -424,5 +437,15 @@ public class DefaultMill implements Mill {
         }
         this.mostRecentValue = result;
         return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return {@inheritDoc}
+     */
+    @Override
+    public int width() {
+        return WIDTH;
     }
 }

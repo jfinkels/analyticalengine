@@ -175,7 +175,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case LSHIFTN:
             try {
                 int shift = Integer.parseInt(card.argument(0));
-                if (shift < 0 || shift > 100) {
+                // TODO The mill should handle this, not the Engine.
+                if (shift < 0 || shift > 2 * this.mill.width()) {
                     throw new BadCard("Bad stepping up card", card);
                 }
                 LOG.debug("Performing left shift on mill by {}", shift);
@@ -217,7 +218,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case RSHIFTN:
             try {
                 int shift = Integer.parseInt(card.argument(0));
-                if (shift < 0 || shift > 100) {
+                if (shift < 0 || shift > 2 * this.mill.width()) {
                     throw new BadCard("Bad stepping up card", card);
                 }
                 LOG.debug("Performing right shift on mill by {}", shift);

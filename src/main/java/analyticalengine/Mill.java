@@ -65,7 +65,9 @@ import java.math.BigInteger;
  * Thus, to multiple V11 and V12, scale the result right 10 decimal places, and
  * store the scaled product in V10, one would write:
  * 
- * <pre>{@code * L011 L012 &gt;10 S010}</pre>
+ * <pre>
+ * {@code * L011 L012 &gt;10 S010}
+ * </pre>
  * 
  * Similarly, we provide a left shift for prescaling fixed point dividends
  * prior to division; this operation shifts the two ingress axes containing the
@@ -75,7 +77,9 @@ import java.math.BigInteger;
  * respectively, and we wish to shift this quantity left 10 digits before
  * dividing by the divisor in V13, we use:
  * 
- * <pre>{@code / L011 L012' &lt;10 L013 S010}</pre>
+ * <pre>
+ * {@code / L011 L012' &lt;10 L013 S010}
+ * </pre>
  * 
  * Note that shifting does not change the current operation for which the mill
  * is set; it merely shifts the axes in place.
@@ -231,4 +235,16 @@ public interface Mill {
      * @return The "most recently used" integer.
      */
     BigInteger mostRecentValue();
+
+    /**
+     * Returns the width in decimal digits of integers on which this mill can
+     * operate.
+     * 
+     * This value and {@link #maxValue()} must satisfy
+     * <em>max == 10<sup>width</sup> - 1</em>.
+     * 
+     * @return The width in decimal digits of integers on which this mill can
+     *         operate.
+     */
+    int width();
 }
