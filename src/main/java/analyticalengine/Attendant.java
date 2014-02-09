@@ -33,7 +33,8 @@ import analyticalengine.io.UnknownCard;
  * attendant
  * <ul>
  * <li>loads the program into the {@link CardReader}</li>
- * <li>receives, formats, and annotates the output from the {@link Printer}</li>
+ * <li>
+ * receives, formats, and annotates the output from the {@link Printer}</li>
  * <li>maintains a library of functions</li>
  * </ul>
  * 

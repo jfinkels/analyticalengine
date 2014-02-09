@@ -135,7 +135,9 @@ public enum CardType {
     SETX(0),
     /** Sets the y coordinate of the curve printer. */
     SETY(0),
-    /** Stores the contents of the most recently used main axis in the store. */
+    /**
+     * Stores the contents of the most recently used main axis in the store.
+     */
     STORE(1),
     /** Stores the contents of the prime axis in the store. */
     STOREPRIME(1),
@@ -159,7 +161,9 @@ public enum CardType {
      * a specified format.
      */
     WRITEPICTURE(1),
-    /** Instructs the attendant to write the output from the printer in rows. */
+    /**
+     * Instructs the attendant to write the output from the printer in rows.
+     */
     WRITEROWS(0),
     /**
      * Loads a number from the store into a main ingress axis of the mill,

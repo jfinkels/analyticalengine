@@ -28,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -169,8 +170,8 @@ public class MainTest {
     public void testList() {
         String testfile;
         try {
-            testfile = Paths
-                    .get(this.getClass().getResource("/test_basic.ae").toURI())
+            testfile = Paths.get(
+                    this.getClass().getResource("/test_basic.ae").toURI())
                     .toString();
         } catch (URISyntaxException e) {
             TestUtils.fail(e);
@@ -194,8 +195,8 @@ public class MainTest {
     public void testNoArguments() {
         String testfile;
         try {
-            testfile = Paths
-                    .get(this.getClass().getResource("/test_basic.ae").toURI())
+            testfile = Paths.get(
+                    this.getClass().getResource("/test_basic.ae").toURI())
                     .toString();
         } catch (URISyntaxException e) {
             TestUtils.fail(e);
@@ -210,9 +211,9 @@ public class MainTest {
     public void testStripComments() {
         String testfile;
         try {
-            testfile = Paths
-                    .get(this.getClass().getResource("/test_divide.ae").toURI())
-                    .toString();
+            URI fileUri = this.getClass().getResource("/test_divide.ae")
+                    .toURI();
+            testfile = Paths.get(fileUri).toString();
         } catch (URISyntaxException e) {
             TestUtils.fail(e);
             return;
@@ -229,8 +230,8 @@ public class MainTest {
     public void testVerbose() {
         String testfile;
         try {
-            testfile = Paths
-                    .get(this.getClass().getResource("/test_basic.ae").toURI())
+            testfile = Paths.get(
+                    this.getClass().getResource("/test_basic.ae").toURI())
                     .toString();
         } catch (URISyntaxException e) {
             TestUtils.fail(e);
@@ -246,8 +247,8 @@ public class MainTest {
     public void testVeryVerbose() {
         String testfile;
         try {
-            testfile = Paths
-                    .get(this.getClass().getResource("/test_basic.ae").toURI())
+            testfile = Paths.get(
+                    this.getClass().getResource("/test_basic.ae").toURI())
                     .toString();
         } catch (URISyntaxException e) {
             TestUtils.fail(e);

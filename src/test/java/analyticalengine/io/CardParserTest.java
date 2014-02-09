@@ -59,10 +59,10 @@ public class CardParserTest {
             assertEquals(CardType.DRAW, CardParser.toCard("D+").type());
             assertEquals(CardType.MOVE, CardParser.toCard("D-").type());
 
-            assertEquals(CardType.NUMBER, CardParser.toCard("N123 456").type());
+            assertEquals(CardType.NUMBER, CardParser.toCard("N123 4").type());
 
             assertEquals(CardType.LOAD, CardParser.toCard("L123").type());
-            assertEquals(CardType.LOADPRIME, CardParser.toCard("L123'").type());
+            assertEquals(CardType.LOADPRIME, CardParser.toCard("L12'").type());
             assertEquals(CardType.STORE, CardParser.toCard("S123").type());
             assertEquals(CardType.STOREPRIME, CardParser.toCard("S123'")
                     .type());

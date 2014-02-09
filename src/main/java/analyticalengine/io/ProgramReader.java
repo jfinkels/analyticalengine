@@ -109,7 +109,8 @@ public final class ProgramReader {
      *             if a line in the string does not correspond to a known type
      *             of card (essentially, this is a syntax error).
      */
-    public static List<Card> fromString(final String input) throws UnknownCard {
+    public static List<Card> fromString(final String input)
+            throws UnknownCard {
         return fromString(input, System.lineSeparator());
     }
 

@@ -46,8 +46,8 @@ import java.math.BigInteger;
  * 
  * <h4>Left and right arithmetic shifts</h4>
  * 
- * <em>John Walker, the author of the original code from which this simulation is
- * based, had the following comments about left and right shifts.</em>
+ * <em>John Walker, the author of the original code from which this simulation
+ * is based, had the following comments about left and right shifts.</em>
  * 
  * In Section 1.[5] of his 26 December 1837 "On the Mathematical Powers of the
  * Calculating Engine", Babbage remarks: "The termination of the Multiplication

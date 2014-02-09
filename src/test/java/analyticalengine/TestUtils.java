@@ -33,7 +33,8 @@ public final class TestUtils {
      * The message produced when {@link #shouldHaveThrownException()} is
      * called.
      */
-    private static final String EXCEPTION_MSG = "Exception should have been thrown on previous line.";
+    private static final String EXCEPTION_MSG = "Exception should have been"
+            + " thrown on previous line.";
 
     /**
      * Prints the stack trace of the specified Exception to stderr and calls

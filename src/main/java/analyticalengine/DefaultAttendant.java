@@ -61,7 +61,8 @@ public class DefaultAttendant implements Attendant {
      *         {@code start} matches the cycle end specified by type {code
      *         end}.
      */
-    private static boolean cyclesMatch(final CardType start, final CardType end) {
+    private static boolean cyclesMatch(final CardType start,
+            final CardType end) {
         switch (start) {
         case BACKSTART:
         case CBACKSTART:
@@ -129,7 +130,8 @@ public class DefaultAttendant implements Attendant {
      * @return {@code true} if and only if the element is found somewhere in
      *         the given array.
      */
-    private static boolean isIn(final Object needle, final Object... haystack) {
+    private static boolean isIn(final Object needle,
+            final Object... haystack) {
         for (Object element : haystack) {
             if (element.equals(needle)) {
                 return true;
@@ -229,9 +231,9 @@ public class DefaultAttendant implements Attendant {
 
                 if (dspec.charAt(0) == '+' || dspec.charAt(0) == '-') {
                     if (decimalPlace == -1) {
-                        throw new BadCard(
-                                "I cannot accept a relative decimal place setting\nwithout a prior absolute setting.",
-                                card);
+                        String msg = "I cannot accept a relative decimal place"
+                                + "setting\nwithout a prior absolute setting.";
+                        throw new BadCard(msg, card);
                     }
                     if (dspec.charAt(0) == '+') {
                         relative = 1;
@@ -244,17 +246,18 @@ public class DefaultAttendant implements Attendant {
                 try {
                     d = Integer.parseInt(dspec);
                 } catch (NumberFormatException e) {
-                    throw new BadCard(
-                            "I cannot find the number of decimal places you wish to use.",
-                            card, e);
+                    String msg = "I cannot find the number of decimal places"
+                            + " you wish to use.";
+                    throw new BadCard(msg, card, e);
                 }
                 if (relative != 0) {
                     d = decimalPlace + d * relative;
                 }
+                // TODO use mill width, since mill can be set at run time
                 if (d < 0 || d > 50) {
-                    throw new BadCard(
-                            "I can only set the decimal place between 0 and 50 digits.",
-                            card);
+                    String msg = "I can only set the decimal place between 0"
+                            + " and 50 digits.";
+                    throw new BadCard(msg, card);
                 }
 
                 if (!this.stripComments) {
@@ -267,11 +270,11 @@ public class DefaultAttendant implements Attendant {
             // Convert "A write numbers with decimal point" to a picture
             case WRITEDECIMAL:
                 if (decimalPlace < 0) {
-                    throw new BadCard(
-                            "I cannot add the number of decimal places because\n"
-                                    + "you have not instructed me how many decimal\n"
-                                    + "places to use in a prior \"A set decimal places to\"\ninstruction.",
-                            card);
+                    String msg = "I cannot add the number of decimal places"
+                            + " because\n you have not instructed me how many"
+                            + " decimal\nplaces to use in a prior \"A set"
+                            + " decimal places to\"\ninstruction.";
+                    throw new BadCard(msg, card);
                 }
 
                 replacement = this.expandWriteDecimal(decimalPlace);
@@ -290,11 +293,11 @@ public class DefaultAttendant implements Attendant {
                     break;
                 }
                 if (decimalPlace < 0) {
-                    throw new BadCard(
-                            "I cannot add the number of decimal places because\n"
-                                    + "you have not instructed me how many decimal\n"
-                                    + "places to use in a prior \"A set decimal places\"\ninstruction.",
-                            card);
+                    String msg = "I cannot add the number of decimal places"
+                            + " because\n you have not instructed me how many"
+                            + " decimal\nplaces to use in a prior \"A set"
+                            + " decimal places to\"\ninstruction.";
+                    throw new BadCard(msg, card);
                 }
                 replacement = this.expandNumber(decimalPlace, card);
                 result.add(replacement);
@@ -303,11 +306,11 @@ public class DefaultAttendant implements Attendant {
             case LSHIFT:
             case RSHIFT:
                 if (decimalPlace < 0) {
-                    throw new BadCard(
-                            "I cannot add the number of decimal places because\n"
-                                    + "you have not instructed me how many decimal\n"
-                                    + "places to use in a prior \"A set decimal places\"\ninstruction.",
-                            card);
+                    String msg = "I cannot add the number of decimal places"
+                            + " because\n you have not instructed me how many"
+                            + " decimal\nplaces to use in a prior \"A set"
+                            + " decimal places to\"\ninstruction.";
+                    throw new BadCard(msg, card);
                 }
 
                 replacement = this.expandShift(decimalPlace, card);
@@ -485,7 +488,8 @@ public class DefaultAttendant implements Attendant {
                     break;
 
                 case ',': // Comma if digits remain to output
-                    if (this.formatString.indexOf('9') >= 0 || s.length() > 0) {
+                    if (this.formatString.indexOf('9') >= 0
+                        || s.length() > 0) {
                         o = c + o;
                     }
                     break;
@@ -730,7 +734,8 @@ public class DefaultAttendant implements Attendant {
      *             combinatorial cards (for example, if a start card has no
      *             corresponding end card).
      */
-    private void translateCombinatorics(final List<Card> cards) throws BadCard {
+    private void translateCombinatorics(final List<Card> cards)
+            throws BadCard {
         for (int i = 0; i < cards.size(); i++) {
             if (isCycleStart(cards.get(i).type())) {
                 LOG.debug("Translating cycle starting from " + cards.get(i)
@@ -846,13 +851,13 @@ public class DefaultAttendant implements Attendant {
 
                     for (j = i + 1; j < cards.size(); j++) {
                         u = cards.get(j);
-
-                        if (isCycleStart(u.type())) {
+                        CardType uType = u.type();
+                        if (isCycleStart(uType)) {
                             translateCycle(cards, j);
                         }
-                        if (isCycleEnd(u.type())) {
-                            if (!u.type().equals(CardType.FORWARDEND)
-                                    && !u.type().equals(CardType.ALTERNATION)) {
+                        if (isCycleEnd(uType)) {
+                            if (!uType.equals(CardType.FORWARDEND)
+                                    && !uType.equals(CardType.ALTERNATION)) {
                                 throw new BadCard(
                                         "End of else cycle does not match "
                                                 + c + " beginning on card "

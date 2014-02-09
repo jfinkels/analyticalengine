@@ -34,9 +34,9 @@ public final class CardParser {
     /**
      * Trim whitespace from the left of the specified string.
      * 
-     * <a href=
-     * "http://www.fromdev.com/2009/07/playing-with-java-string-trim-basics.html"
-     * >Source.</a>
+     * <a
+     * href="//fromdev.com/2009/07/playing-with-java-string-trim-basics.html">
+     * Source.</a>
      * 
      * @param value
      *            The string to trim.

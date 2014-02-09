@@ -23,6 +23,7 @@ package analyticalengine.io;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -103,8 +104,9 @@ public class ProgramReaderTest {
     @Test
     public void testFromFile() {
         try {
-            Path testfile = Paths.get(this.getClass().getResource("/test_basic.ae")
-                    .toURI());
+            URI fileUri = this.getClass().getResource("/test_basic.ae")
+                    .toURI();
+            Path testfile = Paths.get(fileUri);
             List<Card> cards = ProgramReader.fromPath(testfile);
             assertCardsEqual(EXPECTED, cards);
         } catch (IOException | UnknownCard | URISyntaxException e) {

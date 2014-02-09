@@ -268,12 +268,12 @@ public class DefaultMill implements Mill {
         if (this.ingressAxes[2].signum() != 0) {
             value = value.add(this.ingressAxes[2].multiply(MAXPLUSONE));
         }
-        LOG.debug("Value to shift: " + value);
+        LOG.debug("Value to shift: {}", value);
 
         BigInteger sf = BigInteger.TEN.pow(shift);
         BigInteger pr = value.multiply(sf);
 
-        LOG.debug("Shifted to: " + pr);
+        LOG.debug("Shifted to: {}", pr);
 
         if (pr.compareTo(MAX) == 0) {
             this.ingressAxes[0] = pr;
@@ -283,7 +283,8 @@ public class DefaultMill implements Mill {
             this.ingressAxes[0] = pq[1];
             this.ingressAxes[2] = pq[0];
         }
-        LOG.debug("Set new ingress axes: " + Arrays.toString(this.ingressAxes));
+        LOG.debug("Set new ingress axes: {}",
+                Arrays.toString(this.ingressAxes));
         this.mostRecentValue = this.ingressAxes[0];
     }
 

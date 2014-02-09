@@ -163,7 +163,8 @@ public class DefaultLibrary implements Library {
      * @throws LibraryLookupException
      *             {@inheritDoc}
      */
-    public List<Card> find(final String filename) throws LibraryLookupException {
+    public List<Card> find(final String filename)
+            throws LibraryLookupException {
         // we assume library files have the .ae file extension
         String fileWithExt = filename;
         if (!fileWithExt.endsWith(".ae")) {

@@ -51,7 +51,8 @@ public class LibraryLookupException extends Exception {
      * @param cause
      *            The throwable that caused this exception.
      */
-    public LibraryLookupException(final String message, final Throwable cause) {
+    public LibraryLookupException(final String message,
+            final Throwable cause) {
         super(message, cause);
     }
 

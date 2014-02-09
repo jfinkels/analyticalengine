@@ -115,7 +115,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     @Test
     public void testArithmetic() {
         runProgram("test_arithmetic.ae");
-        assertEquals(join("8", "4", "6", "12"), this.attendant().finalReport());
+        String finalReport = this.attendant().finalReport();
+        assertEquals(join("8", "4", "6", "12"), finalReport);
     }
 
     /** Test for loop with condition check at the end (a "do-while" loop). */
@@ -312,7 +313,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     @Test
     public void testConditionalForward() {
         runProgram("test_cforward.ae");
-        assertEquals("141421356237309504880\n", this.attendant().finalReport());
+        String expected = "141421356237309504880\n";
+        assertEquals(expected, this.attendant().finalReport());
     }
 
     /** Tests the division operator. */
@@ -322,7 +324,9 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         assertEquals(join("357", "4"), this.attendant().finalReport());
     }
 
-    /** Test for loop with condition check at the beginning (a "while" loop). */
+    /**
+     * Test for loop with condition check at the beginning (a "while" loop).
+     */
     @Test
     public void testForwardLoop() {
         runProgram("test_forwardloop.ae");
@@ -413,7 +417,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         try {
             cards = Arrays.asList(CardParser.toCard("}{"));
             this.attendant().loadProgram(cards);
-        } catch (BadCard | IOException | UnknownCard | LibraryLookupException e) {
+        } catch (BadCard | IOException | UnknownCard
+                 | LibraryLookupException e) {
             TestUtils.fail(e);
         }
 
@@ -433,8 +438,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     @Test
     public void testWriteAs() {
         runProgram("test_writeas.ae");
-        assertEquals(
-                "Total price for 337 items is 1,114 pounds, 18 shillings, 2 pence.\n",
-                this.attendant().finalReport());
+        String expected = "Total price for 337 items is"
+                + " 1,114 pounds, 18 shillings, 2 pence.\n";
+        assertEquals(expected, this.attendant().finalReport());
     }
 }

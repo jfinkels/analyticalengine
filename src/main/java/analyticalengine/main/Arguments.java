@@ -49,14 +49,17 @@ public class Arguments {
     private List<String> args = new ArrayList<String>();
 
     /** Whether to display the help/usage message. */
-    @Parameter(names = { "-h", "--help" }, description = "print this message", help = true)
+    @Parameter(names = { "-h", "--help" }, description = "print this message",
+            help = true)
     private boolean help = false;
 
     /**
      * A list of paths to search when interpreting a request to include a
      * library function.
      */
-    @Parameter(names = { "-s", "--library-path" }, description = "a colon-separated list of library paths", converter = PathConverter.class, splitter = ColonSplit.class)
+    @Parameter(names = { "-s", "--library-path" },
+            description = "a colon-separated list of library paths",
+            converter = PathConverter.class, splitter = ColonSplit.class)
     private List<Path> libraryPath = Arrays.asList(Paths.get("."));
 
     // TODO isn't this basically the same as listOnly?
@@ -72,18 +75,21 @@ public class Arguments {
     /**
      * Whether to list (and not run) the cards mounted by the attendant.
      */
-    @Parameter(names = { "-l", "--list-only" }, description = "list the card chain as mounted by the attendant")
+    @Parameter(names = { "-l", "--list-only" },
+            description = "list the card chain as mounted by the attendant")
     private boolean listOnly = false;
 
     /**
      * Whether the attendant should remove comment cards from the card chain
      * before mounting them in the card reader.
      */
-    @Parameter(names = { "-c", "--strip-comments" }, description = "remove comment cards from the card chain")
+    @Parameter(names = { "-c", "--strip-comments" },
+            description = "remove comment cards from the card chain")
     private boolean stripComments = false;
 
     /** The amount of information to display while running the program. */
-    @Parameter(names = { "-v", "--verbose" }, description = "set verbosity level")
+    @Parameter(names = { "-v", "--verbose" },
+            description = "set verbosity level")
     private int verbosity = 0;
 
     /**

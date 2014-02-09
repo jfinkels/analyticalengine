@@ -210,7 +210,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 break;
             }
             String printed = this.printer.print(value);
-            LOG.debug("Attendant receives value from the printer: {}", printed);
+            LOG.debug("Attendant received value from printer: {}", printed);
             this.attendant.receiveOutput(printed);
             break;
         case RSHIFTN:
@@ -335,7 +335,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             // LOG.info("Program halted.", e);
             LOG.info("Program halted.");
         } catch (IndexOutOfBoundsException e) {
-            // LOG.error("Program indicated advance or reverse beyond boundary of card chain.",
+            // LOG.error("Advance or reverse beyond boundary of card chain.",
             // e);
             throw e;
         }
