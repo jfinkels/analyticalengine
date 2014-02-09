@@ -79,8 +79,6 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
      *             If the specified card has invalid syntax.
      */
     private void executeCard(final Card card) throws Bell, Halt, BadCard {
-        LOG.debug("Executing card {}", card);
-
         // These variables show up in more than one case, but we cannot define
         // them within each case because each case has the same (switch-level)
         // scope, even though it would be more readable that way.
@@ -90,13 +88,17 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
 
         switch (card.type()) {
         case ADD:
+            LOG.debug("Setting operation on mill: addition.");
             this.mill.setOperation(Operation.ADD);
             break;
         case ANNOTATE:
-            this.attendant.annotate(card.argument(0));
+            String message = card.argument(0);
+            LOG.debug("Annotating in final report: {}", message);
+            this.attendant.annotate(message);
             break;
         case BACKWARD:
             numCards = Integer.parseInt(card.argument(0));
+            LOG.debug("Reversing by {} cards", numCards);
             this.cardReader.reverse(numCards);
             break;
         case BELL:
@@ -104,40 +106,56 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case CBACKWARD:
             if (this.mill.hasRunUp()) {
                 numCards = Integer.parseInt(card.argument(0));
+                LOG.debug("Reversing (due to run-up) by {} cards", numCards);
                 this.cardReader.reverse(numCards);
+            } else {
+                LOG.debug("Skipped reversing due to no run-up");
             }
             break;
         case CFORWARD:
             if (this.mill.hasRunUp()) {
                 numCards = Integer.parseInt(card.argument(0));
+                LOG.debug("Advancing (due to run-up) by {} cards", numCards);
                 this.cardReader.advance(numCards);
+            } else {
+                LOG.debug("Skipped advancing due to no run-up");
             }
             break;
         case COMMENT:
             LOG.debug("Comment: " + card.argument(0));
             break;
         case DIVIDE:
+            LOG.debug("Setting operation on mill: division.");
             this.mill.setOperation(Operation.DIVIDE);
             break;
         case SETX:
-            this.curvePrinter.setX(this.mill.mostRecentValue());
+            value = this.mill.mostRecentValue();
+            LOG.debug("Setting the x value of the curve printer: {}", value);
+            this.curvePrinter.setX(value);
             break;
         case SETY:
-            this.curvePrinter.setY(this.mill.mostRecentValue());
+            value = this.mill.mostRecentValue();
+            LOG.debug("Setting the y value of the curve printer: {}", value);
+            this.curvePrinter.setY(value);
             break;
         case DRAW:
+            LOG.debug("Drawing on the curve printer");
             this.curvePrinter.draw();
             break;
         case FORWARD:
             numCards = Integer.parseInt(card.argument(0));
+            LOG.debug("Advancing card reader by {} cards", numCards);
             this.cardReader.advance(numCards);
             break;
         case HALT:
+            LOG.debug("Received halt card.");
             throw new Halt("Card indicated halt", card);
         case LOAD:
             try {
                 address = Long.parseLong(card.argument(0));
                 value = this.store.get(address);
+                LOG.debug("Loading from {} into ingress axis: {}", address,
+                        value);
                 this.mill.transferIn(value);
             } catch (NumberFormatException exception) {
                 throw new BadCard("Failed to parse load address", card);
@@ -147,6 +165,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             try {
                 address = Long.parseLong(card.argument(0));
                 value = this.store.get(address);
+                LOG.debug("Loading from {} into prime axis: {}", address,
+                        value);
                 this.mill.transferIn(value, true);
             } catch (NumberFormatException exception) {
                 throw new BadCard("Failed to parse load address", card);
@@ -158,15 +178,18 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 if (shift < 0 || shift > 100) {
                     throw new BadCard("Bad stepping up card", card);
                 }
+                LOG.debug("Performing left shift on mill by {}", shift);
                 this.mill.leftShift(shift);
             } catch (NumberFormatException exception) {
                 throw new BadCard("Failed to parse step up value", card);
             }
             break;
         case MOVE:
+            LOG.debug("Moving curve printer's stylus.");
             this.curvePrinter.move();
             break;
         case MULTIPLY:
+            LOG.debug("Setting operation on mill: multiplication.");
             this.mill.setOperation(Operation.MULTIPLY);
             break;
         case NUMBER:
@@ -178,7 +201,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             if (value.compareTo(this.mill.maxValue()) > 0) {
                 throw new BadCard("Value too large to store: " + value, card);
             }
-            LOG.debug("Loading number " + value + " into address " + address);
+            LOG.debug("Loading number {} into address {}", value, address);
             this.store.put(address, value);
             break;
         case PRINT:
@@ -188,6 +211,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 break;
             }
             String printed = this.printer.print(value);
+            LOG.debug("Attendant receives value from the printer: {}", printed);
             this.attendant.receiveOutput(printed);
             break;
         case RSHIFTN:
@@ -196,6 +220,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 if (shift < 0 || shift > 100) {
                     throw new BadCard("Bad stepping up card", card);
                 }
+                LOG.debug("Performing right shift on mill by {}", shift);
                 this.mill.rightShift(shift);
             } catch (NumberFormatException exception) {
                 throw new BadCard("Failed to parse step down value", card);
@@ -220,6 +245,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             }
             break;
         case SUBTRACT:
+            LOG.debug("Setting operation on mill: subtraction.");
             this.mill.setOperation(Operation.SUBTRACT);
             break;
         case TRACEON:
@@ -249,16 +275,22 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             }
             break;
         case NEWLINE:
+            LOG.debug("Writing a new line in the final report.");
             this.attendant.writeNewline();
             break;
         case WRITECOLUMNS:
+            LOG.debug("Writing in rows.");
             this.attendant.writeInDirection(WriteDirection.COLUMNS);
             break;
         case WRITEROWS:
+            LOG.debug("Writing in columns.");
             this.attendant.writeInDirection(WriteDirection.ROWS);
             break;
         case WRITEPICTURE:
-            this.attendant.setFormat(card.argument(0));
+            String format = card.argument(0);
+            LOG.debug("Setting format string for numbers in final report: {}",
+                    format);
+            this.attendant.setFormat(format);
             break;
         case ALTERNATION:
         case BACKEND:
