@@ -79,216 +79,61 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
      *             If the specified card has invalid syntax.
      */
     private void executeCard(final Card card) throws Bell, Halt, BadCard {
-        // These variables show up in more than one case, but we cannot define
-        // them within each case because each case has the same (switch-level)
-        // scope, even though it would be more readable that way.
-        int numCards;
-        long address;
-        BigInteger value;
-
         switch (card.type()) {
+        // Instructions affecting the mill: arithmetic and shift instructions
         case ADD:
-            LOG.debug("Setting operation on mill: addition.");
-            this.mill.setOperation(Operation.ADD);
-            break;
-        case ANNOTATE:
-            String message = card.argument(0);
-            LOG.debug("Annotating in final report: {}", message);
-            this.attendant.annotate(message);
-            break;
-        case BACKWARD:
-            numCards = Integer.parseInt(card.argument(0));
-            LOG.debug("Reversing by {} cards", numCards);
-            this.cardReader.reverse(numCards);
-            break;
-        case BELL:
-            throw new Bell("Card indicated bell", card);
-        case CBACKWARD:
-            if (this.mill.hasRunUp()) {
-                numCards = Integer.parseInt(card.argument(0));
-                LOG.debug("Reversing (due to run-up) by {} cards", numCards);
-                this.cardReader.reverse(numCards);
-            } else {
-                LOG.debug("Skipped reversing due to no run-up");
-            }
-            break;
-        case CFORWARD:
-            if (this.mill.hasRunUp()) {
-                numCards = Integer.parseInt(card.argument(0));
-                LOG.debug("Advancing (due to run-up) by {} cards", numCards);
-                this.cardReader.advance(numCards);
-            } else {
-                LOG.debug("Skipped advancing due to no run-up");
-            }
-            break;
-        case COMMENT:
-            LOG.debug("Comment: " + card.argument(0));
-            break;
         case DIVIDE:
-            LOG.debug("Setting operation on mill: division.");
-            this.mill.setOperation(Operation.DIVIDE);
-            break;
-        case SETX:
-            value = this.mill.mostRecentValue();
-            LOG.debug("Setting the x value of the curve printer: {}", value);
-            this.curvePrinter.setX(value);
-            break;
-        case SETY:
-            value = this.mill.mostRecentValue();
-            LOG.debug("Setting the y value of the curve printer: {}", value);
-            this.curvePrinter.setY(value);
-            break;
-        case DRAW:
-            LOG.debug("Drawing on the curve printer");
-            this.curvePrinter.draw();
-            break;
-        case FORWARD:
-            numCards = Integer.parseInt(card.argument(0));
-            LOG.debug("Advancing card reader by {} cards", numCards);
-            this.cardReader.advance(numCards);
-            break;
-        case HALT:
-            LOG.debug("Received halt card.");
-            throw new Halt("Card indicated halt", card);
-        case LOAD:
-            try {
-                address = Long.parseLong(card.argument(0));
-                value = this.store.get(address);
-                LOG.debug("Loading from {} into ingress axis: {}", address,
-                        value);
-                this.mill.transferIn(value);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse load address", card, e);
-            }
-            break;
-        case LOADPRIME:
-            try {
-                address = Long.parseLong(card.argument(0));
-                value = this.store.get(address);
-                LOG.debug("Loading from {} into prime axis: {}", address,
-                        value);
-                this.mill.transferIn(value, true);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse load address", card, e);
-            }
-            break;
-        case LSHIFTN:
-            try {
-                int shift = Integer.parseInt(card.argument(0));
-                LOG.debug("Performing left shift on mill by {}", shift);
-                this.mill.leftShift(shift);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse step up value", card, e);
-            } catch (IllegalArgumentException e) {
-                throw new BadCard("Shift value is out of bounds", card, e);
-            }
-            break;
-        case MOVE:
-            LOG.debug("Moving curve printer's stylus.");
-            this.curvePrinter.move();
-            break;
         case MULTIPLY:
-            LOG.debug("Setting operation on mill: multiplication.");
-            this.mill.setOperation(Operation.MULTIPLY);
-            break;
-        case NUMBER:
-            address = Long.parseLong(card.argument(0));
-            if (address < 0 || address >= this.store.maxAddress()) {
-                throw new BadCard("Address out of bounds: " + address, card);
-            }
-            value = new BigInteger(card.argument(1));
-            if (value.compareTo(this.mill.maxValue()) > 0) {
-                throw new BadCard("Value too large to store: " + value, card);
-            }
-            LOG.debug("Loading number {} into address {}", value, address);
-            this.store.put(address, value);
-            break;
-        case PRINT:
-            value = this.mill.mostRecentValue();
-            if (value == null) {
-                LOG.error("No value is available for printing. Not printing.");
-                break;
-            }
-            String printed = this.printer.print(value);
-            LOG.debug("Attendant received value from printer: {}", printed);
-            this.attendant.receiveOutput(printed);
+        case SUBTRACT:
+            this.setOperation(card);
             break;
         case RSHIFTN:
-            try {
-                int shift = Integer.parseInt(card.argument(0));
-                LOG.debug("Performing right shift on mill by {}", shift);
-                this.mill.rightShift(shift);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse step up value", card, e);
-            } catch (IllegalArgumentException e) {
-                throw new BadCard("Shift value is out of bounds", card, e);
-            }
+        case LSHIFTN:
+            this.setShift(card);
             break;
+        // Control flow instructions: advance and reverse instructions
+        case CBACKWARD:
+        case CFORWARD:
+        case BACKWARD:
+        case FORWARD:
+            this.applyCombinatorialCard(card);
+            break;
+        // Memory access instructions: store, load, and zero-load
+        case LOAD:
+        case LOADPRIME:
+        case NUMBER:
         case STORE:
-            try {
-                address = Long.parseLong(card.argument(0));
-                value = this.mill.transferOut();
-                this.store.put(address, value);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse store address", card, e);
-            }
-            break;
         case STOREPRIME:
-            try {
-                address = Long.parseLong(card.argument(0));
-                value = this.mill.transferOut(true);
-                this.store.put(address, value);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse store address", card, e);
-            }
-            break;
-        case SUBTRACT:
-            LOG.debug("Setting operation on mill: subtraction.");
-            this.mill.setOperation(Operation.SUBTRACT);
-            break;
-        case TRACEON:
-            // TODO this should just change the logging level or something
-            break;
-        case TRACEOFF:
-            // TODO this should just change the logging level or something
-            break;
         case ZLOAD:
-            try {
-                address = Long.parseLong(card.argument(0));
-                value = this.store.get(address);
-                this.store.put(address, BigInteger.ZERO);
-                this.mill.transferIn(value);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse zload address", card, e);
-            }
-            break;
         case ZLOADPRIME:
-            try {
-                address = Long.parseLong(card.argument(0));
-                value = this.store.get(address);
-                this.store.put(address, BigInteger.ZERO);
-                this.mill.transferIn(value, true);
-            } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse zload address", card, e);
-            }
+            this.handleMemoryAccess(card);
             break;
+        // Curve printer instructions
+        case DRAW:
+        case MOVE:
+        case SETX:
+        case SETY:
+            this.handleCurveDrawing(card);
+            break;
+        // Action instructions: halt, ring bell, or print
+        case BELL:
+        case HALT:
+        case PRINT:
+            this.handleActionCard(card);
+            break;
+        // Attendant action instructions
+        case ANNOTATE:
         case NEWLINE:
-            LOG.debug("Writing a new line in the final report.");
-            this.attendant.writeNewline();
-            break;
         case WRITECOLUMNS:
-            LOG.debug("Writing in rows.");
-            this.attendant.writeInDirection(WriteDirection.COLUMNS);
-            break;
         case WRITEROWS:
-            LOG.debug("Writing in columns.");
-            this.attendant.writeInDirection(WriteDirection.ROWS);
-            break;
         case WRITEPICTURE:
-            String format = card.argument(0);
-            LOG.debug("Setting format string for numbers in final report: {}",
-                    format);
-            this.attendant.setFormat(format);
+            this.handleAttendantAction(card);
+            break;
+        // Debugging instructions
+        case COMMENT:
+        case TRACEON:
+        case TRACEOFF:
+            this.handleDebuggingCard(card);
             break;
         case ALTERNATION:
         case BACKEND:
@@ -308,6 +153,371 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         default:
             break;
         }
+    }
+
+    /**
+     * Handles Analytical Engine debugging cards, including comment and trace
+     * cards.
+     * 
+     * @param card
+     *            A debugging card.
+     * @throws IllegalArgumentException
+     *             if the specified card is not a debugging card.
+     */
+    private void handleDebuggingCard(final Card card) {
+        switch (card.type()) {
+        case COMMENT:
+            LOG.debug("Comment: " + card.argument(0));
+            break;
+        case TRACEON:
+            // TODO this should just change the logging level or something
+            break;
+        case TRACEOFF:
+            // TODO this should just change the logging level or something
+            break;
+        default:
+            throw new IllegalArgumentException("Expected debugging card, not "
+                    + card);
+        }
+
+    }
+
+    /**
+     * Performs the Analytical Engine action specified by the given card.
+     * 
+     * This includes ringing the bell to attract the attention of the
+     * attendant, halting the machine, and sending a value from the mill to the
+     * printer.
+     * 
+     * @param card
+     *            The action to perform.
+     * @throws Bell
+     *             if the card indicates the bell should be rung.
+     * @throws Halt
+     *             if the card indicates the machine should halt.
+     * @throws IllegalArgumentException
+     *             if the card is not an action card.
+     */
+    private void handleActionCard(final Card card) throws Bell, Halt {
+        switch (card.type()) {
+        case BELL:
+            throw new Bell("Card indicated bell", card);
+        case HALT:
+            LOG.debug("Received halt card.");
+            throw new Halt("Card indicated halt", card);
+        case PRINT:
+            BigInteger value = this.mill.mostRecentValue();
+            if (value == null) {
+                LOG.error("No value is available for printing. Not printing.");
+                break;
+            }
+            String printed = this.printer.print(value);
+            LOG.debug("Attendant received value from printer: {}", printed);
+            this.attendant.receiveOutput(printed);
+            break;
+        default:
+            throw new IllegalArgumentException("Expected action card, not "
+                    + card);
+        }
+    }
+
+    /**
+     * Instructs the attendant to perform the action specified by the card.
+     * 
+     * This includes annotating and formatting numbers printed to the final
+     * report.
+     * 
+     * @param card
+     *            An attendant action card.
+     * @throws IllegalArgumentException
+     *             if the card is not an attendant action card.
+     */
+    private void handleAttendantAction(final Card card) {
+        switch (card.type()) {
+        case ANNOTATE:
+            String message = card.argument(0);
+            LOG.debug("Annotating in final report: {}", message);
+            this.attendant.annotate(message);
+            break;
+        case NEWLINE:
+            LOG.debug("Writing a new line in the final report.");
+            this.attendant.writeNewline();
+            break;
+        case WRITECOLUMNS:
+            LOG.debug("Writing in rows.");
+            this.attendant.writeInDirection(WriteDirection.COLUMNS);
+            break;
+        case WRITEROWS:
+            LOG.debug("Writing in columns.");
+            this.attendant.writeInDirection(WriteDirection.ROWS);
+            break;
+        case WRITEPICTURE:
+            String format = card.argument(0);
+            LOG.debug("Setting format string for numbers in final report: {}",
+                    format);
+            this.attendant.setFormat(format);
+            break;
+        default:
+            throw new IllegalArgumentException(
+                    "Expected attendant action card, not " + card);
+        }
+
+    }
+
+    /**
+     * Performs the memory access specified by the given card.
+     * 
+     * This includes reading from and writing to memory.
+     * 
+     * @param card
+     *            A memory access card.
+     * @throws BadCard
+     *             if the card has a syntax error or induces a runtime error in
+     *             the Analytical Engine.
+     * @throws IllegalArgumentException
+     *             if the card is not a memory access card.
+     */
+    private void handleMemoryAccess(final Card card) throws BadCard {
+        long address = Long.parseLong(card.argument(0));
+        BigInteger value;
+        switch (card.type()) {
+        case LOAD:
+            try {
+                value = this.store.get(address);
+                LOG.debug("Loading from {} into ingress axis: {}", address,
+                        value);
+                this.mill.transferIn(value);
+            } catch (NumberFormatException e) {
+                throw new BadCard("Failed to parse load address", card, e);
+            }
+            break;
+        case LOADPRIME:
+            try {
+                value = this.store.get(address);
+                LOG.debug("Loading from {} into prime axis: {}", address,
+                        value);
+                this.mill.transferIn(value, true);
+            } catch (NumberFormatException e) {
+                throw new BadCard("Failed to parse load address", card, e);
+            }
+            break;
+        case NUMBER:
+            // TODO move this bounds checking into store
+            if (address < 0 || address >= this.store.maxAddress()) {
+                throw new BadCard("Address out of bounds: " + address, card);
+            }
+            value = new BigInteger(card.argument(1));
+            // TODO move this bounds checking into mill
+            if (value.compareTo(this.mill.maxValue()) > 0) {
+                throw new BadCard("Value too large to store: " + value, card);
+            }
+            LOG.debug("Loading number {} into address {}", value, address);
+            this.store.put(address, value);
+            break;
+        case STORE:
+            try {
+                value = this.mill.transferOut();
+                this.store.put(address, value);
+            } catch (NumberFormatException e) {
+                throw new BadCard("Failed to parse store address", card, e);
+            }
+            break;
+        case STOREPRIME:
+            try {
+                value = this.mill.transferOut(true);
+                this.store.put(address, value);
+            } catch (NumberFormatException e) {
+                throw new BadCard("Failed to parse store address", card, e);
+            }
+            break;
+        case ZLOAD:
+            try {
+                value = this.store.get(address);
+                this.store.put(address, BigInteger.ZERO);
+                this.mill.transferIn(value);
+            } catch (NumberFormatException e) {
+                throw new BadCard("Failed to parse zload address", card, e);
+            }
+            break;
+        case ZLOADPRIME:
+            try {
+                value = this.store.get(address);
+                this.store.put(address, BigInteger.ZERO);
+                this.mill.transferIn(value, true);
+            } catch (NumberFormatException e) {
+                throw new BadCard("Failed to parse zload address", card, e);
+            }
+            break;
+        default:
+            throw new IllegalArgumentException(
+                    "Expected memory access card, not " + card);
+        }
+
+    }
+
+    /**
+     * Performs the specified action on the curve drawing device.
+     * 
+     * This includes setting the coordinates of the stylus and drawing with it.
+     * 
+     * @param card
+     *            A curve drawing card.
+     * @throws IllegalArgumentException
+     *             if the card is not a curve drawing card.
+     */
+    private void handleCurveDrawing(final Card card) {
+        BigInteger value;
+        switch (card.type()) {
+        case DRAW:
+            LOG.debug("Drawing on the curve printer");
+            this.curvePrinter.draw();
+            break;
+        case MOVE:
+            LOG.debug("Moving curve printer's stylus.");
+            this.curvePrinter.move();
+            break;
+        case SETX:
+            value = this.mill.mostRecentValue();
+            LOG.debug("Setting the x value of the curve printer: {}", value);
+            this.curvePrinter.setX(value);
+            break;
+        case SETY:
+            value = this.mill.mostRecentValue();
+            LOG.debug("Setting the y value of the curve printer: {}", value);
+            this.curvePrinter.setY(value);
+            break;
+        default:
+            throw new IllegalArgumentException(
+                    "Expected curve drawing card, not " + card);
+        }
+    }
+
+    /**
+     * Performs the advance or reverse specified by the given card.
+     * 
+     * This includes conditional and unconditional advances and reverses.
+     * 
+     * @param card
+     *            A combinatorial card.
+     * @throws IllegalArgumentException
+     *             if the card is not a combinatorial card.
+     */
+    private void applyCombinatorialCard(final Card card) {
+        int numCards = Integer.parseInt(card.argument(0));
+        boolean hasRunUp = this.mill.hasRunUp();
+        switch (card.type()) {
+        case CBACKWARD:
+            if (hasRunUp) {
+                LOG.debug("Reversing (due to run-up) by {} cards", numCards);
+                this.cardReader.reverse(numCards);
+            } else {
+                LOG.debug("Skipped reversing due to no run-up");
+            }
+            break;
+        case CFORWARD:
+            if (hasRunUp) {
+                LOG.debug("Advancing (due to run-up) by {} cards", numCards);
+                this.cardReader.advance(numCards);
+            } else {
+                LOG.debug("Skipped advancing due to no run-up");
+            }
+            break;
+        case FORWARD:
+            LOG.debug("Advancing card reader by {} cards", numCards);
+            this.cardReader.advance(numCards);
+            break;
+        case BACKWARD:
+            LOG.debug("Reversing by {} cards", numCards);
+            this.cardReader.reverse(numCards);
+            break;
+        default:
+            throw new IllegalArgumentException(
+                    "Expected combinatorial card, not " + card);
+        }
+    }
+
+    /**
+     * Performs the left or right shift specified by the given card.
+     * 
+     * @param card
+     *            A left or right shift card.
+     * @throws BadCard
+     *             if there is a syntax error on the card.
+     * @throws IllegalArgumentException
+     *             if the card is not a shift card.
+     */
+    private void setShift(final Card card) throws BadCard {
+        int shift;
+        try {
+            shift = Integer.parseInt(card.argument(0));
+        } catch (NumberFormatException e) {
+            throw new BadCard("Failed to parse step up value", card, e);
+        }
+
+        switch (card.type()) {
+        case LSHIFTN:
+            LOG.debug("Performing left shift on mill by {}", shift);
+            try {
+                this.mill.leftShift(shift);
+            } catch (IllegalArgumentException e) {
+                throw new BadCard("Shift value is out of bounds", card, e);
+            }
+            break;
+        case RSHIFTN:
+            LOG.debug("Performing right shift on mill by {}", shift);
+            try {
+                this.mill.rightShift(shift);
+            } catch (IllegalArgumentException e) {
+                throw new BadCard("Shift value is out of bounds", card, e);
+            }
+            break;
+        default:
+            throw new IllegalArgumentException("Expected shift card, not "
+                    + card);
+        }
+    }
+
+    /**
+     * Sets the arithmetic operation to perform on the mill based on the
+     * specified card.
+     * 
+     * {@code card} must have a type corresponding to one of the four
+     * arithmetic operations. If not, an {@code IllegalArgumentException} will
+     * be thrown.
+     * 
+     * @param card
+     *            A card whose type corresponds to one of the four arithmetic
+     *            operations.
+     * @throws IllegalArgumentException
+     *             if {@code type} does not correspond to one of the four
+     *             arithmetic operations.
+     */
+    private void setOperation(final Card card) {
+        Operation operation;
+        String name;
+        switch (card.type()) {
+        case ADD:
+            operation = Operation.ADD;
+            name = "addition";
+            break;
+        case DIVIDE:
+            operation = Operation.DIVIDE;
+            name = "division";
+            break;
+        case MULTIPLY:
+            operation = Operation.MULTIPLY;
+            name = "multiplication";
+            break;
+        case SUBTRACT:
+            operation = Operation.SUBTRACT;
+            name = "subtraction";
+            break;
+        default:
+            throw new IllegalArgumentException("Expected arithmetic card: "
+                    + card);
+        }
+        LOG.debug("Setting operation on mill: {}", name);
+        this.mill.setOperation(operation);
     }
 
     /**
