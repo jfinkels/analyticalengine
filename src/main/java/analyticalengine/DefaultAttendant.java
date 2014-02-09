@@ -560,12 +560,16 @@ public class DefaultAttendant implements Attendant {
         LOG.debug("Examining cards before loading: " + cards);
         List<Card> result = cards;
         // Note: "A write numbers as ..." cards remain in the card chain.
+        LOG.debug("Transcluding requested library functions");
         result = this.transcludeLibraryCards(result);
         if (this.stripComments) {
+            LOG.debug("Remove comment cards");
             result = strippedComments(result);
         }
+        LOG.debug("Making requested decimal expansions");
         result = this.expandDecimal(result);
         // TODO this method should return a new list like the others do
+        LOG.debug("Translating shorthand combinatoric cards");
         translateCombinatorics(result);
         LOG.debug("Mounting cards in reader: " + result);
         this.cardReader.mountCards(result);
