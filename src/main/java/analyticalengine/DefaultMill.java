@@ -250,10 +250,16 @@ public class DefaultMill implements Mill {
      * 
      * @param shift
      *            {@inheritDoc}
+     * @throws IllegalArgumentException
+     *             {@inheritDoc}
      */
     @Override
     public void leftShift(final int shift) {
-        LOG.debug("Performing left shift by " + shift);
+        LOG.debug("Performing left shift by {}", shift);
+        if (shift < 0 || shift > 2 * WIDTH) {
+            throw new IllegalArgumentException("Shift is out of bounds: "
+                    + shift);
+        }
         /*
          * A left shift is performed before a fixed point division, so the two
          * ingress axes containing the dividend are shifted.
@@ -328,9 +334,16 @@ public class DefaultMill implements Mill {
      * 
      * @param shift
      *            {@inheritDoc}
+     * @throws IllegalArgumentException
+     *             {@inheritDoc}
      */
     @Override
     public void rightShift(final int shift) {
+        LOG.debug("Performing right shift by {}", shift);
+        if (shift < 0 || shift > 2 * WIDTH) {
+            throw new IllegalArgumentException("Shift is out of bounds: "
+                    + shift);
+        }
         /*
          * A right shift is used to normalise after a fixed point
          * multiplication, so the egress axes are used.
@@ -437,15 +450,5 @@ public class DefaultMill implements Mill {
         }
         this.mostRecentValue = result;
         return result;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @return {@inheritDoc}
-     */
-    @Override
-    public int width() {
-        return WIDTH;
     }
 }

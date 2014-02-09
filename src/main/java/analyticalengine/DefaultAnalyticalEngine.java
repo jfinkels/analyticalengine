@@ -175,14 +175,12 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case LSHIFTN:
             try {
                 int shift = Integer.parseInt(card.argument(0));
-                // TODO The mill should handle this, not the Engine.
-                if (shift < 0 || shift > 2 * this.mill.width()) {
-                    throw new BadCard("Bad stepping up card", card);
-                }
                 LOG.debug("Performing left shift on mill by {}", shift);
                 this.mill.leftShift(shift);
-            } catch (NumberFormatException exception) {
+            } catch (NumberFormatException e) {
                 throw new BadCard("Failed to parse step up value", card);
+            } catch (IllegalArgumentException e) {
+                throw new BadCard("Shift value is out of bounds", card);
             }
             break;
         case MOVE:
@@ -218,13 +216,12 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
         case RSHIFTN:
             try {
                 int shift = Integer.parseInt(card.argument(0));
-                if (shift < 0 || shift > 2 * this.mill.width()) {
-                    throw new BadCard("Bad stepping up card", card);
-                }
                 LOG.debug("Performing right shift on mill by {}", shift);
                 this.mill.rightShift(shift);
-            } catch (NumberFormatException exception) {
-                throw new BadCard("Failed to parse step down value", card);
+            } catch (NumberFormatException e) {
+                throw new BadCard("Failed to parse step up value", card);
+            } catch (IllegalArgumentException e) {
+                throw new BadCard("Shift value is out of bounds", card);
             }
             break;
         case STORE:

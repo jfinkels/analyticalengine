@@ -119,6 +119,9 @@ public interface Mill {
      * 
      * @param shift
      *            The number of digits by which to shift to the left.
+     * @throws IllegalArgumentException
+     *             if the specified shift value is negative, or would certainly
+     *             cause an overflow.
      */
     void leftShift(int shift);
 
@@ -148,6 +151,9 @@ public interface Mill {
      * 
      * @param shift
      *            The number of digits by which to shift to the right.
+     * @throws IllegalArgumentException
+     *             if the specified shift value is negative, or would certainly
+     *             cause an overflow.
      */
     void rightShift(int shift);
 
@@ -235,16 +241,4 @@ public interface Mill {
      * @return The "most recently used" integer.
      */
     BigInteger mostRecentValue();
-
-    /**
-     * Returns the width in decimal digits of integers on which this mill can
-     * operate.
-     * 
-     * This value and {@link #maxValue()} must satisfy
-     * <em>max == 10<sup>width</sup> - 1</em>.
-     * 
-     * @return The width in decimal digits of integers on which this mill can
-     *         operate.
-     */
-    int width();
 }
