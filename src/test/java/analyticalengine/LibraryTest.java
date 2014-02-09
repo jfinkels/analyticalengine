@@ -22,11 +22,7 @@ package analyticalengine;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-
 import org.junit.Test;
-
-import analyticalengine.io.UnknownCard;
 
 /**
  * Test for built-in library functions.
