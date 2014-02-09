@@ -316,7 +316,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     public void testPrintNull() throws BadCard, UnknownCard, IOException,
             LibraryLookupException {
         runProgramString("P");
-        // TODO capture stderr
+        // TODO assert that standard error contains indication of an attempt to
+        // print a null character
     }
 
     /**
@@ -359,4 +360,12 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         this.attendant().reset();
     }
 
+    /** Tests the "A write numbers as" instruction. */
+    @Test
+    public void testWriteAs() {
+        runProgram("ex15.ae");
+        assertEquals(
+                "Total price for 337 items is 1,114 pounds, 18 shillings, 2 pence.\n",
+                this.attendant().finalReport());
+    }
 }

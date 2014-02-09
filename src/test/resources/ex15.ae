@@ -4,7 +4,7 @@
     Replace the following three number cards with the price
     of each unit sold in pounds, shillings, and pence respectively.
 
-N010    3       . £
+N010    3       . pounds
 N011    6       . s
 N012    2       . d
 
@@ -25,7 +25,7 @@ N001    12      . pence per shilling
 
     Convert unit price to pence, result in column 2
 
-×
+*
 L010
 L000
 S002
@@ -35,7 +35,7 @@ L002
 L011
 S002
 
-×
+*
 L002
 L001
 S002
@@ -47,14 +47,14 @@ S002
 
     Multiply unit price in pence by quantity purchased
 
-×
+*
 L002
 L013
 S002
 
     Divide by pence per shilling; remainder is pence
 
-÷
+/
 L002
 L001
 S003
@@ -77,15 +77,15 @@ A write numbers as 9
 L013
 P
 A write annotation  items is 
-A write numbers as £#,##9 
+A write numbers as #,##9 pounds, 
 +
 L005
 P
-A write numbers as 9s  
+A write numbers as 9 shillings, 
 +
 L004
 P
-A write numbers as 9d
+A write numbers as 9 pence.
 +
 L003
 P

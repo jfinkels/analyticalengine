@@ -32,6 +32,25 @@ import analyticalengine.cards.CardType;
 public final class CardParser {
 
     /**
+     * Trim whitespace from the left of the specified string.
+     * 
+     * <a href=
+     * "http://www.fromdev.com/2009/07/playing-with-java-string-trim-basics.html"
+     * >Source.</a>
+     * 
+     * @param value
+     *            The string to trim.
+     * @return The string with any whitespace on the left end trimmed.
+     */
+    public static String leftTrim(final String value) {
+        int i = 0;
+        while (i < value.length() && Character.isWhitespace(value.charAt(i))) {
+            i++;
+        }
+        return value.substring(i);
+    }
+
+    /**
      * Returns the combinatorial card represented by the specified string.
      * 
      * @param cardString
@@ -88,7 +107,8 @@ public final class CardParser {
      */
     public static Card toCard(final String cardString) throws UnknownCard {
         char firstChar = cardString.charAt(0);
-        String rest = cardString.substring(1).trim();
+        String untrimmedRest = cardString.substring(1);
+        String rest = leftTrim(untrimmedRest.trim());
         // TODO need to account for possible inline comments after period
         switch (firstChar) {
         case '+':
@@ -167,7 +187,7 @@ public final class CardParser {
                         new String[] { rest.substring(22) });
             } else if (rest.startsWith("write numbers as")) {
                 return new Card(CardType.WRITEPICTURE,
-                        new String[] { rest.substring(17) });
+                        new String[] { untrimmedRest.substring(18) });
             } else if (rest.startsWith("write numbers with decimal point")) {
                 return new Card(CardType.WRITEDECIMAL);
             } else if (rest.startsWith("write in rows")) {
@@ -178,7 +198,7 @@ public final class CardParser {
                 return new Card(CardType.NEWLINE);
             } else if (rest.startsWith("write annotation")) {
                 return new Card(CardType.ANNOTATE,
-                        new String[] { rest.substring(17) });
+                        new String[] { untrimmedRest.substring(18) });
             } else {
                 throw new UnknownCard("Unknown attendant request: "
                         + cardString);
