@@ -62,6 +62,23 @@ public abstract class CardException extends Exception {
     }
 
     /**
+     * Instantiates this exception with the specified error message, card that
+     * caused the exception, and exception that caused the exception.
+     * 
+     * @param message
+     *            The error message.
+     * @param cardCause
+     *            The card that caused the exception.
+     * @param throwableCause
+     *            The throwable that caused this exception.
+     */
+    public CardException(final String message, final Card cardCause,
+            final Throwable throwableCause) {
+        super(message, throwableCause);
+        this.card = cardCause;
+    }
+
+    /**
      * Instantiates this exception with the specified error message and the
      * specified exception that caused the exception.
      * 

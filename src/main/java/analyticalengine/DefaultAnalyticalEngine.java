@@ -157,8 +157,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 LOG.debug("Loading from {} into ingress axis: {}", address,
                         value);
                 this.mill.transferIn(value);
-            } catch (NumberFormatException exception) {
-                throw new BadCard("Failed to parse load address", card);
+            } catch (NumberFormatException e) {
+                throw new BadCard("Failed to parse load address", card, e);
             }
             break;
         case LOADPRIME:
@@ -168,8 +168,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 LOG.debug("Loading from {} into prime axis: {}", address,
                         value);
                 this.mill.transferIn(value, true);
-            } catch (NumberFormatException exception) {
-                throw new BadCard("Failed to parse load address", card);
+            } catch (NumberFormatException e) {
+                throw new BadCard("Failed to parse load address", card, e);
             }
             break;
         case LSHIFTN:
@@ -178,9 +178,9 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 LOG.debug("Performing left shift on mill by {}", shift);
                 this.mill.leftShift(shift);
             } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse step up value", card);
+                throw new BadCard("Failed to parse step up value", card, e);
             } catch (IllegalArgumentException e) {
-                throw new BadCard("Shift value is out of bounds", card);
+                throw new BadCard("Shift value is out of bounds", card, e);
             }
             break;
         case MOVE:
@@ -219,9 +219,9 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 LOG.debug("Performing right shift on mill by {}", shift);
                 this.mill.rightShift(shift);
             } catch (NumberFormatException e) {
-                throw new BadCard("Failed to parse step up value", card);
+                throw new BadCard("Failed to parse step up value", card, e);
             } catch (IllegalArgumentException e) {
-                throw new BadCard("Shift value is out of bounds", card);
+                throw new BadCard("Shift value is out of bounds", card, e);
             }
             break;
         case STORE:
@@ -229,8 +229,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 address = Long.parseLong(card.argument(0));
                 value = this.mill.transferOut();
                 this.store.put(address, value);
-            } catch (NumberFormatException exception) {
-                throw new BadCard("Failed to parse store address", card);
+            } catch (NumberFormatException e) {
+                throw new BadCard("Failed to parse store address", card, e);
             }
             break;
         case STOREPRIME:
@@ -238,8 +238,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 address = Long.parseLong(card.argument(0));
                 value = this.mill.transferOut(true);
                 this.store.put(address, value);
-            } catch (NumberFormatException exception) {
-                throw new BadCard("Failed to parse store address", card);
+            } catch (NumberFormatException e) {
+                throw new BadCard("Failed to parse store address", card, e);
             }
             break;
         case SUBTRACT:
@@ -258,8 +258,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 value = this.store.get(address);
                 this.store.put(address, BigInteger.ZERO);
                 this.mill.transferIn(value);
-            } catch (NumberFormatException exception) {
-                throw new BadCard("Failed to parse zload address", card);
+            } catch (NumberFormatException e) {
+                throw new BadCard("Failed to parse zload address", card, e);
             }
             break;
         case ZLOADPRIME:
@@ -268,8 +268,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 value = this.store.get(address);
                 this.store.put(address, BigInteger.ZERO);
                 this.mill.transferIn(value, true);
-            } catch (NumberFormatException exception) {
-                throw new BadCard("Failed to parse zload address", card);
+            } catch (NumberFormatException e) {
+                throw new BadCard("Failed to parse zload address", card, e);
             }
             break;
         case NEWLINE:
@@ -335,9 +335,8 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             // LOG.info("Program halted.", e);
             LOG.info("Program halted.");
         } catch (IndexOutOfBoundsException e) {
-            LOG.error(
-                    "Program indicated advance or reverse beyond boundary of card chain.",
-                    e);
+            // LOG.error("Program indicated advance or reverse beyond boundary of card chain.",
+            // e);
             throw e;
         }
     }

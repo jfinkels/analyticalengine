@@ -275,13 +275,13 @@ public class DefaultMill implements Mill {
 
         LOG.debug("Shifted to: " + pr);
 
-        if (pr.compareTo(MAX) != 0) {
+        if (pr.compareTo(MAX) == 0) {
+            this.ingressAxes[0] = pr;
+            this.ingressAxes[2] = BigInteger.ZERO;
+        } else {
             BigInteger[] pq = pr.divideAndRemainder(MAXPLUSONE);
             this.ingressAxes[0] = pq[1];
             this.ingressAxes[2] = pq[0];
-        } else {
-            this.ingressAxes[0] = pr;
-            this.ingressAxes[2] = BigInteger.ZERO;
         }
         LOG.debug("Set new ingress axes: " + Arrays.toString(this.ingressAxes));
         this.mostRecentValue = this.ingressAxes[0];
@@ -356,13 +356,13 @@ public class DefaultMill implements Mill {
         BigInteger shiftFactor = BigInteger.TEN.pow(shift);
         BigInteger[] qr = value.divideAndRemainder(shiftFactor);
 
-        if (qr[0].compareTo(MAX) != 0) {
+        if (qr[0].compareTo(MAX) == 0) {
+            this.egressAxes[0] = qr[0];
+            this.egressAxes[1] = BigInteger.ZERO;
+        } else {
             qr = qr[0].divideAndRemainder(MAXPLUSONE);
             this.egressAxes[0] = qr[1];
             this.egressAxes[1] = qr[0];
-        } else {
-            this.egressAxes[0] = qr[0];
-            this.egressAxes[1] = BigInteger.ZERO;
         }
 
         this.mostRecentValue = this.egressAxes[0];

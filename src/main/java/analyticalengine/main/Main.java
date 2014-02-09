@@ -34,7 +34,6 @@ import analyticalengine.ArrayListCardReader;
 import analyticalengine.Attendant;
 import analyticalengine.BadCard;
 import analyticalengine.CardReader;
-import analyticalengine.CurvePrinter;
 import analyticalengine.DefaultAnalyticalEngine;
 import analyticalengine.DefaultAttendant;
 import analyticalengine.DefaultLibrary;
@@ -42,9 +41,6 @@ import analyticalengine.DefaultMill;
 import analyticalengine.HashMapStore;
 import analyticalengine.Library;
 import analyticalengine.LibraryLookupException;
-import analyticalengine.Mill;
-import analyticalengine.Printer;
-import analyticalengine.Store;
 import analyticalengine.StringPrinter;
 import analyticalengine.cards.Card;
 import analyticalengine.io.ProgramReader;
@@ -94,32 +90,33 @@ public final class Main {
             LOG.debug("Requested verbosity 2; not yet implemented.");
         }
 
-        // create the analytical engine and necessary components
-        AnalyticalEngine engine = new DefaultAnalyticalEngine();
+        // Create and hook up the components of the engine.
+        //
+        // The engine has a mill (ALU), a store (memory), a card reader
+        // (instructions), a printer, a curve printer (plotter), and an
+        // attendant (operator).
+        //
+        // The attendant has access to a library of built-in functions, and
+        // access to the card reader used by the engine.
         Attendant attendant = new DefaultAttendant();
         CardReader reader = new ArrayListCardReader();
-        CurvePrinter curvePrinter = new AWTCurvePrinter();
-        Library library = new DefaultLibrary();
-        Mill mill = new DefaultMill();
-        Printer printer = new StringPrinter();
-        Store store = new HashMapStore();
-
-        // hook up the components of the engine
         attendant.setCardReader(reader);
+        Library library = new DefaultLibrary();
         attendant.setLibrary(library);
 
-        engine.setAttendant(attendant);
-        engine.setCardReader(reader);
-        engine.setCurvePrinter(curvePrinter);
-        engine.setMill(mill);
-        engine.setPrinter(printer);
-        engine.setStore(store);
-
-        // apply any configuration specified on command line
+        // apply any attendant-specific configuration from command-line args
         library.addLibraryPaths(arguments.libraryPath());
         // always search the current directory as well
         library.addLibraryPath(Paths.get("."));
         attendant.setStripComments(arguments.stripComments());
+
+        AnalyticalEngine engine = new DefaultAnalyticalEngine();
+        engine.setAttendant(attendant);
+        engine.setCardReader(reader);
+        engine.setCurvePrinter(new AWTCurvePrinter());
+        engine.setMill(new DefaultMill());
+        engine.setPrinter(new StringPrinter());
+        engine.setStore(new HashMapStore());
 
         // load the file specified in the command-line argument
         List<Card> cards;
@@ -165,7 +162,7 @@ public final class Main {
             LOG.error("Encountered invalid card", e);
             return;
         }
-        
+
         // print the attendant's report to standard output
         System.out.println(attendant.finalReport());
     }

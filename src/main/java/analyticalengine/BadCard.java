@@ -51,4 +51,20 @@ public class BadCard extends CardException {
         super(message, cause);
     }
 
+    /**
+     * Instantiates this exception with the specified error message, card that
+     * caused the exception, and exception that caused the exception.
+     * 
+     * @param message
+     *            The error message.
+     * @param cardCause
+     *            The card that caused the exception.
+     * @param throwableCause
+     *            The throwable that caused this exception.
+     */
+    public BadCard(final String message, final Card cardCause,
+            final Throwable throwableCause) {
+        super(message, cardCause, throwableCause);
+    }
+
 }

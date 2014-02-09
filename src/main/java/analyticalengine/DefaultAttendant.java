@@ -243,10 +243,10 @@ public class DefaultAttendant implements Attendant {
                 int d;
                 try {
                     d = Integer.parseInt(dspec);
-                } catch (NumberFormatException ne) {
+                } catch (NumberFormatException e) {
                     throw new BadCard(
                             "I cannot find the number of decimal places you wish to use.",
-                            card);
+                            card, e);
                 }
                 if (relative != 0) {
                     d = decimalPlace + d * relative;
@@ -759,7 +759,6 @@ public class DefaultAttendant implements Attendant {
             throws BadCard {
         Card c = cards.get(startIndex);
         boolean depends = false;
-        int i;
         LOG.debug("Translating cycle starting at " + c);
 
         depends = c.type() == CardType.CBACKSTART
@@ -778,7 +777,7 @@ public class DefaultAttendant implements Attendant {
          * recurse to translate it.
          */
 
-        for (i = start + 1; i < cards.size(); i++) {
+        for (int i = start + 1; i < cards.size(); i++) {
             Card u = cards.get(i);
             LOG.debug("looking at card " + u);
             if (isCycleStart(u.type())) {

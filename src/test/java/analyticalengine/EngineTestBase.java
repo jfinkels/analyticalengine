@@ -122,24 +122,23 @@ public class EngineTestBase {
     /** Creates the Analytical Engine to test. */
     @Before
     public void setUp() {
-        this.engine = new DefaultAnalyticalEngine();
         this.attendant = new DefaultAttendant();
-        this.store = new HashMapStore();
-        this.mill = new DefaultMill();
         Library library = new DefaultLibrary();
         CardReader reader = new ArrayListCardReader();
-        CurvePrinter curvePrinter = new AWTCurvePrinter();
-        Printer printer = new StringPrinter();
 
         this.attendant.setCardReader(reader);
         this.attendant.setLibrary(library);
 
+        this.engine = new DefaultAnalyticalEngine();
         this.engine.setAttendant(this.attendant);
         this.engine.setCardReader(reader);
-        this.engine.setCurvePrinter(curvePrinter);
-        this.engine.setMill(this.mill);
-        this.engine.setPrinter(printer);
+
+        this.store = new HashMapStore();
+        this.mill = new DefaultMill();
         this.engine.setStore(this.store);
+        this.engine.setMill(this.mill);
+        this.engine.setCurvePrinter(new AWTCurvePrinter());
+        this.engine.setPrinter(new StringPrinter());
     }
 
     /**
