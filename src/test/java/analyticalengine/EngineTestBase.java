@@ -103,10 +103,14 @@ public class EngineTestBase {
      * 
      * @param program
      *            The program to run.
-     * @throws UnknownCard
      * @throws LibraryLookupException
+     *             if there is a problem included a built-in library function.
      * @throws IOException
+     *             if there is a problem reading a list of cards from a file.
+     * @throws UnknownCard
+     *             if the specified program includes an unknown card.
      * @throws BadCard
+     *             if there is a syntax error on one of the cards.
      */
     void runProgramString(final String program) throws UnknownCard, BadCard,
             IOException, LibraryLookupException {

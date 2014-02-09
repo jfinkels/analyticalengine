@@ -46,18 +46,18 @@ public class Arguments {
      * options): the file containing the Analytical Engine program to execute.
      */
     @Parameter(description = "<filename>")
-    List<String> args = new ArrayList<String>();
+    private List<String> args = new ArrayList<String>();
 
     /** Whether to display the help/usage message. */
     @Parameter(names = { "-h", "--help" }, description = "print this message", help = true)
-    boolean help = false;
+    private boolean help = false;
 
     /**
      * A list of paths to search when interpreting a request to include a
      * library function.
      */
     @Parameter(names = { "-s", "--library-path" }, description = "a colon-separated list of library paths", converter = PathConverter.class, splitter = ColonSplit.class)
-    List<Path> libraryPath = Arrays.asList(Paths.get("."));
+    private List<Path> libraryPath = Arrays.asList(Paths.get("."));
 
     // TODO isn't this basically the same as listOnly?
     // @Parameter(names = { "-n", "--dont-run" }, description =
@@ -73,16 +73,71 @@ public class Arguments {
      * Whether to list (and not run) the cards mounted by the attendant.
      */
     @Parameter(names = { "-l", "--list-only" }, description = "list the card chain as mounted by the attendant")
-    boolean listOnly = false;
+    private boolean listOnly = false;
 
     /**
      * Whether the attendant should remove comment cards from the card chain
      * before mounting them in the card reader.
      */
     @Parameter(names = { "-c", "--strip-comments" }, description = "remove comment cards from the card chain")
-    boolean stripComments = false;
+    private boolean stripComments = false;
 
     /** The amount of information to display while running the program. */
     @Parameter(names = { "-v", "--verbose" }, description = "set verbosity level")
-    int verbosity = 0;
+    private int verbosity = 0;
+
+    /**
+     * The positional command-line arguments (excluding the program name) that
+     * are not given as options.
+     * 
+     * @return The position command-line arguments.
+     */
+    List<String> args() {
+        return this.args;
+    }
+
+    /**
+     * Whether to print usage information then exit.
+     * 
+     * @return Whether to print the usage message.
+     */
+    boolean help() {
+        return this.help;
+    }
+
+    /**
+     * A list of paths to search when looking for library functions.
+     * 
+     * @return A list of paths to search when looking for library functions.
+     */
+    List<Path> libraryPath() {
+        return this.libraryPath;
+    }
+
+    /**
+     * Whether to list but not run the requested program.
+     * 
+     * @return Whether to list but not run the requested program.
+     */
+    boolean listOnly() {
+        return this.listOnly;
+    }
+
+    /**
+     * Whether to remove comments from the program when loading the card chain.
+     * 
+     * @return Whether to remove comments from the loaded card chain.
+     */
+    boolean stripComments() {
+        return this.stripComments;
+    }
+
+    /**
+     * Returns the verbosity level, an integer between 0 and 2, inclusive.
+     * 
+     * @return The verbosity level.
+     */
+    int verbosity() {
+        return this.verbosity;
+    }
 }

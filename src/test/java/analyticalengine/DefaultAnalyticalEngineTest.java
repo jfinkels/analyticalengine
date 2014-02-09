@@ -53,7 +53,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      *            The strings to join.
      * @return The given strings joined with new line characters.
      */
-    private static String join(boolean endingNewLine, String... args) {
+    private static String join(final boolean endingNewLine,
+            final String... args) {
         if (args.length == 0) {
             if (endingNewLine) {
                 return System.lineSeparator();
@@ -80,7 +81,7 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      * @return The given strings joined with new line characters, plus another
      *         new line at the end of the string.
      */
-    private static String join(String... args) {
+    private static String join(final String... args) {
         return join(true, args);
     }
 
@@ -95,9 +96,13 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      * Tests attendant annotations.
      * 
      * @throws LibraryLookupException
+     *             if there is a problem included a built-in library function.
      * @throws IOException
+     *             if there is a problem reading a list of cards from a file.
      * @throws UnknownCard
+     *             if the specified program includes an unknown card.
      * @throws BadCard
+     *             if there is a syntax error on one of the cards.
      */
     @Test
     public void testAnnotation() throws BadCard, UnknownCard, IOException,
@@ -128,9 +133,13 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      * Test backward.
      * 
      * @throws LibraryLookupException
+     *             if there is a problem included a built-in library function.
      * @throws IOException
+     *             if there is a problem reading a list of cards from a file.
      * @throws UnknownCard
+     *             if the specified program includes an unknown card.
      * @throws BadCard
+     *             if there is a syntax error on one of the cards.
      */
     @Test
     public void testBackward() throws BadCard, UnknownCard, IOException,
@@ -171,10 +180,14 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     /**
      * Test for advancing or reversing beyond the bounds of the card chain.
      * 
-     * @throws BadCard
-     * @throws UnknownCard
-     * @throws IOException
      * @throws LibraryLookupException
+     *             if there is a problem included a built-in library function.
+     * @throws IOException
+     *             if there is a problem reading a list of cards from a file.
+     * @throws UnknownCard
+     *             if the specified program includes an unknown card.
+     * @throws BadCard
+     *             if there is a syntax error on one of the cards.
      */
     @Test
     public void testBadAdvance() throws BadCard, UnknownCard, IOException,
@@ -197,7 +210,16 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         }
     }
 
-    /** Test bad number arguments. */
+    /**
+     * Test bad number arguments.
+     * 
+     * @throws LibraryLookupException
+     *             if there is a problem included a built-in library function.
+     * @throws IOException
+     *             if there is a problem reading a list of cards from a file.
+     * @throws UnknownCard
+     *             if the specified program includes an unknown card.
+     */
     @Test
     public void testBadNumber() throws UnknownCard, IOException,
             LibraryLookupException {
@@ -264,9 +286,13 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      * Test for the bell.
      * 
      * @throws LibraryLookupException
+     *             if there is a problem included a built-in library function.
      * @throws IOException
+     *             if there is a problem reading a list of cards from a file.
      * @throws UnknownCard
+     *             if the specified program includes an unknown card.
      * @throws BadCard
+     *             if there is a syntax error on one of the cards.
      */
     @Test
     public void testBell() throws BadCard, UnknownCard, IOException,
@@ -307,9 +333,13 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      * Test halt.
      * 
      * @throws LibraryLookupException
+     *             if there is a problem included a built-in library function.
      * @throws IOException
+     *             if there is a problem reading a list of cards from a file.
      * @throws UnknownCard
+     *             if the specified program includes an unknown card.
      * @throws BadCard
+     *             if there is a syntax error on one of the cards.
      */
     @Test
     public void testHalt() throws BadCard, UnknownCard, IOException,
@@ -323,7 +353,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     @Test
     public void testLoad() {
         runProgram("test_load.ae");
-        BigInteger quotient = DefaultMill.MAX.add(BigInteger.ONE).divide(new BigInteger("2"));
+        BigInteger quotient = DefaultMill.MAX.add(BigInteger.ONE).divide(
+                new BigInteger("2"));
         assertEquals(join("1", "0", quotient.toString(), "1", "0", "0"), this
                 .attendant().finalReport());
     }
@@ -332,7 +363,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     @Test
     public void testLoadPrime() {
         runProgram("test_loadprime.ae");
-        BigInteger quotient = DefaultMill.MAX.add(BigInteger.ONE).divide(new BigInteger("2"));
+        BigInteger quotient = DefaultMill.MAX.add(BigInteger.ONE).divide(
+                new BigInteger("2"));
         assertEquals(join(quotient.toString(), "1"), this.attendant()
                 .finalReport());
     }
@@ -341,9 +373,13 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      * Tests for printing a null value.
      * 
      * @throws LibraryLookupException
+     *             if there is a problem included a built-in library function.
      * @throws IOException
+     *             if there is a problem reading a list of cards from a file.
      * @throws UnknownCard
+     *             if the specified program includes an unknown card.
      * @throws BadCard
+     *             if there is a syntax error on one of the cards.
      */
     @Test
     public void testPrintNull() throws BadCard, UnknownCard, IOException,

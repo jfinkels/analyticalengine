@@ -91,8 +91,7 @@ public class DefaultLibrary implements Library {
      *             within a JAR file.
      */
     private List<Card> cardsFromResource(final URL fileurl)
-            throws URISyntaxException, IOException, UnknownCard,
-            IllegalArgumentException {
+            throws URISyntaxException, IOException, UnknownCard {
         // Create some cards which will be placed at the beginning and end of
         // the card chain to indicate to the user that the intermediate cards
         // come from an included library file.
@@ -164,10 +163,11 @@ public class DefaultLibrary implements Library {
      * @throws LibraryLookupException
      *             {@inheritDoc}
      */
-    public List<Card> find(String filename) throws LibraryLookupException {
+    public List<Card> find(final String filename) throws LibraryLookupException {
         // we assume library files have the .ae file extension
-        if (!filename.endsWith(".ae")) {
-            filename += ".ae";
+        String fileWithExt = filename;
+        if (!fileWithExt.endsWith(".ae")) {
+            fileWithExt += ".ae";
         }
 
         /*
@@ -183,7 +183,7 @@ public class DefaultLibrary implements Library {
          * file:/path/to/analyticalengine/filename.ae
          */
         URL fileurl = this.getClass().getClassLoader()
-                .getResource("analyticalengine/" + filename);
+                .getResource("analyticalengine/" + fileWithExt);
 
         // If the file exists as a resource available to the class loader, then
         // load the cards from that location.
@@ -198,13 +198,13 @@ public class DefaultLibrary implements Library {
 
         // If the above resource did not exist, look for the file in the list
         // of known paths.
-        Path filePath = this.findInPath(filename);
+        Path filePath = this.findInPath(fileWithExt);
 
         // Raise an exception if the requested library file could not be found
         // in any of the known paths.
         if (filePath == null) {
             throw new LibraryLookupException("Could not find library file: "
-                    + filename);
+                    + fileWithExt);
         }
 
         // If the file was found somewhere in one of the library paths, load

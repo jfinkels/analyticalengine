@@ -81,15 +81,17 @@ public final class Main {
         Arguments arguments = new Arguments();
         JCommander argparser = new JCommander(arguments, argv);
 
-        if (arguments.help || arguments.args.size() != 1) {
+        if (arguments.help() || arguments.args().size() != 1) {
             argparser.usage();
             return;
         }
 
-        if (arguments.verbosity == 1) {
+        if (arguments.verbosity() == 1) {
             // TODO increase debugging level to info
-        } else if (arguments.verbosity == 2) {
+            LOG.debug("Requested verbosity 1; not yet implemented.");
+        } else if (arguments.verbosity() == 2) {
             // TODO increase debugging level to debug
+            LOG.debug("Requested verbosity 2; not yet implemented.");
         }
 
         // create the analytical engine and necessary components
@@ -114,15 +116,15 @@ public final class Main {
         engine.setStore(store);
 
         // apply any configuration specified on command line
-        library.addLibraryPaths(arguments.libraryPath);
+        library.addLibraryPaths(arguments.libraryPath());
         // always search the current directory as well
         library.addLibraryPath(Paths.get("."));
-        attendant.setStripComments(arguments.stripComments);
+        attendant.setStripComments(arguments.stripComments());
 
         // load the file specified in the command-line argument
         List<Card> cards;
         try {
-            Path program = Paths.get(arguments.args.get(0));
+            Path program = Paths.get(arguments.args().get(0));
             cards = ProgramReader.fromPath(program);
         } catch (IOException e) {
             LOG.error("Failed to load specified program", e);
@@ -149,7 +151,7 @@ public final class Main {
             return;
         }
 
-        if (arguments.listOnly) {
+        if (arguments.listOnly()) {
             for (Card card : reader.cards()) {
                 System.out.println(card);
             }
