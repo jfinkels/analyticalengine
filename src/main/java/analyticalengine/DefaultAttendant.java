@@ -412,7 +412,6 @@ public class DefaultAttendant implements Attendant {
     private Card expandWriteDecimal(final int decimalPlace) {
         int dpa;
 
-        // TODO do this as a string formatting operation
         StringBuilder formatString = new StringBuilder("9.");
         for (dpa = 0; dpa < decimalPlace; dpa++) {
             formatString.append("9");

@@ -406,7 +406,6 @@ public class DefaultMill implements Mill {
         }
 
         this.ingressAxes[this.currentAxis] = value;
-        // TODO document this
         // When first ingress axis set, clear prime axis
         if (this.currentAxis == 0) {
             this.ingressAxes[2] = BigInteger.ZERO;

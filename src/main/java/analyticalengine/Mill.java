@@ -161,6 +161,8 @@ public interface Mill {
      * the first ingress axis will be the next one available, and the pattern
      * repeats.
      * 
+     * When the first ingress axis is set, the prime axis is reset to zero.
+     * 
      * This is a convenience method for
      * {@link #transferIn(BigInteger, boolean)} where the second argument is
      * {@code false}.
@@ -185,6 +187,8 @@ public interface Mill {
      * example, the first invocation sets the first ingress axis and the second
      * sets the second ingress axis. After that, the first ingress axis will be
      * the next one available, and the pattern repeats.
+     * 
+     * When the first ingress axis is set, the prime axis is reset to zero.
      * 
      * This method makes the return value of {@link #mostRecentValue()} to be
      * the value stored in the main ingress axis (after the shift).

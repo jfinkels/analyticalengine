@@ -79,7 +79,6 @@ public final class ProgramReader {
      *             if a line in the file does not correspond to a known type of
      *             card (essentially, this is a syntax error).
      */
-    // TODO create a syntax error and raise it instead of unknown card?
     public static List<Card> fromPath(final Path path, final Charset charset)
             throws IOException, UnknownCard {
         List<Card> cards = new ArrayList<Card>();
