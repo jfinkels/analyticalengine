@@ -151,6 +151,12 @@ public interface Attendant {
      * Instructs the attendant to format the output from the printer either in
      * columns or in rows.
      * 
+     * Writing in "rows" means automatically writing a new line after each
+     * string received from the printer. Writing in "columns" means that a new
+     * line will only be written in the final report when explicitly requested
+     * by a "A write new line" card. (This is confusing, but this is how the
+     * original code did it.)
+     * 
      * @param direction
      *            The direction in which to write (rows or columns).
      */

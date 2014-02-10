@@ -196,7 +196,6 @@ public class DefaultAttendant implements Attendant {
     @Override
     public void annotate(final String message) {
         this.report += message;
-        // TODO this makes no sense, but this is how the original code did it
         if (this.writeInRows) {
             this.report += System.lineSeparator();
         }
@@ -582,7 +581,6 @@ public class DefaultAttendant implements Attendant {
     @Override
     public void receiveOutput(final String printed) {
         this.report += this.formatted(printed);
-        // TODO this makes no sense, but this is how the original code did it
         if (this.writeInRows) {
             this.report += System.lineSeparator();
         }
