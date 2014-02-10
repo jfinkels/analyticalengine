@@ -253,12 +253,6 @@ public class DefaultAttendant implements Attendant {
                 if (relative != 0) {
                     d = decimalPlace + d * relative;
                 }
-                // TODO use mill width, since mill can be set at run time
-                if (d < 0 || d > 50) {
-                    String msg = "I can only set the decimal place between 0"
-                            + " and 50 digits.";
-                    throw new BadCard(msg, card);
-                }
 
                 if (!this.stripComments) {
                     replacement = Card.commentCard("A set decimal places to "
