@@ -30,6 +30,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import analyticalengine.cards.Card;
+import analyticalengine.gui.JFrameCurvePrinter;
 import analyticalengine.io.ProgramReader;
 import analyticalengine.io.UnknownCard;
 
@@ -137,7 +138,7 @@ public class EngineTestBase {
         this.mill = new DefaultMill();
         this.engine.setStore(this.store);
         this.engine.setMill(this.mill);
-        this.engine.setCurvePrinter(new AWTCurvePrinter());
+        this.engine.setCurvePrinter(new JFrameCurvePrinter());
         this.engine.setPrinter(new StringPrinter());
     }
 

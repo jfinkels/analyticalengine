@@ -28,7 +28,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import analyticalengine.AWTCurvePrinter;
 import analyticalengine.AnalyticalEngine;
 import analyticalengine.ArrayListCardReader;
 import analyticalengine.Attendant;
@@ -43,6 +42,7 @@ import analyticalengine.Library;
 import analyticalengine.LibraryLookupException;
 import analyticalengine.StringPrinter;
 import analyticalengine.cards.Card;
+import analyticalengine.gui.JFrameCurvePrinter;
 import analyticalengine.io.ProgramReader;
 import analyticalengine.io.ProgramWriter;
 import analyticalengine.io.UnknownCard;
@@ -114,7 +114,7 @@ public final class Main {
         AnalyticalEngine engine = new DefaultAnalyticalEngine();
         engine.setAttendant(attendant);
         engine.setCardReader(reader);
-        engine.setCurvePrinter(new AWTCurvePrinter());
+        engine.setCurvePrinter(new JFrameCurvePrinter());
         engine.setMill(new DefaultMill());
         engine.setPrinter(new StringPrinter());
         engine.setStore(new HashMapStore());
@@ -126,11 +126,9 @@ public final class Main {
             cards = ProgramReader.fromPath(program);
         } catch (IOException e) {
             LOG.error("Failed to load specified program", e);
-            System.exit(-1);
             return;
         } catch (UnknownCard e) {
             LOG.error("Unknown card in file", e);
-            System.exit(-1);
             return;
         }
 
@@ -139,19 +137,15 @@ public final class Main {
             attendant.loadProgram(cards);
         } catch (BadCard e) {
             LOG.error("Attendant encountered bad card", e);
-            System.exit(-1);
             return;
         } catch (IOException e) {
             LOG.error("Attendant could not locate library file", e);
-            System.exit(-1);
             return;
         } catch (UnknownCard e) {
             LOG.error("Included file contains unknown card", e);
-            System.exit(-1);
             return;
         } catch (LibraryLookupException e) {
             LOG.error("Attendant failed to load library file", e);
-            System.exit(-1);
             return;
         }
 
@@ -160,7 +154,6 @@ public final class Main {
                 ProgramWriter.write(reader.cards());
             } catch (UnknownCard e) {
                 LOG.error("Encountered unknown card", e);
-                System.exit(-1);
             }
             return;
         }
@@ -170,7 +163,6 @@ public final class Main {
             engine.run();
         } catch (BadCard e) {
             LOG.error("Encountered invalid card", e);
-            System.exit(-1);
             return;
         }
 

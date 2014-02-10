@@ -1,5 +1,5 @@
 /**
- * AWTCurvePrinter.java - plots a curve in an AWT window
+ * package-info.java - graphical outputs for the Analytical Engine
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -18,32 +18,11 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
 
 /**
- * Plots the curve produced by the Analytical Engine in an AWT window.
+ * Graphical output classes for the Analytical Engine.
  * 
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
  */
-public class AWTCurvePrinter extends AbstractCurvePrinter {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void draw() {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void move() {
-        // TODO Auto-generated method stub
-
-    }
-
-}
+package analyticalengine.gui;
