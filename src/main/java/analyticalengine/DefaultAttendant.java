@@ -61,8 +61,7 @@ public class DefaultAttendant implements Attendant {
      *         {@code start} matches the cycle end specified by type {code
      *         end}.
      */
-    private static boolean cyclesMatch(final CardType start,
-            final CardType end) {
+    private static boolean cyclesMatch(final CardType start, final CardType end) {
         switch (start) {
         case BACKSTART:
         case CBACKSTART:
@@ -130,8 +129,7 @@ public class DefaultAttendant implements Attendant {
      * @return {@code true} if and only if the element is found somewhere in
      *         the given array.
      */
-    private static boolean isIn(final Object needle,
-            final Object... haystack) {
+    private static boolean isIn(final Object needle, final Object... haystack) {
         for (Object element : haystack) {
             if (element.equals(needle)) {
                 return true;
@@ -333,7 +331,7 @@ public class DefaultAttendant implements Attendant {
      *         point.
      */
     private Card expandNumber(final int decimalPlace, final Card card) {
-        // TODO these two lines are repeated in the calling function, but we
+        // these two lines are repeated in the calling function, but we
         // repeat them here so that this method has only the two parameters
         String number = card.argument(1);
         int decimalIndex = number.indexOf(".");
@@ -481,8 +479,7 @@ public class DefaultAttendant implements Attendant {
                     break;
 
                 case ',': // Comma if digits remain to output
-                    if (this.formatString.indexOf('9') >= 0
-                        || s.length() > 0) {
+                    if (this.formatString.indexOf('9') >= 0 || s.length() > 0) {
                         o = c + o;
                     }
                     break;
@@ -726,8 +723,7 @@ public class DefaultAttendant implements Attendant {
      *             combinatorial cards (for example, if a start card has no
      *             corresponding end card).
      */
-    private void translateCombinatorics(final List<Card> cards)
-            throws BadCard {
+    private void translateCombinatorics(final List<Card> cards) throws BadCard {
         for (int i = 0; i < cards.size(); i++) {
             if (isCycleStart(cards.get(i).type())) {
                 LOG.debug("Translating cycle starting from " + cards.get(i)
