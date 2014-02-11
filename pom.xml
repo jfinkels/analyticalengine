@@ -77,7 +77,7 @@
           <dependencies>
             <dependency>
               <groupId>org.apache.maven.scm</groupId>
-              <artifactId>maven-scm-provider-git</artifactId>
+              <artifactId>maven-scm-provider-gitexe</artifactId>
               <version>${version.scm.git}</version>
             </dependency>
           </dependencies>
@@ -169,7 +169,7 @@
         <dependencies>
           <dependency>
             <groupId>org.apache.maven.scm</groupId>
-            <artifactId>maven-scm-provider-git</artifactId>
+            <artifactId>maven-scm-provider-gitexe</artifactId>
             <version>${version.scm.git}</version>
           </dependency>
         </dependencies>
