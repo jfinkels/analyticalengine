@@ -22,220 +22,221 @@ grammar AnalyticalEngine;
 
 program
 :
-	(
-		card LINESEP
-	)*
+  (
+    card LINESEP
+  )*
 ;
 
 card
 :
-	ARITHMETIC
-	| MEMORY
-	| COMBINATORIAL
-	| ACTION
-	| CURVE
-	| ATTENDANT
-	| DEBUG
-	| SHORTCOMBINATORIAL
+  arithmetic
+  | memory
+  | combinatorial
+  | action
+  | curve
+  | attendant
+  | debug
+  // | shortcombinatorial
+
 ;
 
-SHORTCOMBINATORIAL
+//shortcombinatorial
+//:
+//  (
+//    backstart
+//    | cbackstart
+//    | backend
+//    | forwardstart
+//    | cforwardstart
+//    | alternation
+//    | forwardend
+//  )
+//;
+
+//backstart
+//:
+//  '('
+//;
+//
+//cbackstart
+//:
+//  '(?'
+//;
+//
+//backend
+//:
+//  ')'
+//;
+//
+//forwardstart
+//:
+//  '{'
+//;
+//
+//cforwardstart
+//:
+//  '{?'
+//;
+//
+//alternation
+//:
+//  '}{'
+//;
+//
+//forwardend
+//:
+//  '}'
+//;
+
+arithmetic
 :
-	(
-		BACKSTART
-		| CBACKSTART
-		| BACKEND
-		| FORWARDSTART
-		| CFORWARDSTART
-		| ALTERNATION
-		| FORWARDEND
-	)
+  (
+    '+'
+    | '/'
+    | '-'
+    | '*'
+    | shift
+  )
 ;
 
-BACKSTART
+shift
 :
-	'('
+  (
+    '<'
+    | '>'
+  ) INT?
 ;
 
-CBACKSTART
+memory
 :
-	'(?'
+  memoryCommand INT '\''?
+  | numberCommand
 ;
 
-BACKEND
+numberCommand
 :
-	')'
+  'N' INT WS SIGNEDNUMBER
 ;
 
-FORWARDSTART
+combinatorial
 :
-	'{'
+  'C'
+  (
+    'B'
+    | 'F'
+  )
+  (
+    '?'
+    | '+'
+  ) INT
 ;
 
-CFORWARDSTART
+action
 :
-	'{?'
+  (
+    'H'
+    | 'B'
+    | 'P'
+  )
 ;
 
-ALTERNATION
+curve
 :
-	'}{'
+  'D'
+  (
+    '+'
+    | '-'
+    | 'X'
+    | 'Y'
+  )
 ;
 
-FORWARDEND
+attendant
 :
-	'}'
+  'A ' attendantCommand ' '
 ;
 
-ARITHMETIC
+debug
 :
-	(
-		'+'
-		| '/'
-		| '-'
-		| '*'
-		| SHIFT
-	)
+  trace
+  | lineComment
 ;
 
-SHIFT
+lineComment
 :
-	(
-		'<'
-		| '>'
-	) INT?
+  ' ' .
+  | '.' .
 ;
 
-MEMORY
+trace
 :
-	MEMORYCOMMAND INT '\''?
-	| NUMBERCOMMAND
+  'T'
+  (
+    '0'
+    | '1'
+  )
 ;
 
-NUMBERCOMMAND
+attendantCommand
 :
-	'N' INT WS SIGNEDNUMBER
-;
-
-COMBINATORIAL
-:
-	'C'
-	(
-		'B'
-		| 'F'
-	)
-	(
-		'?'
-		| '+'
-	) INT
-;
-
-ACTION
-:
-	(
-		'H'
-		| 'B'
-		| 'P'
-	)
-;
-
-CURVE
-:
-	'D'
-	(
-		'+'
-		| '-'
-		| 'X'
-		| 'Y'
-	)
-;
-
-ATTENDANT
-:
-	'A ' ATTENDANTCOMMAND ' '
-;
-
-DEBUG
-:
-	TRACE
-	| LINECOMMENT
-;
-
-LINECOMMENT
-:
-	' ' .
-	| '.' .
-;
-
-TRACE
-:
-	'T'
-	(
-		'0'
-		| '1'
-	)
-;
-
-ATTENDANTCOMMAND
-:
-	(
-		'include cards'
-		| 'include from library cards for'
-		| 'set decimal places to'
-		| 'write numbers as'
-		| 'write numbers with decimal point'
-		| 'write in rows'
-		| 'write in columns'
-		| 'write new line'
-		| 'write annotation'
-	)
+  (
+    'include cards'
+    | 'include from library cards for'
+    | 'set decimal places to'
+    | 'write numbers as'
+    | 'write numbers with decimal point'
+    | 'write in rows'
+    | 'write in columns'
+    | 'write new line'
+    | 'write annotation'
+  )
 ;
 
 SIGNEDNUMBER
 :
-	'+'? NUMBER
+  '+'? NUMBER
 ;
 
 NUMBER
 :
-	INT
-	| DOUBLE
+  INT
+  | DOUBLE
 ;
 
 DOUBLE
 :
-	INT '.' INT?
+  INT '.' INT?
 ;
 
 WS
 :
-	[ \t]+
+  [ \t]+
 ;
 
-MEMORYCOMMAND
+memoryCommand
 :
-	(
-		'L'
-		| 'Z'
-		| 'S'
-	)
+  (
+    'L'
+    | 'Z'
+    | 'S'
+  )
 ;
 
 INT
 :
-	[0-9]+
+  [0-9]+
 ;
 
 LINESEP
 :
-	(
-		'\n'
-		| '\r\n'
-		| '\r'
-	)
+  (
+    '\n'
+    | '\r\n'
+    | '\r'
+  )
 ;
 
 T
 :
-	'T'
+  'T'
 ;
