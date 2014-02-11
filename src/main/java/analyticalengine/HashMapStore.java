@@ -21,8 +21,6 @@
 package analyticalengine;
 
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A memory store for the Analytical Engine backed by a
@@ -52,7 +50,27 @@ public class HashMapStore implements Store {
     public static final BigInteger MIN_VALUE = MAX_VALUE.negate();
 
     /** The hash map that provides the addressable, random-access storage. */
-    private Map<Long, BigInteger> rack = new HashMap<Long, BigInteger>();
+    private final DefaultHashMap<Long, BigInteger> rack = new DefaultHashMap<Long, BigInteger>();
+
+    /**
+     * Instantiates this object and initializes the underlying hash map.
+     */
+    public HashMapStore() {
+        this.rack.setValueGenerator(new ValueGenerator<Long, BigInteger>() {
+
+            /**
+             * Always returns {@link java.math.BigInteger#ZERO}.
+             * 
+             * @param key
+             *            This parameter is ignored.
+             * @return Zero.
+             */
+            @Override
+            public BigInteger generate(final Long key) {
+                return BigInteger.ZERO;
+            }
+        });
+    }
 
     /**
      * {@inheritDoc}
