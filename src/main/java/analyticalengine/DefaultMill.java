@@ -31,7 +31,8 @@ import org.slf4j.LoggerFactory;
  * Engine.
  * 
  * The {@link #MAX} and {@link #MIN} bounds for integers in this mill should
- * agree with the {@link #MAX_VALUE} and {@link #MIN_VALUE} fields of
+ * agree with the {@link analyticalengine.HashMapStore#MAX_VALUE} and
+ * {@link analyticalengine.HashMapStore#MIN_VALUE} fields of
  * {@link analyticalengine.HashMapStore}.
  * 
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
