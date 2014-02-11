@@ -45,23 +45,23 @@ A write new line
 
     Demonstrate square root and square as inverse
 
-A write annotation                     sqrt(x)² = 
+A write annotation                     sqrt(x)^2 = 
 L105
 L106
 S000
 
 A include from library cards for sqrt
 
-×
+*
 L000
 L000
 >
 P
 A write new line
 
-    Demonstrate sin² x + cos² x = 1
+    Demonstrate sin^2 x + cos^2 x = 1
 
-A write annotation            sin²(x) + cos²(x) = 
+A write annotation            sin^2(x) + cos^2(x) = 
 
 +
 L105
@@ -70,7 +70,7 @@ S000
 
 A include from library cards for sine
 
-×
+*
 L000
 L000
 >
@@ -83,7 +83,7 @@ S000
 
 A include from library cards for cosine
 
-×
+*
 L000
 L000
 >
@@ -117,7 +117,7 @@ S000
 
 A include from library cards for cosine
 
-÷
+/
 L110
 <
 L000
