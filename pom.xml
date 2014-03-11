@@ -402,7 +402,7 @@
   <licenses>
     <license>
       <name>GNU General Public License, Version 3.0</name>
-      <url>https://www.gnu.org/licenses/gpl.html</url>
+      <url>https://www.gnu.org/licenses/gpl.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
