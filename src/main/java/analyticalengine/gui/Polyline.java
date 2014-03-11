@@ -20,6 +20,7 @@
  */
 package analyticalengine.gui;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,10 @@ import org.slf4j.LoggerFactory;
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
  */
-public class Polyline {
+public class Polyline implements Serializable {
+
+    /** Default generated serial version UID. */
+    private static final long serialVersionUID = -7306563886042736197L;
 
     /** The logger for this class. */
     public static final transient Logger LOG = LoggerFactory

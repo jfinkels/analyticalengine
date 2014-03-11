@@ -53,23 +53,36 @@ public class HashMapStore implements Store {
     private final DefaultHashMap<Long, BigInteger> rack = new DefaultHashMap<Long, BigInteger>();
 
     /**
+     * An object which simply generates zero values (of type
+     * {@link java.math.BigInteger} ).
+     * 
+     * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+     * @since 0.0.1
+     */
+    private static final class ZeroGenerator implements
+            ValueGenerator<Long, BigInteger> {
+
+        /** Default generated serial version UID. */
+        private static final long serialVersionUID = 4997265095366224345L;
+
+        /**
+         * Always returns {@link java.math.BigInteger#ZERO}.
+         * 
+         * @param key
+         *            This parameter is ignored.
+         * @return Zero.
+         */
+        @Override
+        public BigInteger generate(final Long key) {
+            return BigInteger.ZERO;
+        }
+    };
+
+    /**
      * Instantiates this object and initializes the underlying hash map.
      */
     public HashMapStore() {
-        this.rack.setValueGenerator(new ValueGenerator<Long, BigInteger>() {
-
-            /**
-             * Always returns {@link java.math.BigInteger#ZERO}.
-             * 
-             * @param key
-             *            This parameter is ignored.
-             * @return Zero.
-             */
-            @Override
-            public BigInteger generate(final Long key) {
-                return BigInteger.ZERO;
-            }
-        });
+        this.rack.setValueGenerator(new ZeroGenerator());
     }
 
     /**

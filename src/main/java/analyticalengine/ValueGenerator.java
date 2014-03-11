@@ -20,6 +20,8 @@
  */
 package analyticalengine;
 
+import java.io.Serializable;
+
 /**
  * Generates values based on a specified key.
  * 
@@ -30,7 +32,7 @@ package analyticalengine;
  * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
  * @since 0.0.1
  */
-public interface ValueGenerator<K, V> {
+public interface ValueGenerator<K, V> extends Serializable {
 
     /**
      * Generates a value based on the specified key.

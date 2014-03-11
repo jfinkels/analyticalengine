@@ -23,7 +23,6 @@ package analyticalengine.gui;
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -37,7 +36,7 @@ public class Plotter extends Canvas {
     private static final long serialVersionUID = -5319914534841657078L;
 
     /** The current list of polylines to print. */
-    private List<Polyline> polylines = new ArrayList<Polyline>();
+    private ArrayList<Polyline> polylines = new ArrayList<Polyline>();
 
     /**
      * Adds the specified polyline to the current list of polylines to
