@@ -26,7 +26,7 @@ import java.math.BigInteger;
  * A memory store for the Analytical Engine backed by a
  * {@link java.util.HashMap}.
  * 
- * The {@link #MAX_VALUE} and {@value #MIN_VALUE} fields of this store should
+ * The {@link #MAX_VALUE} and {@link #MIN_VALUE} fields of this store should
  * agree with the {@link analyticalengine.DefaultMill#MAX} and
  * {@link analyticalengine.DefaultMill#MIN} fields of
  * {@link analyticalengine.DefaultMill}.
