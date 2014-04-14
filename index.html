@@ -59,6 +59,36 @@
 
           <pre class="command-line"><span class="command">analyticalengine myprogram.ae</span></pre>
 
+          <h4>Brief hardware overview</h4>
+
+          <p>The Analytical Engine machinery is essentially the same as a
+          (simple) modern digital computer. Here is a brief description of the
+          hardware including both the old and new terminologies.
+
+          <p>Each instruction for the machine comes on a <dfn>card</dfn> with
+          holes punched in it to indicate which instruction it represents (that
+          is, its &quot;opcode&quot;). A program is provided as a sequence of
+          cards.
+
+          <p>The random access memory of the machine is called
+          the <dfn>store</dfn> and the arithmetic logic unit is called
+          the <dfn>mill</dfn>. The mill performs arithmetic operations on
+          integers, each of which is stored in a register called
+          an <dfn>axis</dfn> (plural <dfn>axes</dfn>). Integers read from
+          memory are stored in <dfn>ingress axes</dfn> and the result of
+          arithmetic operations are stored in <dfn>egress axes</dfn>.
+
+          <p>The machine is controlled by an <dfn>attendant</dfn> who loads
+          programs, starts and operates the machine while the program executes,
+          and provides a final report showing the output of the machine. The
+          machine can produce textual output via a printer as well as graphical
+          output via a <dfn>curve drawing apparatus</dfn>, a device we would
+          call a plotter.
+
+          <p>For more information on the terminology,
+          see <a href="http://www.fourmilab.ch/babbage/glossary.html">this
+          glossary</a>.
+
           <h4>Programming the Analytical Engine</h4>
 
           <p>The programming language for this machine is arcane, but
