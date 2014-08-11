@@ -52,7 +52,7 @@ Running the Analytical Engine
 
 To create a shell script that runs the simulator, run
 
-    mvn appassembler:assemble
+    mvn clean package jar:jar appassembler:assemble
 
 Then, to run the simulator on a file named `myprogram.ae`, run
 
