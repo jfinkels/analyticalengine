@@ -21,6 +21,7 @@
 package analyticalengine;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 /**
  * Device that performs the arithmetic operations required by the Analytical
@@ -234,7 +235,8 @@ public interface Mill {
      * transferred value (in or out), the result of a computation, or the
      * result of a shift.
      * 
-     * @return The "most recently used" integer.
+     * @return The "most recently used" integer, or an empty {@link Optional}
+     *         if no such integer exists.
      */
-    BigInteger mostRecentValue();
+    Optional<BigInteger> mostRecentValue();
 }

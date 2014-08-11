@@ -21,6 +21,7 @@
 package analyticalengine;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -218,12 +219,12 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             LOG.debug("Received halt card.");
             throw new Halt("Card indicated halt", card);
         case PRINT:
-            BigInteger value = this.mill.mostRecentValue();
-            if (value == null) {
+            Optional<BigInteger> value = this.mill.mostRecentValue();
+            if (!value.isPresent()) {
                 LOG.error("No value is available for printing. Not printing.");
                 break;
             }
-            String printed = this.printer.print(value);
+            String printed = this.printer.print(value.get());
             LOG.debug("Attendant received value from printer: {}", printed);
             this.attendant.receiveOutput(printed);
             break;
@@ -287,7 +288,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
      *             if the card is not a curve drawing card.
      */
     private void handleCurveDrawing(final Card card) {
-        BigInteger value;
+        Optional<BigInteger> value;
         switch (card.type()) {
         case DRAW:
             LOG.debug("Drawing on the curve printer");
@@ -299,13 +300,23 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
             break;
         case SETX:
             value = this.mill.mostRecentValue();
+            if (!value.isPresent()) {
+                LOG.error("No value is available for setting the x value of"
+                          + " the curve printer; not setting a value.");
+                break;
+            }
             LOG.debug("Setting the x value of the curve printer: {}", value);
-            this.curvePrinter.setX(value);
+            this.curvePrinter.setX(value.get());
             break;
         case SETY:
             value = this.mill.mostRecentValue();
+            if (!value.isPresent()) {
+                LOG.error("No value is available for setting the y value of"
+                          + " the curve printer; not setting a value.");
+                break;
+            }
             LOG.debug("Setting the y value of the curve printer: {}", value);
-            this.curvePrinter.setY(value);
+            this.curvePrinter.setY(value.get());
             break;
         default:
             throw new IllegalArgumentException(

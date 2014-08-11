@@ -22,6 +22,7 @@ package analyticalengine;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -299,8 +300,8 @@ public class DefaultMill implements Mill {
      * @return {@inheritDoc}
      */
     @Override
-    public BigInteger mostRecentValue() {
-        return this.mostRecentValue;
+    public Optional<BigInteger> mostRecentValue() {
+        return Optional.ofNullable(this.mostRecentValue);
     }
 
     /**
