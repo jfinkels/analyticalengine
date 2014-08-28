@@ -34,7 +34,7 @@ import analyticalengine.cards.Card;
  * Reads an Analytical Engine program from a string or file and returns the
  * card chain that it represents.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public final class ProgramReader {

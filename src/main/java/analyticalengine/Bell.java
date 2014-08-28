@@ -26,7 +26,7 @@ import analyticalengine.cards.Card;
  * Represents a bell that rings on the Analytical Engine, attracting the
  * attention of the attendant.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class Bell extends CardException {

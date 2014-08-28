@@ -29,7 +29,7 @@ import java.io.Serializable;
  *            The type of keys for which to generate associated values.
  * @param <V>
  *            The type of values to generate for associated keys.
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public interface ValueGenerator<K, V> extends Serializable {

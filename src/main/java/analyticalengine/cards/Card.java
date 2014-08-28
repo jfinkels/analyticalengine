@@ -28,7 +28,7 @@ import java.util.Arrays;
  * The specific instruction is specified by the
  * {@link analyticalengine.cards.CardType} parameter of the constructor.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class Card {

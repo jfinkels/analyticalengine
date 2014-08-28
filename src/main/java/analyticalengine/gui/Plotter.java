@@ -28,7 +28,7 @@ import java.util.ArrayList;
 /**
  * A Canvas object that plots polylines.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class Plotter extends Canvas {

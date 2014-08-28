@@ -29,7 +29,7 @@ import org.junit.Test;
 /**
  * Tests for the HashMapStore class.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class HashMapStoreTest {

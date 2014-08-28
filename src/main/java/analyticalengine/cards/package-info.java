@@ -25,7 +25,7 @@
  * Each card has a type which indicates the specific instruction that the card
  * represents. Each card type has zero or more required arguments.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 package analyticalengine.cards;

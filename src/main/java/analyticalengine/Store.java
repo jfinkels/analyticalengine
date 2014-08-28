@@ -25,7 +25,7 @@ import java.math.BigInteger;
 /**
  * The memory of the Analytical Engine; stores values in random access memory.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  */
 public interface Store {
     /**

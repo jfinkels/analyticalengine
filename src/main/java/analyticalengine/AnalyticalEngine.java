@@ -45,7 +45,7 @@ package analyticalengine;
  * by the printer will be available from the attendant after the engine has
  * halted.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public interface AnalyticalEngine {

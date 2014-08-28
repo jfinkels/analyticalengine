@@ -28,7 +28,7 @@ import analyticalengine.cards.Card;
  * 
  * This is essentially a syntax error.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class BadCard extends CardException {

@@ -24,7 +24,7 @@ package analyticalengine;
  * The direction in which the attendant should write the output from the
  * printer, either in rows or in columns.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public enum WriteDirection {

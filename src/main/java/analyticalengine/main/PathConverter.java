@@ -28,7 +28,7 @@ import com.beust.jcommander.IStringConverter;
 /**
  * Converts a string containing a path to a path object.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class PathConverter implements IStringConverter<Path> {

@@ -24,7 +24,7 @@ package analyticalengine;
  * Utilities for testing, including a method which fails a test after
  * outputting an Exception's message.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public final class TestUtils {

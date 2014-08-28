@@ -40,7 +40,7 @@ import analyticalengine.io.UnknownCard;
 /**
  * A basic implementation of a library of built-in functions.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class DefaultLibrary implements Library {

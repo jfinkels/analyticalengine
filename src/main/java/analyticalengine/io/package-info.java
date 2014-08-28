@@ -23,7 +23,7 @@
  * Contains utility classes that aid in parsing Analytical Engine programs from
  * strings or files.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 package analyticalengine.io;

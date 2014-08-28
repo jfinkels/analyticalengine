@@ -31,7 +31,7 @@ import analyticalengine.cards.CardType;
 /**
  * Tests for {@link analyticalengine.io.CardParser}.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class CardParserTest {

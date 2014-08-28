@@ -44,7 +44,7 @@ import java.math.BigInteger;
  * {@link #transferOut(boolean)} with its argument set to {@code true} to get
  * the high order digits of the result.
  * 
- * <h4>Left and right arithmetic shifts</h4>
+ * <h3>Left and right arithmetic shifts</h3>
  * 
  * <em>John Walker, the author of the original code from which this simulation
  * is based, had the following comments about left and right shifts.</em>
@@ -84,7 +84,7 @@ import java.math.BigInteger;
  * Note that shifting does not change the current operation for which the mill
  * is set; it merely shifts the axes in place.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public interface Mill {

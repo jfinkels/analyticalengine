@@ -27,7 +27,7 @@ import analyticalengine.cards.Card;
 /**
  * A device through which a sequence of cards is provided to the Engine.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public interface CardReader {

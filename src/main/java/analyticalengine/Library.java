@@ -29,7 +29,7 @@ import analyticalengine.cards.Card;
  * A library containing built-in functions that can be included by user
  * programs.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public interface Library {

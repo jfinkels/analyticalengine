@@ -29,7 +29,7 @@ import java.util.HashMap;
  *            The type of keys in the map.
  * @param <V>
  *            The type of values in the map.
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class DefaultHashMap<K, V> extends HashMap<K, V> {

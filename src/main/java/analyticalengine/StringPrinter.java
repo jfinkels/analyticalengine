@@ -25,7 +25,7 @@ import java.math.BigInteger;
 /**
  * A basic implementation of a printer.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class StringPrinter implements Printer {

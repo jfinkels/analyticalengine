@@ -31,7 +31,7 @@ import java.math.BigInteger;
  * {@link analyticalengine.DefaultMill#MIN} fields of
  * {@link analyticalengine.DefaultMill}.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class HashMapStore implements Store {
@@ -56,7 +56,7 @@ public class HashMapStore implements Store {
      * An object which simply generates zero values (of type
      * {@link java.math.BigInteger} ).
      * 
-     * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+     * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
      * @since 0.0.1
      */
     private static final class ZeroGenerator implements

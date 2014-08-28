@@ -28,7 +28,7 @@ import analyticalengine.cards.Card;
 /**
  * Writes a list of cards to an output stream.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public final class ProgramWriter {

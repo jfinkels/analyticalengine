@@ -34,7 +34,7 @@ import com.beust.jcommander.Parameter;
  * An instance of this class should be provided to the constructor of the
  * {@link com.beust.jcommander.JCommander} class.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class Arguments {

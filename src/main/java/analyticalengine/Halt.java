@@ -27,7 +27,7 @@ import analyticalengine.cards.Card;
  * program, either because the program includes a "halt" instruction, or the
  * card reader has read every available card.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class Halt extends CardException {

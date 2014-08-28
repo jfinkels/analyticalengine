@@ -25,7 +25,7 @@ import analyticalengine.cards.Card;
 /**
  * Base class for exceptions that are caused by cards.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public abstract class CardException extends Exception {

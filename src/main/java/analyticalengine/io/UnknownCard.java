@@ -24,7 +24,7 @@ package analyticalengine.io;
  * This exception is raised when an attempt to parse a string into a card
  * fails.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class UnknownCard extends Exception {

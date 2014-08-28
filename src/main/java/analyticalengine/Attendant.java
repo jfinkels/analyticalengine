@@ -48,7 +48,7 @@ import analyticalengine.io.UnknownCard;
  * {@link #reset()} method after each run of the Analytical Engine before any
  * subsequent runs, so that the attendant can clear the current report.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public interface Attendant {

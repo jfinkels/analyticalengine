@@ -32,7 +32,7 @@ import analyticalengine.cards.Card;
 /**
  * A card reader backed by an {@link java.util.ArrayList} of cards.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class ArrayListCardReader implements CardReader {

@@ -30,7 +30,7 @@ import analyticalengine.CurvePrinter;
 /**
  * Plots the curve produced by the Analytical Engine in a JFrame.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class JFrameCurvePrinter extends JFrame implements CurvePrinter {

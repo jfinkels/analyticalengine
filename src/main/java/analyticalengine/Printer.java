@@ -25,7 +25,7 @@ import java.math.BigInteger;
 /**
  * Device that produces textual output from the Analytical Engine.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public interface Printer {

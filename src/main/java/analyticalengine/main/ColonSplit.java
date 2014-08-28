@@ -28,7 +28,7 @@ import com.beust.jcommander.converters.IParameterSplitter;
 /**
  * Splits a colon-separated string on the colons.
  * 
- * @author Jeffrey Finkelstein <jeffrey.finkelstein@gmail.com>
+ * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
 public class ColonSplit implements IParameterSplitter {
