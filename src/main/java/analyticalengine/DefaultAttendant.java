@@ -277,7 +277,7 @@ public class DefaultAttendant implements Attendant {
              */
             case NUMBER:
                 String number = card.argument(1);
-                int decimalIndex = number.indexOf(".");
+                int decimalIndex = number.indexOf('.');
                 // If the number has no decimal, just add the card as is.
                 if (decimalIndex < 0) {
                     result.add(card);
@@ -334,7 +334,7 @@ public class DefaultAttendant implements Attendant {
         // these two lines are repeated in the calling function, but we
         // repeat them here so that this method has only the two parameters
         String number = card.argument(1);
-        int decimalIndex = number.indexOf(".");
+        int decimalIndex = number.indexOf('.');
 
         /*
          * Now adjust the decimal part to the given number of decimal places by
