@@ -4,5 +4,11 @@ jdk:
   - oraclejdk7
   - openjdk7
 
+# Java complains if it doesn't have access to an X11 display server, so we
+# start a dummy one.
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+
 # Need to skip GPG signing of artifacts on install.
 install: mvn install -DskipTests=true -Dgpg.skip=true
