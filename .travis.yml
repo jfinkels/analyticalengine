@@ -6,3 +6,5 @@ jdk:
 
 # Need to skip GPG signing of artifacts on install.
 install: mvn install -DskipTests=true -Dgpg.skip=true
+
+sudo: false
