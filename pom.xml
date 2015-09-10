@@ -266,7 +266,7 @@
       <plugin> <!-- PMD code analysis report -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>3.0.1</version>
+        <version>3.5</version>
         <configuration>
           <targetJdk>${version.java.target}</targetJdk>
         </configuration>
