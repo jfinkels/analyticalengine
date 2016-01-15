@@ -24,7 +24,7 @@ Getting started
 ---------------
 
 This project uses [Maven](http://maven.apache.org/) for build management and
-requires Java 1.7 to compile.
+requires Java 1.8 to compile and run.
 
 To package this project into a JAR file, run
 
