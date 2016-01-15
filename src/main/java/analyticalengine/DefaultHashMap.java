@@ -37,8 +37,10 @@ public class DefaultHashMap<K, V> extends HashMap<K, V> {
     /** Default generated serial version UID. */
     private static final long serialVersionUID = 8778315633381430886L;
 
-    /** The object that generates values for keys that have not yet been set. */
-    private Function<K, V> generator;
+    /**
+     * The object that generates values for keys that have not yet been set.
+     */
+    private transient Function<K, V> generator;
 
     /**
      * Gets the value associated with the specified key, or a default value if
