@@ -81,9 +81,9 @@
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="UpperEll"/>
-    <module name="RedundantThrows">
-      <property name="suppressLoadErrors" value="true"/>
-    </module>
+    <!-- <module name="RedundantThrows"> -->
+    <!--   <property name="suppressLoadErrors" value="true"/> -->
+    <!-- </module> -->
   </module>
   <module name="NewlineAtEndOfFile"/>
   <module name="Translation"/>
