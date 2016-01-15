@@ -73,7 +73,7 @@ public class DefaultHashMap<K, V> extends HashMap<K, V> {
      * @param generator
      *            The generator for default values in this map.
      */
-    public void setValueGenerator(Function<K, V> generator) {
+    public void setValueGenerator(final Function<K, V> generator) {
         this.generator = generator;
     }
 }
