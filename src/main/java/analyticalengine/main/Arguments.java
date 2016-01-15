@@ -48,6 +48,12 @@ public class Arguments {
     @Parameter(description = "<filename>")
     private List<String> args = new ArrayList<String>();
 
+    /** Whether to run the program in headless mode. */
+    @Parameter(
+            names = { "-X", "--headless" },
+            description = "run the program without displaying curve printer output")
+    private boolean headless = false;
+
     /** Whether to display the help/usage message. */
     @Parameter(names = { "-h", "--help" }, description = "print this message",
             help = true)
@@ -90,6 +96,16 @@ public class Arguments {
      */
     List<String> args() {
         return this.args;
+    }
+
+    /**
+     * Returns whether the program should be run in "headless" mode, which
+     * means curve printer commands will be ignored.
+     * 
+     * @return Whether the program should run in headless mode.
+     */
+    boolean headless() {
+        return this.headless;
     }
 
     /**

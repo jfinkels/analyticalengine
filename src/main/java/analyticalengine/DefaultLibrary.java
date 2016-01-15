@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import analyticalengine.cards.Card;
 import analyticalengine.io.ProgramReader;
@@ -199,11 +200,11 @@ public class DefaultLibrary implements Library {
 
         // If the above resource did not exist, look for the file in the list
         // of known paths.
-        Path filePath = this.findInPath(fileWithExt);
+        Optional<Path> filePath = this.findInPath(fileWithExt);
 
         // Raise an exception if the requested library file could not be found
         // in any of the known paths.
-        if (filePath == null) {
+        if (!filePath.isPresent()) {
             throw new LibraryLookupException("Could not find library file: "
                     + fileWithExt);
         }
@@ -211,7 +212,7 @@ public class DefaultLibrary implements Library {
         // If the file was found somewhere in one of the library paths, load
         // the program directly from that file.
         try {
-            return ProgramReader.fromPath(filePath);
+            return ProgramReader.fromPath(filePath.get());
         } catch (IOException | UnknownCard e) {
             throw new LibraryLookupException("Failed to load library file", e);
         }
@@ -223,15 +224,16 @@ public class DefaultLibrary implements Library {
      * @param filename
      *            The basename of the file to search for.
      * @return The path to the first occurrence of a file with the specified
-     *         name, or {@code null} if no such file could be found.
+     *         name, or an empty {@link Optional} if no such file could be
+     *         found.
      */
-    private Path findInPath(final String filename) {
+    private Optional<Path> findInPath(final String filename) {
         for (Path path : this.paths) {
             Path libraryFile = path.resolve(filename);
             if (Files.exists(libraryFile)) {
-                return libraryFile;
+                return Optional.of(libraryFile);
             }
         }
-        return null;
+        return Optional.empty();
     }
 }

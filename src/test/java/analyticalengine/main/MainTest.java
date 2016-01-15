@@ -20,9 +20,11 @@
  */
 package analyticalengine.main;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,6 +36,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -43,6 +47,9 @@ import analyticalengine.TestUtils;
 
 /**
  * Tests for {@link analyticalengine.main.Main}.
+ * 
+ * All the tests in this class should be using the command-line argument
+ * indicating that the program be run in a headless environment.
  * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
@@ -155,39 +162,45 @@ public class MainTest {
                     + withoutExtension + "\n");
         }
 
-        // list tempDir2 first, so we expect 8 as output
-        String[] argv = new String[] { "-s", tempDir2 + ":" + tempDir1,
+        // list tempDir2 first, so we expect 28 as output
+        String[] argv = new String[] { "-X", "-s", tempDir2 + ":" + tempDir1,
                 tempProgram.toString() };
         Main.main(argv);
         String output = this.stdout.toString().toLowerCase();
-        assertTrue(output.contains("4"));
-        assertTrue(output.contains("7"));
         assertTrue(output.contains("28"));
+        assertFalse(output.contains("6"));
     }
 
-    /** Test for listing the cards only. */
+    /**
+     * Test for listing the cards only.
+     * 
+     * @throws IOException
+     *             If there is a problem reading from the test file.
+     */
     @Test
-    public void testList() {
-        String testfile;
+    public void testList() throws IOException {
+        Path testfile;
         try {
-            testfile = Paths.get(
-                    this.getClass().getResource("/test_basic.ae").toURI())
-                    .toString();
+            testfile = Paths.get(this.getClass().getResource("/test_basic.ae")
+                    .toURI());
         } catch (URISyntaxException e) {
             TestUtils.fail(e);
             return;
         }
-        String[] argv = new String[] { "-l", testfile };
+        String testfileName = testfile.toString();
+        String[] argv = new String[] { "-X", "-l", testfileName };
         Main.main(argv);
-        String output = this.stdout.toString().toLowerCase();
-        assertTrue(output.contains("number"));
-        assertTrue(output.contains("120"));
-        assertTrue(output.contains("10000"));
-        assertTrue(output.contains("121"));
-        assertTrue(output.contains("3"));
-        assertTrue(output.contains("divide"));
-        assertTrue(output.contains("load"));
-        assertTrue(output.contains("store"));
+        String output = this.stdout.toString();
+        List<String> lines = new ArrayList<String>();
+        try (BufferedReader reader = Files.newBufferedReader(testfile)) {
+            String currentLine = reader.readLine();
+            while (currentLine != null) {
+                lines.add(currentLine);
+                currentLine = reader.readLine();
+            }
+        }
+        String expected = String.join(System.lineSeparator(), lines);
+        assertEquals(expected, output.trim());
     }
 
     /** Test for no command-line arguments. */
@@ -202,7 +215,7 @@ public class MainTest {
             TestUtils.fail(e);
             return;
         }
-        String[] argv = new String[] { testfile };
+        String[] argv = new String[] { "-X", testfile };
         Main.main(argv);
     }
 
@@ -218,10 +231,9 @@ public class MainTest {
             TestUtils.fail(e);
             return;
         }
-        String[] argv = new String[] { "-c", testfile };
+        String[] argv = new String[] { "-X", "-c", testfile };
         Main.main(argv);
         String output = this.stdout.toString();
-        this.oldStdout.println(output);
         assertFalse(output.contains("Executing card COMMENT"));
     }
 
@@ -237,7 +249,7 @@ public class MainTest {
             TestUtils.fail(e);
             return;
         }
-        String[] argv = new String[] { "-v", "1", testfile };
+        String[] argv = new String[] { "-X", "-v", "1", testfile };
         Main.main(argv);
         // TODO test something
     }
@@ -254,7 +266,7 @@ public class MainTest {
             TestUtils.fail(e);
             return;
         }
-        String[] argv = new String[] { "-v", "2", testfile };
+        String[] argv = new String[] { "-X", "-v", "2", testfile };
         Main.main(argv);
         // TODO test something
     }

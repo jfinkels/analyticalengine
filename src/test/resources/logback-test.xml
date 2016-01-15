@@ -8,7 +8,8 @@
     </encoder>
   </appender>
 
-  <root level="debug">
+  <!-- change `level` to `"debug"` to get debugging messages in tests -->
+  <root level="warn">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>
