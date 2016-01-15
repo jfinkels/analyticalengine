@@ -40,6 +40,7 @@ import analyticalengine.DefaultMill;
 import analyticalengine.HashMapStore;
 import analyticalengine.Library;
 import analyticalengine.LibraryLookupException;
+import analyticalengine.NullCurvePrinter;
 import analyticalengine.StringPrinter;
 import analyticalengine.cards.Card;
 import analyticalengine.gui.JFrameCurvePrinter;
@@ -114,10 +115,15 @@ public final class Main {
         AnalyticalEngine engine = new DefaultAnalyticalEngine();
         engine.setAttendant(attendant);
         engine.setCardReader(reader);
-        engine.setCurvePrinter(new JFrameCurvePrinter());
         engine.setMill(new DefaultMill());
         engine.setPrinter(new StringPrinter());
         engine.setStore(new HashMapStore());
+        // if this is a headless execution, ignore curve printer commands
+        if (arguments.headless()) {
+            engine.setCurvePrinter(new NullCurvePrinter());
+        } else {
+            engine.setCurvePrinter(new JFrameCurvePrinter());
+        }
 
         // load the file specified in the command-line argument
         List<Card> cards;

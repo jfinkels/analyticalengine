@@ -44,6 +44,9 @@ import analyticalengine.TestUtils;
 /**
  * Tests for {@link analyticalengine.main.Main}.
  * 
+ * All the tests in this class should be using the command-line argument
+ * indicating that the program be run in a headless environment.
+ * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
@@ -156,7 +159,7 @@ public class MainTest {
         }
 
         // list tempDir2 first, so we expect 8 as output
-        String[] argv = new String[] { "-s", tempDir2 + ":" + tempDir1,
+        String[] argv = new String[] { "-X", "-s", tempDir2 + ":" + tempDir1,
                 tempProgram.toString() };
         Main.main(argv);
         String output = this.stdout.toString().toLowerCase();
@@ -177,7 +180,7 @@ public class MainTest {
             TestUtils.fail(e);
             return;
         }
-        String[] argv = new String[] { "-l", testfile };
+        String[] argv = new String[] { "-X", "-l", testfile };
         Main.main(argv);
         String output = this.stdout.toString().toLowerCase();
         assertTrue(output.contains("number"));
@@ -202,7 +205,7 @@ public class MainTest {
             TestUtils.fail(e);
             return;
         }
-        String[] argv = new String[] { testfile };
+        String[] argv = new String[] { "-X", testfile };
         Main.main(argv);
     }
 
@@ -218,7 +221,7 @@ public class MainTest {
             TestUtils.fail(e);
             return;
         }
-        String[] argv = new String[] { "-c", testfile };
+        String[] argv = new String[] { "-X", "-c", testfile };
         Main.main(argv);
         String output = this.stdout.toString();
         this.oldStdout.println(output);
@@ -237,7 +240,7 @@ public class MainTest {
             TestUtils.fail(e);
             return;
         }
-        String[] argv = new String[] { "-v", "1", testfile };
+        String[] argv = new String[] { "-X", "-v", "1", testfile };
         Main.main(argv);
         // TODO test something
     }
@@ -254,7 +257,7 @@ public class MainTest {
             TestUtils.fail(e);
             return;
         }
-        String[] argv = new String[] { "-v", "2", testfile };
+        String[] argv = new String[] { "-X", "-v", "2", testfile };
         Main.main(argv);
         // TODO test something
     }
