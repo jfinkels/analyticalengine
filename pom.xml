@@ -52,9 +52,13 @@
     <version.plugin.javadoc>2.10.3</version.plugin.javadoc>
     <version.plugin.scm>1.9.4</version.plugin.scm>
     <version.plugin.surefire>2.19.1</version.plugin.surefire>
+    <version.plugin.jacoco>0.7.5.201505241946</version.plugin.jacoco>
     
     <!-- SCM provider versions -->
     <version.scm.git>${version.plugin.scm}</version.scm.git>
+
+    <!-- intermediate execution files for Jacoco -->
+    <jacoco.execfile>${project.build.directory}/coverage-reports/jacoco-ut.exec</jacoco.execfile>
   </properties>
   
   <build>
@@ -242,7 +246,7 @@
       <plugin> <!-- test coverage -->
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.5.201505241946</version>
+        <version>${version.plugin.jacoco}</version>
         <executions>
           <!--
               This execution prepares the property pointing to the JaCoCo
@@ -256,7 +260,7 @@
             </goals>
             <configuration>
               <!-- This file contains the execution data. -->
-              <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+              <destFile>${jacoco.execfile}</destFile>
               <!-- This property contains the settings for the JaCoCo runtime
                    agent. -->
               <propertyName>surefireArgLine</propertyName>
@@ -274,7 +278,7 @@
             </goals>
             <configuration>
               <!-- This file contains the execution data, as set above. -->
-              <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+              <dataFile>${jacoco.execfile}</dataFile>
               <!-- The output directory for the code coverage report. -->
               <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
             </configuration>
@@ -356,6 +360,15 @@
         <artifactId>cobertura-maven-plugin</artifactId>
         <version>2.7</version>
       </plugin> -->
+
+      <plugin> <!-- Jacoco test coverage report -->
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${version.plugin.jacoco}</version>
+        <configuration>
+          <dataFile>${jacoco.execfile}</dataFile>
+        </configuration>
+      </plugin>
 
       <plugin> <!-- FindBugs report -->
         <groupId>org.codehaus.mojo</groupId>
