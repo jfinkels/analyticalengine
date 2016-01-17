@@ -1,5 +1,5 @@
 /**
- * CurvePrinter.java - device that plots curves on Euclidean plane
+ * HashMapStoreTest.java - tests for the HashMapStore class
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -18,47 +18,33 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
+package analyticalengine.components;
+
+import static org.junit.Assert.assertEquals;
 
 import java.math.BigInteger;
 
+import org.junit.Test;
+
+import analyticalengine.components.HashMapStore;
+import analyticalengine.components.Store;
+
 /**
- * Device that plots curves produced by the Analytical Engine.
+ * Tests for the HashMapStore class.
  * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
-public interface CurvePrinter {
-    /**
-     * Sets the x coordinate of the plotting pen.
-     * 
-     * @param x
-     *            The x coordinate of the plotting pen.
-     */
-    void setX(BigInteger x);
+public class HashMapStoreTest {
 
     /**
-     * Sets the y coordinate of the plotting pen.
-     * 
-     * @param y
-     *            The y coordinate of the plotting pen.
+     * Tests that getting a memory address that has not yet been set returns
+     * zero.
      */
-    void setY(BigInteger y);
+    @Test
+    public void testGetUnsetAddress() {
+        Store store = new HashMapStore();
+        assertEquals(BigInteger.ZERO, store.get(0));
+    }
 
-    /**
-     * Draws to the current location specified by the x and y coordinates.
-     */
-    void draw();
-
-    /**
-     * Moves the pen (without drawing) to the current location specified by the
-     * x and y coordinates.
-     */
-    void move();
-
-    /**
-     * Resets the position of the pen to the origin and clears the current
-     * plot.
-     */
-    void reset();
 }

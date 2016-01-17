@@ -26,7 +26,15 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import analyticalengine.attendant.Attendant;
+import analyticalengine.attendant.WriteDirection;
 import analyticalengine.cards.Card;
+import analyticalengine.components.CardReader;
+import analyticalengine.components.CurvePrinter;
+import analyticalengine.components.Mill;
+import analyticalengine.components.Operation;
+import analyticalengine.components.Printer;
+import analyticalengine.components.Store;
 
 /**
  * A basic implementation of the Analytical Engine interface.

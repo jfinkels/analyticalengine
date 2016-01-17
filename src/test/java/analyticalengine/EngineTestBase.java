@@ -29,7 +29,20 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 
+import analyticalengine.attendant.Attendant;
+import analyticalengine.attendant.DefaultAttendant;
+import analyticalengine.attendant.DefaultLibrary;
+import analyticalengine.attendant.Library;
+import analyticalengine.attendant.LibraryLookupException;
 import analyticalengine.cards.Card;
+import analyticalengine.components.ArrayListCardReader;
+import analyticalengine.components.CardReader;
+import analyticalengine.components.DefaultMill;
+import analyticalengine.components.HashMapStore;
+import analyticalengine.components.Mill;
+import analyticalengine.components.NullCurvePrinter;
+import analyticalengine.components.Store;
+import analyticalengine.components.StringPrinter;
 import analyticalengine.io.ProgramReader;
 import analyticalengine.io.UnknownCard;
 
@@ -55,7 +68,7 @@ public class EngineTestBase {
      * 
      * @return The operator of the Analytical Engine under test.
      */
-    Attendant attendant() {
+    protected Attendant attendant() {
         return this.attendant;
     }
 
@@ -64,7 +77,7 @@ public class EngineTestBase {
      * 
      * @return The Analytical Engine used for testing.
      */
-    AnalyticalEngine engine() {
+    protected AnalyticalEngine engine() {
         return this.engine;
     }
 
@@ -73,7 +86,7 @@ public class EngineTestBase {
      * 
      * @return The mill of the Analytical Engine.
      */
-    Mill mill() {
+    protected Mill mill() {
         return this.mill;
     }
 
@@ -84,10 +97,10 @@ public class EngineTestBase {
      *            The name of the file to test, relative to the test resources
      *            directory.
      */
-    void runProgram(final String filename) {
+    protected void runProgram(final String filename) {
         try {
-            Path program = Paths.get(this.getClass()
-                    .getResource("/" + filename).toURI());
+            Path program = Paths
+                    .get(this.getClass().getResource("/" + filename).toURI());
             List<Card> cards = ProgramReader.fromPath(program);
             this.attendant.loadProgram(cards);
             this.engine.run();
@@ -112,8 +125,8 @@ public class EngineTestBase {
      * @throws BadCard
      *             if there is a syntax error on one of the cards.
      */
-    void runProgramString(final String program) throws UnknownCard, BadCard,
-            IOException, LibraryLookupException {
+    protected void runProgramString(final String program)
+            throws UnknownCard, BadCard, IOException, LibraryLookupException {
         List<Card> cards = ProgramReader.fromString(program);
         this.attendant.loadProgram(cards);
         this.engine.run();
@@ -146,7 +159,7 @@ public class EngineTestBase {
      * 
      * @return The store used by the Analytical Engine.
      */
-    Store store() {
+    protected Store store() {
         return this.store;
     }
 

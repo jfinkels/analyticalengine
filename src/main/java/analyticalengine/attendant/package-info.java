@@ -1,5 +1,5 @@
 /**
- * HashMapStoreTest.java - tests for the HashMapStore class
+ * package-info.java - package-level documentation
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -18,30 +18,17 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
-
-import static org.junit.Assert.assertEquals;
-
-import java.math.BigInteger;
-
-import org.junit.Test;
 
 /**
- * Tests for the HashMapStore class.
+ * Provides an operator for the Analytical Engine.
+ * 
+ * The <em>attendant</em> is the operator of the Analytical Engine. The
+ * attendant reads the cards representing the requested program, makes any
+ * necessary changes to the cards, and inserts them into the machine. In this
+ * implementation, the attendant also handles looking up stored programs from a
+ * library.
  * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
-public class HashMapStoreTest {
-
-    /**
-     * Tests that getting a memory address that has not yet been set returns
-     * zero.
-     */
-    @Test
-    public void testGetUnsetAddress() {
-        Store store = new HashMapStore();
-        assertEquals(BigInteger.ZERO, store.get(0));
-    }
-
-}
+package analyticalengine.attendant;

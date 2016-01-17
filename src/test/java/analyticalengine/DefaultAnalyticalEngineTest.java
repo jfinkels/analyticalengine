@@ -30,7 +30,10 @@ import java.util.List;
 
 import org.junit.Test;
 
+import analyticalengine.attendant.LibraryLookupException;
 import analyticalengine.cards.Card;
+import analyticalengine.components.DefaultMill;
+import analyticalengine.components.HashMapStore;
 import analyticalengine.io.CardParser;
 import analyticalengine.io.UnknownCard;
 

@@ -1,5 +1,5 @@
 /**
- * package-info.java - package-level documentation
+ * Printer.java - device that produces textual output from the engine
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -18,13 +18,26 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
+package analyticalengine.components;
+
+import java.math.BigInteger;
 
 /**
- * Provides objects that represent the physical components of the Analytical
- * Engine.
+ * Device that produces textual output from the Analytical Engine.
  * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
-package analyticalengine;
-
+public interface Printer {
+    /**
+     * Converts the specified integer to a string.
+     * 
+     * If {@code value} is {@code null}, then the printer may print the empty
+     * string.
+     * 
+     * @param value
+     *            The value to print.
+     * @return The string representing the printed integer.
+     */
+    String print(BigInteger value);
+}

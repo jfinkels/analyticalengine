@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
+package analyticalengine.attendant;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -31,8 +31,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import analyticalengine.BadCard;
 import analyticalengine.cards.Card;
 import analyticalengine.cards.CardType;
+import analyticalengine.components.CardReader;
 import analyticalengine.io.ProgramReader;
 import analyticalengine.io.UnknownCard;
 
@@ -630,7 +632,7 @@ public class DefaultAttendant implements Attendant {
      * 
      * @param stripComments
      *            {@inheritDoc}
-     * @see analyticalengine.Attendant#setStripComments(boolean)
+     * @see analyticalengine.attendant.Attendant#setStripComments(boolean)
      */
     @Override
     public void setStripComments(final boolean stripComments) {

@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
+package analyticalengine.components;
 
 import java.math.BigInteger;
 
@@ -43,7 +43,7 @@ public class NullCurvePrinter implements CurvePrinter {
     /**
      * Does nothing.
      * 
-     * @see analyticalengine.CurvePrinter#draw()
+     * @see analyticalengine.components.CurvePrinter#draw()
      */
     @Override
     public void draw() {
@@ -53,7 +53,7 @@ public class NullCurvePrinter implements CurvePrinter {
     /**
      * Does nothing.
      * 
-     * @see analyticalengine.CurvePrinter#move()
+     * @see analyticalengine.components.CurvePrinter#move()
      */
     @Override
     public void move() {
@@ -63,7 +63,7 @@ public class NullCurvePrinter implements CurvePrinter {
     /**
      * (non-Javadoc)
      * 
-     * @see analyticalengine.CurvePrinter#reset()
+     * @see analyticalengine.components.CurvePrinter#reset()
      */
     @Override
     public void reset() {
@@ -76,7 +76,7 @@ public class NullCurvePrinter implements CurvePrinter {
      * @param x
      *            {@inheritDoc}
      * 
-     * @see analyticalengine.CurvePrinter#setX(java.math.BigInteger)
+     * @see analyticalengine.components.CurvePrinter#setX(java.math.BigInteger)
      */
     @Override
     public void setX(BigInteger x) {
@@ -89,7 +89,7 @@ public class NullCurvePrinter implements CurvePrinter {
      * @param y
      *            {@inheritDoc}
      * 
-     * @see analyticalengine.CurvePrinter#setY(java.math.BigInteger)
+     * @see analyticalengine.components.CurvePrinter#setY(java.math.BigInteger)
      */
     @Override
     public void setY(BigInteger y) {

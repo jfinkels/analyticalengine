@@ -1,5 +1,5 @@
 /**
- * StringPrinter.java - converts output from the engine to Java String objects
+ * WriteDirection.java - whether the attendant writes in rows or columns
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -18,29 +18,18 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
-
-import java.math.BigInteger;
+package analyticalengine.attendant;
 
 /**
- * A basic implementation of a printer.
+ * The direction in which the attendant should write the output from the
+ * printer, either in rows or in columns.
  * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
-public class StringPrinter implements Printer {
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @param value
-     *            {@inheritDoc}
-     * @return {@inheritDoc}
-     * @see analyticalengine.Printer#print(BigInteger)
-     */
-    @Override
-    public String print(final BigInteger value) {
-        return value.toString();
-    }
-
+public enum WriteDirection {
+    /** Write in rows. */
+    ROWS,
+    /** Write in columns. */
+    COLUMNS;
 }

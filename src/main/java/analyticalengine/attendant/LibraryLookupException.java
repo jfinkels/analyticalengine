@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
+package analyticalengine.attendant;
 
 /**
  * Raised when a request to include a file from the library of built-in

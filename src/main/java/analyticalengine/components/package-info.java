@@ -1,5 +1,5 @@
 /**
- * WriteDirection.java - whether the attendant writes in rows or columns
+ * package-info.java - package-level documentation
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -18,18 +18,17 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
 
 /**
- * The direction in which the attendant should write the output from the
- * printer, either in rows or in columns.
+ * The internal components of the Analytical Engine.
+ * 
+ * This package includes the interfaces and classes representing the memory,
+ * the arithmetic logic unit, the program reader, the printer, and the plotter
+ * for the Analytical Engine. Instances of these components must be set on the
+ * {@link analyticalengine.AnalyticalEngine} object before it can execute a
+ * program.
  * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
-public enum WriteDirection {
-    /** Write in rows. */
-    ROWS,
-    /** Write in columns. */
-    COLUMNS;
-}
+package analyticalengine.components;

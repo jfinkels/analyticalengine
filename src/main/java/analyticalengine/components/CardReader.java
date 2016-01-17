@@ -18,10 +18,11 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
+package analyticalengine.components;
 
 import java.util.List;
 
+import analyticalengine.Halt;
 import analyticalengine.cards.Card;
 
 /**

@@ -25,7 +25,7 @@ import java.math.BigInteger;
 
 import javax.swing.JFrame;
 
-import analyticalengine.CurvePrinter;
+import analyticalengine.components.CurvePrinter;
 
 /**
  * Plots the curve produced by the Analytical Engine in a JFrame.
@@ -105,7 +105,7 @@ public class JFrameCurvePrinter extends JFrame implements CurvePrinter {
     /**
      * {@inheritDoc}
      * 
-     * @see analyticalengine.CurvePrinter#reset()
+     * @see analyticalengine.components.CurvePrinter#reset()
      */
     @Override
     public void reset() {
@@ -125,7 +125,7 @@ public class JFrameCurvePrinter extends JFrame implements CurvePrinter {
      * 
      * @param x
      *            {@inheritDoc}
-     * @see analyticalengine.CurvePrinter#setX(java.math.BigInteger)
+     * @see analyticalengine.components.CurvePrinter#setX(java.math.BigInteger)
      */
     @Override
     public void setX(final BigInteger x) {
@@ -137,7 +137,7 @@ public class JFrameCurvePrinter extends JFrame implements CurvePrinter {
      * 
      * @param y
      *            {@inheritDoc}
-     * @see analyticalengine.CurvePrinter#setY(java.math.BigInteger)
+     * @see analyticalengine.components.CurvePrinter#setY(java.math.BigInteger)
      */
     @Override
     public void setY(final BigInteger y) {

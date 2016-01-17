@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
+package analyticalengine.components;
 
 import java.math.BigInteger;
 
@@ -27,9 +27,9 @@ import java.math.BigInteger;
  * {@link java.util.HashMap}.
  * 
  * The {@link #MAX_VALUE} and {@link #MIN_VALUE} fields of this store should
- * agree with the {@link analyticalengine.DefaultMill#MAX} and
- * {@link analyticalengine.DefaultMill#MIN} fields of
- * {@link analyticalengine.DefaultMill}.
+ * agree with the {@link analyticalengine.components.DefaultMill#MAX} and
+ * {@link analyticalengine.components.DefaultMill#MIN} fields of
+ * {@link analyticalengine.components.DefaultMill}.
  * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1

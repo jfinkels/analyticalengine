@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
+package analyticalengine.components;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -32,9 +32,9 @@ import org.slf4j.LoggerFactory;
  * Engine.
  * 
  * The {@link #MAX} and {@link #MIN} bounds for integers in this mill should
- * agree with the {@link analyticalengine.HashMapStore#MAX_VALUE} and
- * {@link analyticalengine.HashMapStore#MIN_VALUE} fields of
- * {@link analyticalengine.HashMapStore}.
+ * agree with the {@link analyticalengine.components.HashMapStore#MAX_VALUE} and
+ * {@link analyticalengine.components.HashMapStore#MIN_VALUE} fields of
+ * {@link analyticalengine.components.HashMapStore}.
  * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1

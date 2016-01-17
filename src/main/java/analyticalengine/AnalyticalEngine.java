@@ -20,6 +20,13 @@
  */
 package analyticalengine;
 
+import analyticalengine.attendant.Attendant;
+import analyticalengine.components.CardReader;
+import analyticalengine.components.CurvePrinter;
+import analyticalengine.components.Mill;
+import analyticalengine.components.Printer;
+import analyticalengine.components.Store;
+
 /**
  * The Analytical Engine aggregates the components of the computing system and
  * allows them to communicate with one another.

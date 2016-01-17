@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
+package analyticalengine.components;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +27,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import analyticalengine.Halt;
 import analyticalengine.cards.Card;
 
 /**
@@ -60,7 +61,7 @@ public class ArrayListCardReader implements CardReader {
      *            {@inheritDoc}
      * @throws IndexOutOfBoundsException
      *             {@inheritDoc}
-     * @see analyticalengine.CardReader#advance(int)
+     * @see analyticalengine.components.CardReader#advance(int)
      */
     @Override
     public void advance(final int n) {
@@ -74,7 +75,7 @@ public class ArrayListCardReader implements CardReader {
      * {@inheritDoc}
      * 
      * @return {@inheritDoc}
-     * @see analyticalengine.CardReader#cards()
+     * @see analyticalengine.components.CardReader#cards()
      */
     @Override
     public List<Card> cards() {
@@ -86,7 +87,7 @@ public class ArrayListCardReader implements CardReader {
      * 
      * @param cardChain
      *            {@inheritDoc}
-     * @see analyticalengine.CardReader#mountCards(List)
+     * @see analyticalengine.components.CardReader#mountCards(List)
      */
     @Override
     public void mountCards(final List<Card> cardChain) {
@@ -100,7 +101,7 @@ public class ArrayListCardReader implements CardReader {
      * @return {@inheritDoc}
      * @throws Halt
      *             {@inheritDoc}
-     * @see analyticalengine.CardReader#readAndAdvance()
+     * @see analyticalengine.components.CardReader#readAndAdvance()
      */
     @Override
     public Card readAndAdvance() throws Halt {
@@ -118,7 +119,7 @@ public class ArrayListCardReader implements CardReader {
      *            {@inheritDoc}
      * @throws IndexOutOfBoundsException
      *             {@inheritDoc}
-     * @see analyticalengine.CardReader#advance(int)
+     * @see analyticalengine.components.CardReader#advance(int)
      */
     @Override
     public void reverse(final int n) {
@@ -132,7 +133,7 @@ public class ArrayListCardReader implements CardReader {
     /**
      * {@inheritDoc}
      * 
-     * @see analyticalengine.CardReader#unmountCards()
+     * @see analyticalengine.components.CardReader#unmountCards()
      */
     @Override
     public void unmountCards() {

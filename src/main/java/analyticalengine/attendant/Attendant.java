@@ -18,12 +18,15 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
+package analyticalengine.attendant;
 
 import java.io.IOException;
 import java.util.List;
 
+import analyticalengine.BadCard;
 import analyticalengine.cards.Card;
+import analyticalengine.components.CardReader;
+import analyticalengine.components.Printer;
 import analyticalengine.io.UnknownCard;
 
 /**

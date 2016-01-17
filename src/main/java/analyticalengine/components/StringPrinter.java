@@ -1,5 +1,5 @@
 /**
- * Printer.java - device that produces textual output from the engine
+ * StringPrinter.java - converts output from the engine to Java String objects
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -18,26 +18,29 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
+package analyticalengine.components;
 
 import java.math.BigInteger;
 
 /**
- * Device that produces textual output from the Analytical Engine.
+ * A basic implementation of a printer.
  * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
-public interface Printer {
+public class StringPrinter implements Printer {
+
     /**
-     * Converts the specified integer to a string.
-     * 
-     * If {@code value} is {@code null}, then the printer may print the empty
-     * string.
+     * {@inheritDoc}
      * 
      * @param value
-     *            The value to print.
-     * @return The string representing the printed integer.
+     *            {@inheritDoc}
+     * @return {@inheritDoc}
+     * @see analyticalengine.components.Printer#print(BigInteger)
      */
-    String print(BigInteger value);
+    @Override
+    public String print(final BigInteger value) {
+        return value.toString();
+    }
+
 }
