@@ -25,11 +25,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
 
+import analyticalengine.attendant.Library;
 import analyticalengine.attendant.LibraryLookupException;
 import analyticalengine.cards.Card;
 import analyticalengine.components.DefaultMill;
@@ -44,6 +46,16 @@ import analyticalengine.io.UnknownCard;
  * @since 0.0.1
  */
 public class DefaultAnalyticalEngineTest extends EngineTestBase {
+
+    /**
+     * The tolerance for comparing floating point values computed by the
+     * Analytical Engine to floating point values computed by the Java virtual
+     * machine.
+     * 
+     * In these tests, we set the Analytical Engine to use 20 decimal points,
+     * so we set the tolerance to {@code 1 / 20.0}.
+     */
+    public static final double TOLERANCE = 1 / 20.0;
 
     /**
      * Joins all the elements of {@code args} with new line characters in
@@ -108,8 +120,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      *             if there is a syntax error on one of the cards.
      */
     @Test
-    public void testAnnotation() throws BadCard, UnknownCard, IOException,
-            LibraryLookupException {
+    public void testAnnotation()
+            throws BadCard, UnknownCard, IOException, LibraryLookupException {
         runProgramString("A write annotation foo");
         assertEquals("foo\n", this.attendant().finalReport());
     }
@@ -146,8 +158,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      *             if there is a syntax error on one of the cards.
      */
     @Test
-    public void testBackward() throws BadCard, UnknownCard, IOException,
-            LibraryLookupException {
+    public void testBackward()
+            throws BadCard, UnknownCard, IOException, LibraryLookupException {
         runProgramString(join("CF+1", "H", "N1 3", "L1", "P", "CB+5"));
         assertEquals("3\n", this.attendant().finalReport());
     }
@@ -194,8 +206,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      *             if there is a syntax error on one of the cards.
      */
     @Test
-    public void testBadAdvance() throws BadCard, UnknownCard, IOException,
-            LibraryLookupException {
+    public void testBadAdvance()
+            throws BadCard, UnknownCard, IOException, LibraryLookupException {
         try {
             runProgramString("CF+1");
             TestUtils.shouldHaveThrownException();
@@ -227,8 +239,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      *             if the specified program includes a syntax error
      */
     @Test
-    public void testBadNumber() throws UnknownCard, IOException,
-            LibraryLookupException, BadCard {
+    public void testBadNumber()
+            throws UnknownCard, IOException, LibraryLookupException, BadCard {
         int badAddress = HashMapStore.MAX_ADDRESS + 1;
         try {
             runProgramString("N" + badAddress + " 0");
@@ -312,8 +324,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      *             if there is a syntax error on one of the cards.
      */
     @Test
-    public void testBell() throws BadCard, UnknownCard, IOException,
-            LibraryLookupException {
+    public void testBell()
+            throws BadCard, UnknownCard, IOException, LibraryLookupException {
         runProgramString("B");
         // TODO assert that standard output contains indication of bell
     }
@@ -362,31 +374,40 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      *             if there is a syntax error on one of the cards.
      */
     @Test
-    public void testHalt() throws BadCard, UnknownCard, IOException,
-            LibraryLookupException {
+    public void testHalt()
+            throws BadCard, UnknownCard, IOException, LibraryLookupException {
         // should halt before any output is produced
         runProgramString(join(false, "H", "N1 3", "L1", "P"));
         assertEquals("", this.attendant().finalReport());
+    }
+
+    /** Tests for include a library function with the file extension. */
+    @Test
+    public void testIncludeWithExtension() {
+        runProgram("test_include_with_extension.ae");
+        double expected = Math.pow(Math.E, 2);
+        double actual = Double.valueOf(this.attendant().finalReport());
+        assertEquals(expected, actual, TOLERANCE);
     }
 
     /** Test loading numbers operations. */
     @Test
     public void testLoad() {
         runProgram("test_load.ae");
-        BigInteger quotient = DefaultMill.MAX.add(BigInteger.ONE).divide(
-                new BigInteger("2"));
-        assertEquals(join("1", "0", quotient.toString(), "1", "0", "0"), this
-                .attendant().finalReport());
+        BigInteger quotient = DefaultMill.MAX.add(BigInteger.ONE)
+                .divide(new BigInteger("2"));
+        assertEquals(join("1", "0", quotient.toString(), "1", "0", "0"),
+                this.attendant().finalReport());
     }
 
     /** Test loading a number into the prime axis. */
     @Test
     public void testLoadPrime() {
         runProgram("test_loadprime.ae");
-        BigInteger quotient = DefaultMill.MAX.add(BigInteger.ONE).divide(
-                new BigInteger("2"));
-        assertEquals(join(quotient.toString(), "1"), this.attendant()
-                .finalReport());
+        BigInteger quotient = DefaultMill.MAX.add(BigInteger.ONE)
+                .divide(new BigInteger("2"));
+        assertEquals(join(quotient.toString(), "1"),
+                this.attendant().finalReport());
     }
 
     /**
@@ -402,8 +423,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
      *             if there is a syntax error on one of the cards.
      */
     @Test
-    public void testPrintNull() throws BadCard, UnknownCard, IOException,
-            LibraryLookupException {
+    public void testPrintNull()
+            throws BadCard, UnknownCard, IOException, LibraryLookupException {
         runProgramString("P");
         // TODO assert that standard error contains indication of an attempt to
         // print a null character
@@ -422,8 +443,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     @Test
     public void testShifts() {
         runProgram("test_shift.ae");
-        assertEquals(join("357142857", "4000000"), this.attendant()
-                .finalReport());
+        assertEquals(join("357142857", "4000000"),
+                this.attendant().finalReport());
     }
 
     /** Test for cards that should have been removed by the attendant. */
@@ -433,7 +454,8 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         try {
             cards = Arrays.asList(CardParser.toCard("}{"));
             this.attendant().loadProgram(cards);
-        } catch (BadCard | IOException | UnknownCard | LibraryLookupException e) {
+        } catch (BadCard | IOException | UnknownCard
+                | LibraryLookupException e) {
             TestUtils.fail(e);
         }
 
@@ -442,11 +464,11 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
             TestUtils.shouldHaveThrownException();
         } catch (BadCard e) {
             assertTrue(true);
+            // } finally {
+            // // reset after each test
+            // this.engine().reset();
+            // this.attendant().reset();
         }
-
-        // reset after each test
-        this.engine().reset();
-        this.attendant().reset();
     }
 
     /** Tests the "A write numbers as" instruction. */
