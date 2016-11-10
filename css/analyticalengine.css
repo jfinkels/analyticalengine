@@ -6,6 +6,37 @@ h4 {
 }
 
 /*!
+ * These styles add line numbers and comment formatting to example code.
+ **/
+pre.ae-code {
+  counter-reset: line;
+  padding-left: 3.5em;
+}
+
+pre.ae-code > span {
+  counter-increment: line;
+}
+
+pre.ae-code > span:before {
+  color: gray;
+  content: counter(line);
+  left: 0px;
+  margin-left: 1.5em;
+  position: absolute;
+  text-align: right;
+  width: 2em;
+  -webkit-user-select: none;
+}
+
+pre.ae-code > span.comment {
+  font-style: italic;
+}
+
+pre.ae-code > span.comment:before {
+  font-style: normal;
+}
+
+/*!
  * These styles come from GitHub's documentation.
  **/
 pre.command-line {
