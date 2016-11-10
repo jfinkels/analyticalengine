@@ -61,7 +61,7 @@ public class NullCurvePrinter implements CurvePrinter {
     }
 
     /**
-     * (non-Javadoc)
+     * Does nothing.
      * 
      * @see analyticalengine.components.CurvePrinter#reset()
      */
@@ -79,7 +79,7 @@ public class NullCurvePrinter implements CurvePrinter {
      * @see analyticalengine.components.CurvePrinter#setX(java.math.BigInteger)
      */
     @Override
-    public void setX(BigInteger x) {
+    public void setX(final BigInteger x) {
         LOG.debug("ignoring setX command");
     }
 
@@ -92,7 +92,7 @@ public class NullCurvePrinter implements CurvePrinter {
      * @see analyticalengine.components.CurvePrinter#setY(java.math.BigInteger)
      */
     @Override
-    public void setY(BigInteger y) {
+    public void setY(final BigInteger y) {
         LOG.debug("ignoring setY command");
     }
 
