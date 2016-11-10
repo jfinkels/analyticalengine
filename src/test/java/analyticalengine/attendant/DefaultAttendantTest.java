@@ -20,17 +20,12 @@
  */
 package analyticalengine.attendant;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import analyticalengine.BadCard;
@@ -39,39 +34,28 @@ import analyticalengine.cards.Card;
 import analyticalengine.cards.UnknownCard;
 
 /**
+ * Unit tets for the default attendant implementation.
+ * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
-public class DefaultAttendantTest {
+public class DefaultAttendantTest extends AttendantTestBase {
 
-    private Attendant attendant = null;
-    private Library library = null;
-
-    @Before
-    public void setUp() {
-        this.attendant = new DefaultAttendant();
-        this.library = new DefaultLibrary();
-        this.attendant.setLibrary(this.library);
-    }
-
-    /** Tests for attempting to load an unknown library file. */
+    /**
+     * Tests for attempting to load an unknown library file.
+     * 
+     * @throws IOException
+     * @throws UnknownCard
+     * @throws BadCard
+     */
     @Test
-    public void testUnknownLibraryFile() {
-        String cardString = "A include from library cards for bogus";
-        Card card = null;
+    public void testUnknownLibraryFile()
+            throws BadCard, UnknownCard, IOException {
         try {
-            card = Card.fromString(cardString);
-        } catch (UnknownCard exception) {
-            TestUtils.fail(exception);
-        }
-        List<Card> program = Arrays.asList(card);
-        try {
-            this.attendant.loadProgram(program);
+            this.loadProgramString("A include from library cards for bogus");
             TestUtils.shouldHaveThrownException();
-        } catch (BadCard | IOException | UnknownCard exception) {
-            TestUtils.fail(exception);
         } catch (LibraryLookupException exception) {
-            assertTrue(true);
+            // intentionally unimplemented; this exception is expected
         }
     }
 
@@ -80,12 +64,14 @@ public class DefaultAttendantTest {
      * 
      * @throws IOException
      *             If there is a problem creating the temporary file.
+     * @throws UnknownCard
+     * @throws BadCard
      */
     @Test
-    public void testLibraryBadCard() throws IOException {
+    public void testLibraryBadCard() throws IOException, BadCard, UnknownCard {
         // Create a temporary directory to add to the library.
         Path tempDir = Files.createTempDirectory(null);
-        this.library.addLibraryPath(tempDir);
+        this.library().addLibraryPath(tempDir);
 
         // Create a temporary file in the directory created above that contains
         // a bad card (that is, a bad instruction for the Analytical Engine).
@@ -106,20 +92,11 @@ public class DefaultAttendantTest {
         // containing the bad card.
         Path baseName = tempFile.getFileName();
         String cardString = "A include from library cards for " + baseName;
-        Card card = null;
         try {
-            card = Card.fromString(cardString);
-        } catch (UnknownCard exception) {
-            TestUtils.fail(exception);
-        }
-        List<Card> cards = Arrays.asList(card);
-        try {
-            this.attendant.loadProgram(cards);
+            this.loadProgramString(cardString);
             TestUtils.shouldHaveThrownException();
-        } catch (BadCard |UnknownCard exception) {
-            TestUtils.fail(exception);
         } catch (LibraryLookupException exception) {
-            assertTrue(true);
+            // intentionally unimplemented; this exception is expected
         }
     }
 }

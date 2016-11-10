@@ -1,4 +1,5 @@
 /**
+ * 
  * LibraryTest.java - tests for built-in library functions
  * 
  * Copyright 2014 Jeffrey Finkelstein.
@@ -22,10 +23,15 @@ package analyticalengine.attendant;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
+import analyticalengine.BadCard;
 import analyticalengine.EngineTestBase;
+import analyticalengine.cards.UnknownCard;
 
 /**
  * Test for built-in library functions.
@@ -45,9 +51,18 @@ public class LibraryTest extends EngineTestBase {
      */
     public static final double TOLERANCE = 1 / 20.0;
 
-    /** Test for arctangent function. */
+    /**
+     * Test for arctangent function.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testArctan() {
+    public void testArctan() throws BadCard, URISyntaxException, IOException,
+            UnknownCard, LibraryLookupException {
         // compute the arctangent from 0.0 to 1.0, increasing by 0.1
         runProgram("test_arctan.ae");
 
@@ -66,9 +81,18 @@ public class LibraryTest extends EngineTestBase {
         }
     }
 
-    /** Test for cosine function. */
+    /**
+     * Test for cosine function.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testCosine() {
+    public void testCosine() throws BadCard, URISyntaxException, IOException,
+            UnknownCard, LibraryLookupException {
         // compute the cosine from 0 to 6
         runProgram("test_cosine.ae");
 
@@ -87,9 +111,18 @@ public class LibraryTest extends EngineTestBase {
         }
     }
 
-    /** Test for the exponential function. */
+    /**
+     * Test for the exponential function.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testExp() {
+    public void testExp() throws BadCard, URISyntaxException, IOException,
+            UnknownCard, LibraryLookupException {
         // compute the powers of e, from 0.0 to 1.0, increasing by 0.1
         runProgram("test_exp.ae");
 
@@ -107,10 +140,19 @@ public class LibraryTest extends EngineTestBase {
             assertEquals(Math.pow(Math.E, i / 10.0), actual, TOLERANCE);
         }
     }
-    
-    /** Test for computing the natural logarithm. */
+
+    /**
+     * Test for computing the natural logarithm.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testLogarithm() {
+    public void testLogarithm() throws BadCard, URISyntaxException,
+            IOException, UnknownCard, LibraryLookupException {
         // compute the natural log of 1 to 10, increasing by 1
         runProgram("test_ln.ae");
 
@@ -131,20 +173,36 @@ public class LibraryTest extends EngineTestBase {
 
     /**
      * Simple test for exponential function.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
      */
     @Test
-    public void testSimpleExp() {
+    public void testSimpleExp() throws BadCard, URISyntaxException,
+            IOException, UnknownCard, LibraryLookupException {
         runProgram("test_exp_simple.ae");
         double expected = Math.pow(Math.E, 2);
         double actual = Double.valueOf(this.attendant().finalReport());
         assertEquals(expected, actual, TOLERANCE);
 
     }
-    
-    /** Test for sine function. */
+
+    /**
+     * Test for sine function.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Ignore("Original code also failed this test; bad implementation?")
     @Test
-    public void testSine() {
+    public void testSine() throws BadCard, URISyntaxException, IOException,
+            UnknownCard, LibraryLookupException {
         // compute the sine from 0 to 6
         runProgram("test_sine.ae");
 
@@ -164,9 +222,18 @@ public class LibraryTest extends EngineTestBase {
         }
     }
 
-    /** Test for the square root function. */
+    /**
+     * Test for the square root function.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testSquareRoot() {
+    public void testSquareRoot() throws BadCard, URISyntaxException,
+            IOException, UnknownCard, LibraryLookupException {
         // compute the square root of 0 to 10, increasing by 1
         runProgram("test_sqrt.ae");
 

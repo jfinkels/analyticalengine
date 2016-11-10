@@ -1,5 +1,5 @@
 /**
- * EngineTestBase.java - base class for tests that use an Analytical Engine
+ * AttendantTestBase.java - base class for tests that use an Analytical Engine
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
+package analyticalengine.attendant;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -31,54 +31,49 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 
-import analyticalengine.attendant.AttendantTestBase;
-import analyticalengine.attendant.LibraryLookupException;
+import analyticalengine.BadCard;
 import analyticalengine.cards.Card;
 import analyticalengine.cards.UnknownCard;
 import analyticalengine.components.ArrayListCardReader;
 import analyticalengine.components.CardReader;
-import analyticalengine.components.DefaultMill;
-import analyticalengine.components.HashMapStore;
-import analyticalengine.components.Mill;
-import analyticalengine.components.NullCurvePrinter;
-import analyticalengine.components.Store;
-import analyticalengine.components.StringPrinter;
 
 /**
- * Base class for tests that use an Analytical Engine.
+ * Base class for tests that require an Attendant.
  * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
-public class EngineTestBase extends AttendantTestBase {
+public class AttendantTestBase {
 
-    /** The Analytical Engine instance to test. */
-    private AnalyticalEngine engine = null;
-    /** The mill used by the Analytical Engine. */
-    private Mill mill = null;
-    /** The store used by the Analytical Engine. */
-    private Store store = null;
+    /** The attendant required to operate the Analytical Engine. */
+    private Attendant attendant = null;
+
+    /** The library used by the attendant for including requested functions. */
+    private Library library = null;
+
+    /** The card reader that the attendant accesses. */
+    private CardReader reader = null;
 
     /**
-     * Gets the Analytical Engine object used for testing.
+     * Gets the attendant that operates the Analytical Engine under test.
      * 
-     * @return The Analytical Engine used for testing.
+     * @return The operator of the Analytical Engine under test.
      */
-    protected AnalyticalEngine engine() {
-        return this.engine;
+    protected Attendant attendant() {
+        return this.attendant;
     }
 
     /**
-     * Gets the mill of the Analytical Engine.
+     * Returns the library used by the attendant.
      * 
-     * @return The mill of the Analytical Engine.
+     * @return The library used by the attendant.
      */
-    protected Mill mill() {
-        return this.mill;
+    protected Library library() {
+        return this.library;
     }
 
     /**
-     * Runs the program stored in the specified filename.
+     * Loads the program stored in the specified filename.
      * 
      * @param filename
      *            The name of the file to test, relative to the test resources
@@ -94,17 +89,24 @@ public class EngineTestBase extends AttendantTestBase {
      * @throws BadCard
      *             if there is a syntax error on one of the cards.
      */
-    protected void runProgram(final String filename) throws BadCard, URISyntaxException, IOException, UnknownCard, LibraryLookupException {
-        this.loadProgram(filename);
-        this.engine.run();
+    protected void loadProgram(final String filename)
+            throws URISyntaxException, IOException, UnknownCard, BadCard,
+            LibraryLookupException {
+        Path program = Paths
+                .get(this.getClass().getResource("/" + filename).toURI());
+        List<Card> cards = new ArrayList<Card>();
+        for (String line : Files.readAllLines(program)) {
+            cards.add(Card.fromString(line));
+        }
+        this.attendant.loadProgram(cards);
     }
 
     /**
-     * Runs the program (sequence of card strings) given in the specified
+     * Loads the program (sequence of card strings) given in the specified
      * string.
      * 
      * @param program
-     *            The program to run.
+     *            The program to load.
      * @throws LibraryLookupException
      *             if there is a problem included a built-in library function.
      * @throws IOException
@@ -114,45 +116,40 @@ public class EngineTestBase extends AttendantTestBase {
      * @throws BadCard
      *             if there is a syntax error on one of the cards.
      */
-    protected void runProgramString(final String program)
+    protected void loadProgramString(final String program)
             throws UnknownCard, BadCard, IOException, LibraryLookupException {
-        this.loadProgramString(program);
-        this.engine.run();
+        List<Card> cards = new ArrayList<Card>();
+        for (String line : program.split(System.lineSeparator())) {
+            cards.add(Card.fromString(line));
+        }
+        this.attendant().loadProgram(cards);
+    }
+
+    /**
+     * Returns the card reader that the attendant accesses.
+     * 
+     * @return The card reader that the attendant accesses.
+     */
+    public CardReader reader() {
+        return this.reader;
     }
 
     /** Creates the Analytical Engine to test. */
     @Before
-    @Override
     public void setUp() {
-        super.setUp();
-        this.engine = new DefaultAnalyticalEngine();
-        this.engine.setAttendant(this.attendant());
-        this.engine.setCardReader(this.reader());
+        this.attendant = new DefaultAttendant();
+        this.library = new DefaultLibrary();
+        this.reader = new ArrayListCardReader();
 
-        this.store = new HashMapStore();
-        this.mill = new DefaultMill();
-        this.engine.setStore(this.store);
-        this.engine.setMill(this.mill);
-        this.engine.setCurvePrinter(new NullCurvePrinter());
-        this.engine.setPrinter(new StringPrinter());
+        this.attendant.setCardReader(this.reader);
+        this.attendant.setLibrary(this.library);
     }
 
-    /**
-     * Gets the store used by the Analytical Engine.
-     * 
-     * @return The store used by the Analytical Engine.
-     */
-    protected Store store() {
-        return this.store;
-    }
-
-    /** Resets the Analytical Engine being tested. */
+    /** Resets the attendant being tested. */
     @After
-    @Override
     public void tearDown() {
         // this technically doesn't need to be done, since we are creating new
         // objects in set up code anyway
-        super.tearDown();
-        this.engine.reset();
+        this.attendant.reset();
     }
 }

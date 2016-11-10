@@ -25,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -97,9 +98,18 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         return join(true, args);
     }
 
-    /** Test for alternation (the "if-else" control statement). */
+    /**
+     * Test for alternation (the "if-else" control statement).
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testAlternation() {
+    public void testAlternation() throws BadCard, URISyntaxException,
+            IOException, UnknownCard, LibraryLookupException {
         runProgram("test_alternation.ae");
         assertEquals("900\n", this.attendant().finalReport());
     }
@@ -123,17 +133,35 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         assertEquals("foo\n", this.attendant().finalReport());
     }
 
-    /** Test arithmetic operations. */
+    /**
+     * Test arithmetic operations.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testArithmetic() {
+    public void testArithmetic() throws BadCard, URISyntaxException,
+            IOException, UnknownCard, LibraryLookupException {
         runProgram("test_arithmetic.ae");
         String finalReport = this.attendant().finalReport();
         assertEquals(join("8", "4", "6", "12"), finalReport);
     }
 
-    /** Test for loop with condition check at the end (a "do-while" loop). */
+    /**
+     * Test for loop with condition check at the end (a "do-while" loop).
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testBackLoop() {
+    public void testBackLoop() throws BadCard, URISyntaxException, IOException,
+            UnknownCard, LibraryLookupException {
         runProgram("test_backloop.ae");
         String[] squares = new String[10];
         for (int i = 1; i < 11; i++) {
@@ -327,33 +355,67 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         // TODO assert that standard output contains indication of bell
     }
 
-    /** Tests conditional back. */
+    /**
+     * Tests conditional back.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testConditionalBackward() {
+    public void testConditionalBackward() throws BadCard, URISyntaxException,
+            IOException, UnknownCard, LibraryLookupException {
         runProgram("test_cback.ae");
         assertEquals("720\n", this.attendant().finalReport());
     }
 
-    /** Tests conditional forward. */
+    /**
+     * Tests conditional forward.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testConditionalForward() {
+    public void testConditionalForward() throws BadCard, URISyntaxException,
+            IOException, UnknownCard, LibraryLookupException {
         runProgram("test_cforward.ae");
         String expected = "141421356237309504880\n";
         assertEquals(expected, this.attendant().finalReport());
     }
 
-    /** Tests the division operator. */
+    /**
+     * Tests the division operator.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testDivide() {
+    public void testDivide() throws BadCard, URISyntaxException, IOException,
+            UnknownCard, LibraryLookupException {
         runProgram("test_divide.ae");
         assertEquals(join("357", "4"), this.attendant().finalReport());
     }
 
     /**
      * Test for loop with condition check at the beginning (a "while" loop).
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
      */
     @Test
-    public void testForwardLoop() {
+    public void testForwardLoop() throws BadCard, URISyntaxException,
+            IOException, UnknownCard, LibraryLookupException {
         runProgram("test_forwardloop.ae");
         assertEquals("10\n", this.attendant().finalReport());
     }
@@ -378,18 +440,36 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         assertEquals("", this.attendant().finalReport());
     }
 
-    /** Tests for include a library function with the file extension. */
+    /**
+     * Tests for include a library function with the file extension.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testIncludeWithExtension() {
+    public void testIncludeWithExtension() throws BadCard, URISyntaxException,
+            IOException, UnknownCard, LibraryLookupException {
         runProgram("test_include_with_extension.ae");
         double expected = Math.pow(Math.E, 2);
         double actual = Double.valueOf(this.attendant().finalReport());
         assertEquals(expected, actual, TOLERANCE);
     }
 
-    /** Test loading numbers operations. */
+    /**
+     * Test loading numbers operations.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testLoad() {
+    public void testLoad() throws BadCard, URISyntaxException, IOException,
+            UnknownCard, LibraryLookupException {
         runProgram("test_load.ae");
         BigInteger quotient = DefaultMill.MAX.add(BigInteger.ONE)
                 .divide(new BigInteger("2"));
@@ -397,9 +477,18 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
                 this.attendant().finalReport());
     }
 
-    /** Test loading a number into the prime axis. */
+    /**
+     * Test loading a number into the prime axis.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testLoadPrime() {
+    public void testLoadPrime() throws BadCard, URISyntaxException,
+            IOException, UnknownCard, LibraryLookupException {
         runProgram("test_loadprime.ae");
         BigInteger quotient = DefaultMill.MAX.add(BigInteger.ONE)
                 .divide(new BigInteger("2"));
@@ -429,16 +518,32 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
 
     /**
      * Tests the {@link analyticalengine.DefaultAnalyticalEngine#run()} method.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
      */
     @Test
-    public void testRun() {
+    public void testRun() throws BadCard, URISyntaxException, IOException,
+            UnknownCard, LibraryLookupException {
         runProgram("test_basic.ae");
         assertEquals("3333\n", this.attendant().finalReport());
     }
 
-    /** Test the shift operators. */
+    /**
+     * Test the shift operators.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testShifts() {
+    public void testShifts() throws BadCard, URISyntaxException, IOException,
+            UnknownCard, LibraryLookupException {
         runProgram("test_shift.ae");
         assertEquals(join("357142857", "4000000"),
                 this.attendant().finalReport());
@@ -468,9 +573,18 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
         }
     }
 
-    /** Tests the "A write numbers as" instruction. */
+    /**
+     * Tests the "A write numbers as" instruction.
+     * 
+     * @throws LibraryLookupException
+     * @throws UnknownCard
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws BadCard
+     */
     @Test
-    public void testWriteAs() {
+    public void testWriteAs() throws BadCard, URISyntaxException, IOException,
+            UnknownCard, LibraryLookupException {
         runProgram("test_writeas.ae");
         String expected = "Total price for 337 items is"
                 + " 1,114 pounds, 18 shillings, 2 pence.\n";
