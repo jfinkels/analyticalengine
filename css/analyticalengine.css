@@ -102,6 +102,11 @@ aside p {
   margin: 0;
 }
 
+pre.java {
+  font-size: 80%;
+  padding-left: 1em;
+}
+
 pre.command-line {
   font-size: 80%;
   margin-left: 1rem;
@@ -125,6 +130,7 @@ div.example:last-child {
 div.example:before {
     content: "☞ Example";
     font-variant-caps: titling-caps;
+    margin-left: -1.2rem;
 }
 
 /*!
@@ -134,6 +140,10 @@ div.example pre {
   counter-reset: line;
   padding-left: 2.5rem;
   font-size: 80%;
+}
+
+div.example pre:last-child {
+  margin-bottom: 0;
 }
 
 div.example pre > span {

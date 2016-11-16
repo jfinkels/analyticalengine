@@ -19,22 +19,23 @@
 
     <p>In the mid-1800s, Charles&nbsp;Babbage designed (but never built) a
     machine that we would today call a digital computer. On this machine model,
-    Ada&nbsp;Lovelace designed the first computer program. Babbage&rsquo;s initial
-    descriptions of the machine predate Alan&nbsp;Turing by about a hundred
-    years. This Java simulation of the Analytical Engine will help to preserve
-    the legacy of these pioneers of computing.
+    Ada&nbsp;Lovelace designed the first computer program. Babbage&rsquo;s
+    initial descriptions of the machine predate Alan&nbsp;Turing by about a
+    hundred years. This Java simulation of the Analytical Engine will help to
+    preserve the legacy of these pioneers of computing.
 
     <nav>
       <h2>Contents</h2>
       <ul>
-        <li><a href="#">Hardware overview</a></li>
-        <li><a href="#">Preparing the simulator</a></li>
-        <li><a href="#">Programming the Engine</a></li>
-        <li><a href="#">Copyright license</a></li>
+        <li><a href="#hardware">Hardware overview</a></li>
+        <li><a href="#preparing">Preparing the simulator</a></li>
+        <li><a href="#programming">Programming the Engine</a></li>
+        <li><a href="#programmatic-access">Programmatic access to the simulator</a></li>
+        <li><a href="#copyright">Copyright license</a></li>
       </ul>
     </nav>
 
-    <section>
+    <section id="hardware">
       <h2>Hardware overview</h2>
 
       <aside>
@@ -70,7 +71,7 @@
       call a plotter.
     </section>
 
-    <section>
+    <section id="preparing">
       <h2>Preparing the simulator</h2>
 
       <p>The source code for the Analytical Engine simulator is available
@@ -93,7 +94,7 @@
       <pre class="command-line"><span class="command">target/appassembler/bin/analyticalengine myprogram.ae</span></pre>
     </section>
 
-    <section>
+    <section id="programming">
       <h2>Programming the Engine</h2>
 
       <p>The programming language for this machine is arcane, but
@@ -227,7 +228,63 @@
       </div>
     </section>
 
-    <section>
+    <section id="programmatic-access">
+      <h2>Programmatic access to the simulator</h2>
+
+      <p>The simulator performs the following high-level algorithm
+
+      <ol>
+        <li>prepare a card chain,</li>
+        <li>ask the attendant to load the card chain,</li>
+        <li>run the Engine.</li>
+      </ol>
+
+      <p>The <code>Attendant</code> interface and the
+      <code>AnalyticalEngine</code> interface are the most significant parts of
+      the simulator interface. Once a card chain is prepared, the attendant
+      loads the cards into the Engine using the
+      <code>Attendant.loadProgram()</code> method. Once the cards are loaded,
+      calling the <code>AnalyticalEngine.run()</code> method executes the
+      program. Any output is collected by the attendant and can be accessed via
+      the <code>Attendant.finalReport()</code> method.
+
+      <p>The <code>AnalyticalEngine</code> must be programmatically assembled
+      before it can execute a program. The Engine needs a mill, a store, a card
+      reader, etc., each of which can be set using the appropriately named
+      setter methods.
+
+      <p>The code is designed that each component can be easily reimplemented
+      and replaced. For example, one might replace the default
+      <code>HashMap</code>-based implementation of <code>Store</code> with one
+      backed by a remote key-value data store:
+
+      <pre class="java">package mycoolpackage;
+
+import analyticalengine.components.Store;
+import ???.redis.???;
+import java.math.BigInteger;
+
+public class RedisStore implements Store {
+    public BigInteger get(long address) {
+        return redis.get(address);
+    }
+
+    public BigInteger put(long address, BigInteger value) {
+        redis.put(address, value);
+    }
+
+    public void reset() {
+        redis.clear();
+    }
+}
+</pre>
+
+      <p>This new store can then be set on an <code>AnalyticalEngine</code>
+      instance <code>engine</code> via <code>engine.setStore(new RedisStor())</code>.
+
+    </section>
+
+    <section id="copyright">
       <h2>Copyright license</h2>
 
       <p>Copyright 2014&ndash;2016 Jeffrey&nbsp;Finkelstein.
