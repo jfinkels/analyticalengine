@@ -17,6 +17,7 @@
 body {
   font-family: 'Libre Baskerville', serif;
   font-variant-numeric: oldstyle-nums;
+  max-width: 1000px;
 }
 
 body > * {
@@ -34,12 +35,6 @@ div.container {
   padding-top: 3rem;
   padding-bottom: 3rem;
 }
-
-/* @media all and (max-width: 520px) { */
-/* div.container { */
-/*     margin-left: 0; */
-/* } */
-/* } */
 
 /* TODO Use a font with titling caps. */
 h1 {
@@ -73,10 +68,38 @@ h2 {
   font-variant-caps: small-caps;
 }
 
+p {
+    margin-bottom: 1rem;
+}
+
 nav ul {
   list-style-type: none;
   line-height: 150%;
   padding-left: 0;
+}
+
+aside {
+    color: #666;
+    font-size: 80%;
+    font-style: italic;
+    left: 0;
+    margin-left: 2rem;
+    position: absolute;
+    text-align: right;
+    width: 8rem;
+}
+
+@media all and (max-width: 520px) {
+aside {
+    position: inherit;
+    width: inherit;
+    text-align: left;
+    margin: inherit;
+}
+}
+
+aside p {
+  margin: 0;
 }
 
 pre.command-line {
@@ -88,81 +111,51 @@ pre.command-line .command:before {
   content: "$ ";
 }
 
+/* These styles are for the example blocks. */
+div.example {
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+div.example:last-child {
+    margin-bottom: 0;
+}
+
+/* TODO Use a font with titling caps. */
+div.example:before {
+    content: "☞ Example";
+    font-variant-caps: titling-caps;
+}
+
 /*!
  * These styles add line numbers and comment formatting to example code.
  **/
-pre.ae-code {
+div.example pre {
   counter-reset: line;
-  padding-left: 3.5em;
+  padding-left: 2.5rem;
   font-size: 80%;
 }
 
-pre.ae-code > span {
+div.example pre > span {
   counter-increment: line;
 }
 
-pre.ae-code > span:before {
-  color: gray;
+div.example pre > span:before {
+  color: #666;
   content: counter(line);
   left: 0px;
-  margin-left: 1.5em;
+  margin-left: 0;
   position: absolute;
   text-align: right;
   width: 2em;
   -webkit-user-select: none;
 }
 
-pre.ae-code > span.comment {
+div.example pre > span.comment {
   font-style: italic;
+  color: #444;
 }
 
-pre.ae-code > span.comment:before {
+div.example pre > span.comment:before {
   font-style: normal;
-}
-
-/*!
- * These styles come from Bootstrap's documentation website.
- *
- * Bootstrap Docs (http://getbootstrap.com)
- * Copyright 2011-2014 Twitter, Inc.
- * Licensed under the Creative Commons Attribution 3.0 Unported License. For
- * details, see http://creativecommons.org/licenses/by/3.0/.
- */
-.ae-example {
-  position: relative;
-  padding: 45px 15px 15px;
-  margin: 0 -15px 15px;
-  background-color: #fafafa;
-  box-shadow: inset 0 3px 6px rgba(0,0,0,.05);
-  border-color: #e5e5e5 #eee #eee;
-  border-style: solid;
-  border-width: 1px 0;
-}
-
-.ae-example:after {
-  content: "Example";
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #bbb;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-@media (min-width:768px) {
-  .ae-example {
-    margin-left: 0;
-    margin-right: 0;
-    background-color: #fff;
-    border-width: 1px;
-    border-color: #ddd;
-    border-radius: 4px 4px 0 0;
-    box-shadow: none;
-  }
-}
-
-.ae-example>p:last-child {
-  margin-bottom: 0;
 }

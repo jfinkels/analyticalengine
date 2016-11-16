@@ -37,6 +37,12 @@
     <section>
       <h2>Hardware overview</h2>
 
+      <aside>
+        <p>For more information on the terminology,
+        see <a href="http://www.fourmilab.ch/babbage/glossary.html">this
+        glossary</a>.
+      </aside>
+
       <p>The Analytical Engine machinery is essentially the same as that of a
       (simple) modern digital computer. Here is a brief description of the
       hardware including both the old and new terminologies.
@@ -62,10 +68,6 @@
       machine can produce textual output via a printer as well as graphical
       output via a <dfn>curve drawing apparatus</dfn>, a device we would
       call a plotter.
-
-      <p>For more information on the terminology,
-      see <a href="http://www.fourmilab.ch/babbage/glossary.html">this
-      glossary</a>.
     </section>
 
     <section>
@@ -100,14 +102,14 @@
       see <a href="http://www.fourmilab.ch/babbage/cards.html">this
       website</a>.
 
-      <div class="ae-example">
+      <div class="example">
         <p>Store the number 123 in memory location 1.
         <pre class="ae-code"><span class="card">N1 123</span></pre>
       </div>
-      <div class="ae-example">
+      <div class="example">
         <p>Lines beginning with a space or a period are comments.
         <!-- A period after another instruction indicates a comment. -->
-        <pre class="ae-code">
+        <pre>
 <span class="comment">   This program does foo and bar.</span>
 <span class="card"></span>
 <span class="card">N1 123</span>
@@ -117,10 +119,10 @@
 <span class="card">N2 456</span>
 </pre>
       </div>
-      <div class="ae-example">
+      <div class="example">
         <p>Add two numbers from memory locations 1 and 2 and store the
         result in memory location 3.
-        <pre class="ae-code">
+        <pre>
 <span class="card">N1 123</span>
 <span class="card">N2 456</span>
 <span class="comment"></span>
@@ -131,7 +133,7 @@
         <p>The operation is automatically executed once two operands are
         loaded.
       </div>
-      <div class="ae-example">
+      <div class="example">
         <p>Division can be performed on a dividend of "double width" by
         loading the lower-order digits of the dividend in the first main
         ingress axis and the higher-order digits of the dividend into the
@@ -139,7 +141,7 @@
         axis.
         <p>The quotient of a division can be accessed from the prime egress
         axis, and the remainder from the main egress axis.
-        <pre class="ae-code">
+        <pre>
 <span class="comment">     Compute (10^50 + 1) / 2</span>
 <span class="card"></span>
 <span class="card">N1 1</span>
@@ -163,10 +165,10 @@
         <p>If the quotient is too large for the main axis, the run-up lever
         is set, and the quotient and remainder will be set to 0.
       </div>
-      <div class="ae-example">
+      <div class="example">
         <p>Performing the same operation twice does not require
         re-specifying the operation.
-        <pre class="ae-code">
+        <pre>
 <span class="card">N1 2</span>
 <span class="card">N2 2</span>
 <span class="card"></span>
@@ -179,9 +181,9 @@
 <span class="card">S1</span></pre>
         <p>Memory address 1 now contains value 8.
       </div>
-      <div class="ae-example">
+      <div class="example">
         <p>Print a number to the printer.
-        <pre class="ae-code">
+        <pre>
 <span class="card">N1 123</span>
 <span class="card">N2 456</span>
 <span class="card"></span>
@@ -194,14 +196,14 @@
         standard output; the attendant receives all printed strings and
         makes them all available at once after the program has terminated.
       </div>
-      <div class="ae-example">
+      <div class="example">
         <p>Loop back to previously performed instructions, depending on
         whether the overflow (or sign change) flag has been set.
-        <pre class="ae-code">
+        <pre>
 <span class="comment">  Computes 6! using a loop.</span>
 <span class="card"></span>
 <span class="comment">  Address 0 is the current value of n.</span>
-<span class="comment">  Address 1 is the accumulator for the cumulative product.</span>
+<span class="comment">  Address 1 is the accumulator for the product.</span>
 <span class="comment">  Address 2 represents the constant 1.</span>
 <span class="card"></span>
 <span class="card">N0 6</span>
