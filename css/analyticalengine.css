@@ -1,8 +1,91 @@
-/*!
- *
- **/
-h4 {
-  margin-top: 2em;
+@media all {html {font-size: 24px;}}
+@media all and (max-width:1000px){html {font-size: 24px;}}
+@media all and (max-width:960px){html {font-size: 23px;}}
+@media all and (max-width:920px){html {font-size: 22px;}}
+@media all and (max-width:880px){html {font-size: 21px;}}
+@media all and (max-width:840px){html {font-size: 20px;}}
+@media all and (max-width:800px){html {font-size: 19px;}}
+@media all and (max-width:760px){html {font-size: 18px;}}
+@media all and (max-width:720px){html {font-size: 17px;}}
+@media all and (max-width:680px){html {font-size: 16px;}}
+@media all and (max-width:640px){html {font-size: 15px;}}
+@media all and (max-width:600px){html {font-size: 14px;}}
+@media all and (max-width:560px){html {font-size: 13px;}}
+@media all and (max-width:520px){html {font-size: 18px;}}
+
+/* TODO Use a font with old-style numerals. */
+body {
+  font-family: 'Libre Baskerville', serif;
+  font-variant-numeric: oldstyle-nums;
+}
+
+body > * {
+  margin-left: 12rem;
+  margin-right: 2rem;
+}
+
+@media all and (max-width: 520px) {
+body > * {
+  margin: 2rem;
+}
+}
+
+div.container {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+/* @media all and (max-width: 520px) { */
+/* div.container { */
+/*     margin-left: 0; */
+/* } */
+/* } */
+
+/* TODO Use a font with titling caps. */
+h1 {
+  font-variant-caps: titling-caps;
+}
+
+/* TODO Use a font with small caps. */
+abbr {
+  font-variant-caps: small-caps;
+}
+
+header {
+  margin-bottom: 10ex;
+}
+
+header p {
+  font-variant-caps: small-caps;
+  font-size: 120%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+h1 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  margin-top: 3em;
+  font-size: 100%;
+  font-variant-caps: small-caps;
+}
+
+nav ul {
+  list-style-type: none;
+  line-height: 150%;
+  padding-left: 0;
+}
+
+pre.command-line {
+  font-size: 80%;
+  margin-left: 1rem;
+}
+
+pre.command-line .command:before {
+  content: "$ ";
 }
 
 /*!
@@ -11,6 +94,7 @@ h4 {
 pre.ae-code {
   counter-reset: line;
   padding-left: 3.5em;
+  font-size: 80%;
 }
 
 pre.ae-code > span {
@@ -34,29 +118,6 @@ pre.ae-code > span.comment {
 
 pre.ae-code > span.comment:before {
   font-style: normal;
-}
-
-/*!
- * These styles come from GitHub's documentation.
- **/
-pre.command-line {
-  border: 2px solid #dddddd;
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  -webkit-font-smoothing: auto;
-}
-
-pre.command-line .command:before {
-  content: "$ ";
-}
-
-pre.command-line .comment {
-  color: #ccc;
-}
-
-pre.command-line .output {
-  color: #63E463;
 }
 
 /*!
