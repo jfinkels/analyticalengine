@@ -99,25 +99,33 @@
     <section id="programming">
       <h2>Programming the Engine</h2>
 
-      <p>The programming language for this machine is arcane, but
-      relatively similar to modern machine languages. For more information
-      on the instruction set and how to write programs for this machine,
-      see <a href="http://www.fourmilab.ch/babbage/cards.html">this
-      website</a>.
+      <aside>
+        <p>For more information on the instruction set and how to write
+        programs for this machine, see the
+        <a href="http://www.fourmilab.ch/babbage/cards.html">card
+        reference</a>.
+      </aside>
+
+      <p>The programming language for this machine is arcane, but relatively
+      similar to modern machine languages. For the purposes of this simulator,
+      an Analytical Engine program is a text file in which each line represents
+      a card.
 
       <div class="example">
         <p>Store the number 123 in memory location 1.
         <pre class="ae-code"><span class="card">N1 123</span></pre>
       </div>
       <div class="example">
-        <p>Lines beginning with a space or a period are comments.
+        <p>Lines beginning with a space or a period are comments. Blank lines
+        are also treated as comment cards, so in this example there are five
+        comment cards, three of which are blank.
         <!-- A period after another instruction indicates a comment. -->
         <pre>
-<span class="comment">   This program does foo and bar.</span>
+<span class="comment">   This program loads two numbers into the store.</span>
 <span class="card"></span>
 <span class="card">N1 123</span>
 <span class="card"></span>
-<span class="comment">. This is another comment</span>
+<span class="comment">. This is another comment.</span>
 <span class="card"></span>
 <span class="card">N2 456</span>
 </pre>
