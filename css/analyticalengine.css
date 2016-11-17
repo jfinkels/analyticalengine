@@ -31,6 +31,14 @@ body > * {
 }
 }
 
+/**
+ * TODO Hanging punctuation in CSS 3 is not currently supported by any
+ * browser.
+ */
+p {
+    hanging-punctuation: first allow-end last;
+}
+
 div.container {
   padding-top: 3rem;
   padding-bottom: 3rem;
