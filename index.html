@@ -111,15 +111,20 @@
       an Analytical Engine program is a text file in which each line represents
       a card.
 
+      <p>To load a number into the store, use the <code>N</code> card.
+
       <div class="example">
         <p>Store the number 123 in memory location 1.
         <pre class="ae-code"><span class="card">N1 123</span></pre>
       </div>
+
+      <p>Blank lines, lines beginning with a period, and lines beginning with
+      spaces are treated as comment cards.
+      <!-- A period after another instruction indicates a comment. -->
+
       <div class="example">
-        <p>Lines beginning with a space or a period are comments. Blank lines
-        are also treated as comment cards, so in this example there are five
-        comment cards, three of which are blank.
-        <!-- A period after another instruction indicates a comment. -->
+        <p>In this example there are five comment cards, three of which are
+        blank.
         <pre>
 <span class="comment">   This program loads two numbers into the store.</span>
 <span class="card"></span>
@@ -130,6 +135,12 @@
 <span class="card">N2 456</span>
 </pre>
       </div>
+
+      <p>Arithmetic operations are automatically executed once the two operands
+      are loaded from memory into the ingress axes. The result of the operation
+      is automatically extracted from the egress axis and stored in a memory
+      location indicated by a store card.
+
       <div class="example">
         <p>Add two numbers from memory locations 1 and 2 and store the
         result in memory location 3.
@@ -141,17 +152,19 @@
 <span class="card">L1</span>
 <span class="card">L2</span>
 <span class="card">S3</span></pre>
-        <p>The operation is automatically executed once two operands are
-        loaded.
       </div>
+
+      <p>Division can be performed on a dividend of "double width" by loading
+      the lower-order digits of the dividend in the first main ingress axis and
+      the higher-order digits of the dividend into the "prime" ingress
+      axis. The prime axis must be loaded after the main axis.
+
+      <p>The quotient of a division can be accessed from the prime egress axis,
+      and the remainder from the main egress axis. If the quotient is too
+      large for the main axis, the run-up lever is set, and the quotient and
+      remainder will be set to 0.
+
       <div class="example">
-        <p>Division can be performed on a dividend of "double width" by
-        loading the lower-order digits of the dividend in the first main
-        ingress axis and the higher-order digits of the dividend into the
-        "prime" ingress axis. The prime axis must be loaded after the main
-        axis.
-        <p>The quotient of a division can be accessed from the prime egress
-        axis, and the remainder from the main egress axis.
         <pre>
 <span class="comment">     Compute (10^50 + 1) / 2</span>
 <span class="card"></span>
@@ -173,12 +186,14 @@
 <span class="card"></span>
 <span class="card">S4</span>
 <span class="card">P</span></pre>
-        <p>If the quotient is too large for the main axis, the run-up lever
-        is set, and the quotient and remainder will be set to 0.
       </div>
+
+      <p>Performing the same operation twice does not require re-specifying the
+      operation.
+
       <div class="example">
-        <p>Performing the same operation twice does not require
-        re-specifying the operation.
+        <p>Multiply two by two, and then multiply that product by two.  Store
+        the result in memory address 1.
         <pre>
 <span class="card">N1 2</span>
 <span class="card">N2 2</span>
@@ -190,10 +205,16 @@
 <span class="card">L1</span>
 <span class="card">L2</span>
 <span class="card">S1</span></pre>
-        <p>Memory address 1 now contains value 8.
       </div>
+
+      <p>Numbers can be printed to the printer by using the <code>P</code>
+      card. To remain historically accurate, the simulator does not print
+      directly to standard output when it encounters a print card; instead, the
+      attendant collects all printed strings and makes them available only
+      after the program has terminated.
+
       <div class="example">
-        <p>Print a number to the printer.
+        <p>Print the sum of 123 and 456 to the printer.
         <pre>
 <span class="card">N1 123</span>
 <span class="card">N2 456</span>
@@ -203,13 +224,20 @@
 <span class="card">L2</span>
 <span class="card">S3</span>
 <span class="card">P</span></pre>
-        <p>The <code>P</code> instruction does not print directly to
-        standard output; the attendant receives all printed strings and
-        makes them all available at once after the program has terminated.
       </div>
+
+      <p>What gives this machine its computational power is conditional
+      execution. A conditional jump card checks whether the run-up lever has
+      been set and either reverses or advances the card chain by a specified
+      number of cards.
+
       <div class="example">
-        <p>Loop back to previously performed instructions, depending on
-        whether the overflow (or sign change) flag has been set.
+        <p>In this example, the Engine computes a factorial by accumulating the
+        product of <em>n</em> with (<em>n</em> - 1)! iteratively. At the end of
+        each iteration, the conditional jump card decides whether to perform
+        another iteration of the loop or to terminate and print the result
+        based on whether the run-up lever has been set.
+
         <pre>
 <span class="comment">  Computes 6! using a loop.</span>
 <span class="card"></span>
