@@ -88,22 +88,26 @@
     <section id="preparing">
       <h2>Preparing the simulator</h2>
 
-      <p>The source code for the Analytical Engine simulator is available
+      <p>The source code for the An&shy;a&shy;lyt&shy;i&shy;cal En&shy;gine
+      sim&shy;u&shy;la&shy;tor is avail&shy;able
       from <a href="//github.com/jfinkels/analyticalengine">GitHub</a>.
 
       <pre class="command-line"><span class="command">git clone https://github.com/jfinkels/analyticalengine</span></pre>
 
-      <p>This project uses <a href="//maven.apache.org/">Maven</a> for
-      build management and requires Java 1.8 to compile.
+      <p>This project uses <a href="//maven.apache.org/">Maven</a> for build
+      man&shy;age&shy;ment and re&shy;quires Java 1.8 to com&shy;pile.
 
-      <p>To create a shell script that runs the simulator, run
+      <p>To cre&shy;ate a shell script that runs the sim&shy;u&shy;la&shy;tor,
+      run
 
       <pre class="command-line"><span class="command">mvn package appassembler:assemble</span></pre>
 
-      <p>This produces a script that executes the simulator
-      at <code>target/appassembler/bin/analyticalengine</code>. An Analytical
-      Engine program stored in a file named <code>myprogram.ae</code>, for
-      example, can then be executed via
+      <p>This pro&shy;duces a script that ex&shy;e&shy;cutes the
+      sim&shy;u&shy;la&shy;tor
+      at <code>target/appassembler/bin/analyticalengine</code>. An
+      An&shy;a&shy;lyt&shy;i&shy;cal En&shy;gine pro&shy;gram stored in a file
+      named <code>myprogram.ae</code>, for ex&shy;am&shy;ple, can then be
+      ex&shy;e&shy;cut&shy;ed via
 
       <pre class="command-line"><span class="command">target/appassembler/bin/analyticalengine myprogram.ae</span></pre>
     </section>
@@ -118,15 +122,17 @@
         ref&shy;er&shy;ence</a>.
       </aside>
 
-      <p>The programming language for this machine is arcane, but relatively
-      similar to modern machine languages. For the purposes of this simulator,
-      an Analytical Engine program is a text file in which each line represents
-      a card.
+      <p>The pro&shy;gram&shy;ming lan&shy;guage for this ma&shy;chine is
+      ar&shy;cane, but rel&shy;a&shy;tive&shy;ly sim&shy;i&shy;lar to
+      mod&shy;ern ma&shy;chine lan&shy;guages. For the pur&shy;pos&shy;es of
+      this sim&shy;u&shy;la&shy;tor, an An&shy;a&shy;lyt&shy;i&shy;cal
+      En&shy;gine pro&shy;gram is a text file in which each line
+      rep&shy;re&shy;sents a card.
 
-      <p>To load a number into the store, use the <code>N</code> card.
+      <p>To load a num&shy;ber into the store, use the <code>N</code> card.
 
       <div class="example">
-        <p>Store the number 123 in memory location 1.
+        <p>Store the num&shy;ber 123 in mem&shy;o&shy;ry lo&shy;ca&shy;tion 1.
         <pre class="ae-code"><span class="card">N1 123</span></pre>
       </div>
 
@@ -284,22 +290,25 @@
     <section id="programmatic-access">
       <h2>Programmatic access to the simulator</h2>
 
-      <p>The simulator performs the following high-level algorithm
+      <p>The sim&shy;u&shy;la&shy;tor per&shy;forms the fol&shy;low&shy;ing
+      high&shy;-lev&shy;el al&shy;go&shy;rithm
 
       <ol>
-        <li>prepare a card chain,</li>
-        <li>ask the attendant to load the card chain,</li>
-        <li>run the Engine.</li>
+        <li>pre&shy;pare a card chain,</li>
+        <li>ask the at&shy;ten&shy;dant to load the card chain,</li>
+        <li>run the En&shy;gine.</li>
       </ol>
 
-      <p>The <code>Attendant</code> interface and the
-      <code>AnalyticalEngine</code> interface are the most significant parts of
-      the simulator interface. Once a card chain is prepared, the attendant
-      loads the cards into the Engine using the
-      <code>Attendant.loadProgram()</code> method. Once the cards are loaded,
-      calling the <code>AnalyticalEngine.run()</code> method executes the
-      program. Any output is collected by the attendant and can be accessed via
-      the <code>Attendant.finalReport()</code> method.
+      <p>The Attendant in&shy;ter&shy;face and
+      the <code>AnalyticalEngine</code> in&shy;ter&shy;face are the most
+      sig&shy;nif&shy;i&shy;cant parts of the sim&shy;u&shy;la&shy;tor
+      in&shy;ter&shy;face. Once a card chain is pre&shy;pared, the
+      at&shy;ten&shy;dant loads the cards into the En&shy;gine us&shy;ing the
+      <code>Attendant.loadProgram()</code> method. Once the cards are
+      load&shy;ed, call&shy;ing the <code>AnalyticalEngine.run()</code> method
+      ex&shy;e&shy;cutes the pro&shy;gram. Any out&shy;put is
+      col&shy;lect&shy;ed by the at&shy;ten&shy;dant and can be ac&shy;cessed
+      via the <code>Attendant.finalReport()</code> method.
 
       <p>The <code>AnalyticalEngine</code> must be programmatically assembled
       before it can execute a program. The Engine needs a mill, a store, a card
