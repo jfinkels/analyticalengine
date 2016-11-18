@@ -36,7 +36,7 @@ body > * {
  * browser.
  */
 p {
-    hanging-punctuation: first allow-end last;
+    hanging-punctuation: first;
 }
 
 div.container {
@@ -65,13 +65,24 @@ header p {
   margin-bottom: 0;
 }
 
+header + p::first-letter {
+    font-size: 60px;
+    float: left;
+}
+
+b {
+    font-weight: normal;
+    font-variant-caps: small-caps;
+}
+
 h1 {
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
 
 h2 {
-  margin-top: 3em;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
   font-size: 100%;
   font-variant-caps: small-caps;
 }
@@ -118,6 +129,11 @@ pre.java {
 pre.command-line {
   font-size: 80%;
   margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+pre.command-line:last-child {
+    margin-bottom: 0;
 }
 
 pre.command-line .command:before {
@@ -126,21 +142,28 @@ pre.command-line .command:before {
 
 /* These styles are for the example blocks. */
 div.example {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-variant-numeric: lining-nums;
+    /* border-top: thin solid #ccc; */
+    /* border-bottom: thin solid #ccc; */
     margin-bottom: 1rem;
+    margin-left: 2rem;
     position: relative;
-    border-top: thin solid #ccc;
-    border-bottom: thin solid #ccc;
 }
 
 div.example:last-child {
     margin-bottom: 0;
 }
 
-/* TODO Use a font with titling caps. */
+/* TODO Use a font with titling caps; if so, we can remove the text-transform. */
 div.example:before {
-    content: "☞ Example";
+    content: "☞";
     font-variant-caps: titling-caps;
-    margin-left: -1.2rem;
+    font-weight: 400;
+    position: absolute;
+    text-transform: uppercase;
+    margin-left: -1.5rem;
 }
 
 /*!
@@ -148,8 +171,8 @@ div.example:before {
  **/
 div.example pre {
   counter-reset: line;
-  padding-left: 2.5rem;
   font-size: 80%;
+  padding-left: 2.5rem;
 }
 
 div.example pre:last-child {

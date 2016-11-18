@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Analytical Engine</title>
 
-  <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400|Libre+Baskerville" rel="stylesheet">
   <link rel="stylesheet" href="css/analyticalengine.css">
 </head>
 <body>
@@ -18,13 +18,16 @@
       <p>A Java Simulation
     </header>
 
-    <p>Charles&nbsp;Babbage designed (but never built) a computing machine in
-    the mid-1800s, a machine that today would be called a digital computer. On
-    this machine model, Ada&nbsp;Lovelace designed the first computer program.
-    Babbage&rsquo;s initial descriptions of the machine predate
-    Alan&nbsp;Turing's model of a general purpose computer by about a hundred
-    years. This Java simulation of the Analytical Engine will help to preserve
-    the legacy of these pioneers of computing.
+    <p>C<b>harles&nbsp;Bab&shy;bage de&shy;signed</b> (but nev&shy;er built) a
+    com&shy;put&shy;ing ma&shy;chine in the mid-1800s, a ma&shy;chine that
+    to&shy;day would be called a dig&shy;i&shy;tal com&shy;put&shy;er. On this
+    ma&shy;chine mod&shy;el, Ada&nbsp;Lovelace de&shy;signed the first
+    com&shy;put&shy;er pro&shy;gram. Babbage&rsquo;s ini&shy;tial
+    de&shy;scrip&shy;tions of the ma&shy;chine pre&shy;date Alan&nbsp;Turing's
+    mod&shy;el of a gen&shy;er&shy;al pur&shy;pose com&shy;put&shy;er by about
+    a hun&shy;dred years. This Java sim&shy;u&shy;la&shy;tion of the
+    An&shy;a&shy;lyt&shy;i&shy;cal En&shy;gine will help to pre&shy;serve the
+    lega&shy;cy of these pi&shy;o&shy;neers of com&shy;put&shy;ing.
 
     <nav>
       <h2>Contents</h2>
@@ -41,36 +44,45 @@
       <h2>Hardware overview</h2>
 
       <aside>
-        <p>For more information on the terminology,
+        <p>For more in&shy;for&shy;ma&shy;tion on the
+        ter&shy;mi&shy;nol&shy;o&shy;gy,
         see <a href="http://www.fourmilab.ch/babbage/glossary.html">this
-        glossary</a>.
+        glos&shy;sary</a>.
       </aside>
 
-      <p>The Analytical Engine machinery is essentially the same as that of a
-      (simple) modern digital computer. Here is a brief description of the
-      hardware including both the old and new terminologies.
+      <p>The An&shy;a&shy;lyt&shy;i&shy;cal En&shy;gine ma&shy;chin&shy;ery is
+      es&shy;sen&shy;tial&shy;ly the same as that of a (sim&shy;ple) mod&shy;ern
+      dig&shy;i&shy;tal com&shy;put&shy;er. Here is a brief
+      de&shy;scrip&shy;tion of the hard&shy;ware in&shy;clud&shy;ing both
+      the old and new ter&shy;mi&shy;nolo&shy;gies.
 
-      <p>Each instruction for the machine comes on a <dfn>card</dfn> with
-      holes punched in it to indicate which instruction it represents (that
-      is, its &quot;opcode&quot;). A program is provided as a sequence of
-      cards.
+      <p>Each in&shy;struc&shy;tion for the ma&shy;chine comes on
+      a <dfn>card</dfn> with holes punched in it to in&shy;di&shy;cate which
+      in&shy;struc&shy;tion it rep&shy;re&shy;sents (that is, its
+      &ldquo;op&shy;code&rdquo;). A pro&shy;gram is pro&shy;vid&shy;ed as a
+      se&shy;quence of card&shy;s.
 
-      <p>The random access memory of the machine is called
-      the <dfn>store</dfn> and the arithmetic logic unit is called
-      the <dfn>mill</dfn>. The mill performs arithmetic operations on
-      integers, each of which is stored in a register called
-      an <dfn>axis</dfn> (plural <dfn>axes</dfn>). Integers read from
-      memory are stored in <dfn>ingress axes</dfn> and the result of
-      arithmetic operations are stored in <dfn>egress axes</dfn>. The
-      <dfn>run-up lever</dfn> is a flag that is set when an arithmetic
-      operation causes an integer overflow.
+      <p>The ran&shy;dom ac&shy;cess mem&shy;o&shy;ry of the ma&shy;chine is
+      called the <dfn>&shy;s&shy;tore</dfn> and the arith&shy;metic log&shy;ic
+      unit is called the <dfn>mil&shy;l</dfn>. The mill per&shy;forms
+      arith&shy;metic op&shy;er&shy;a&shy;tions on in&shy;te&shy;gers, each of
+      which is stored in a reg&shy;is&shy;ter called an <dfn>ax&shy;is</dfn>
+      (plur&shy;al <dfn>ax&shy;es</dfn>). In&shy;te&shy;gers read from
+      mem&shy;o&shy;ry are stored in <dfn>ingress ax&shy;es</dfn> and the
+      re&shy;sult of arith&shy;metic op&shy;er&shy;a&shy;tions are stored
+      in <dfn>egress ax&shy;es</dfn>. The <dfn>run-up lev&shy;er</dfn> is a
+      flag that is set when an arith&shy;metic op&shy;er&shy;a&shy;tion
+      caus&shy;es an in&shy;te&shy;ger over&shy;flow.
 
-      <p>The machine is controlled by an <dfn>attendant</dfn> who loads
-      programs, starts and operates the machine while the program executes,
-      and provides a final report showing the output of the machine. The
-      machine can produce textual output via a printer as well as graphical
-      output via a <dfn>curve drawing apparatus</dfn>, a device we would
-      call a plotter.
+      <p>The ma&shy;chine is con&shy;trolled by
+      an <dfn>at&shy;ten&shy;dan&shy;t</dfn> who loads pro&shy;gram&shy;s,
+      starts and op&shy;er&shy;ates the ma&shy;chine while the pro&shy;gram
+      ex&shy;e&shy;cutes, and pro&shy;vides a fi&shy;nal re&shy;port
+      show&shy;ing the out&shy;put of the ma&shy;chine. The ma&shy;chine can
+      pro&shy;duce tex&shy;tu&shy;al out&shy;put via a print&shy;er as well as
+      graph&shy;i&shy;cal out&shy;put via a <dfn>curve draw&shy;ing
+      ap&shy;pa&shy;ra&shy;tus</dfn>, a de&shy;vice we would call a
+      plot&shy;ter.
     </section>
 
     <section id="preparing">
@@ -165,9 +177,12 @@
       remainder will be set to 0.
 
       <div class="example">
+        <p>Compute 10<sup>50</sup> + 1 divided by two. By default, each axis
+        can store a decimal number of fifty digits, so loading 1 into the lower
+        order ingress axis and another 1 into the prime ingress axis represents
+        10<sup>50</sup> + 1.
+
         <pre>
-<span class="comment">     Compute (10^50 + 1) / 2</span>
-<span class="card"></span>
 <span class="card">N1 1</span>
 <span class="card">N2 1</span>
 <span class="card">N3 2</span>
