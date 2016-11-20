@@ -52,6 +52,7 @@ h1 {
 /* TODO Use a font with small caps. */
 abbr {
   font-variant-caps: small-caps;
+  text-transform: lowercase;
 }
 
 header {
