@@ -136,13 +136,14 @@
         <pre class="ae-code"><span class="card">N1 123</span></pre>
       </div>
 
-      <p>Blank lines, lines beginning with a period, and lines beginning with
-      spaces are treated as comment cards.
+      <p>Blank lines, lines be&shy;gin&shy;ning with a pe&shy;ri&shy;od, and
+      lines be&shy;gin&shy;ning with&shy;spaces are treat&shy;ed as
+      com&shy;ment card&shy;s.
       <!-- A period after another instruction indicates a comment. -->
 
       <div class="example">
-        <p>In this example there are five comment cards, three of which are
-        blank.
+        <p>In this ex&shy;am&shy;ple there are five com&shy;ment card&shy;s,
+        three of which are blank.
         <pre>
 <span class="comment">   This program loads two numbers into the store.</span>
 <span class="card"></span>
@@ -154,14 +155,18 @@
 </pre>
       </div>
 
-      <p>Arithmetic operations are automatically executed once the two operands
-      are loaded from memory into the ingress axes. The result of the operation
-      is automatically extracted from the egress axis and stored in a memory
-      location indicated by a store card.
+      <p>Arith&shy;metic op&shy;er&shy;a&shy;tions are
+      au&shy;to&shy;mat&shy;i&shy;cal&shy;ly ex&shy;e&shy;cut&shy;ed once the
+      two operands are loaded from mem&shy;o&shy;ry into the ingress
+      ax&shy;es. The re&shy;sult of the op&shy;er&shy;a&shy;tion is
+      au&shy;to&shy;mat&shy;i&shy;cal&shy;ly ex&shy;tract&shy;ed from the
+      egress axis and stored in a mem&shy;o&shy;ry lo&shy;ca&shy;tion
+      in&shy;di&shy;cat&shy;ed by a store card.
 
       <div class="example">
-        <p>Add two numbers from memory locations 1 and 2 and store the
-        result in memory location 3.
+        <p>Add two num&shy;bers from mem&shy;o&shy;ry lo&shy;ca&shy;tions 1 and
+        2 and store the re&shy;sult in mem&shy;o&shy;ry lo&shy;ca&shy;tion 3.
+
         <pre>
 <span class="card">N1 123</span>
 <span class="card">N2 456</span>
@@ -172,21 +177,25 @@
 <span class="card">S3</span></pre>
       </div>
 
-      <p>Division can be performed on a dividend of "double width" by loading
-      the lower-order digits of the dividend in the first main ingress axis and
-      the higher-order digits of the dividend into the "prime" ingress
-      axis. The prime axis must be loaded after the main axis.
+      <p>Di&shy;vi&shy;sion can be per&shy;formed on a div&shy;i&shy;dend of
+      "dou&shy;ble width" by load&shy;ing the low&shy;er-order dig&shy;its of
+      the div&shy;i&shy;dend in the first main ingress axis and the
+      high&shy;er-order dig&shy;its of the div&shy;i&shy;dend into the "prime"
+      ingress ax&shy;is. The prime axis must be loaded af&shy;ter the main
+      ax&shy;is.
 
-      <p>The quotient of a division can be accessed from the prime egress axis,
-      and the remainder from the main egress axis. If the quotient is too
-      large for the main axis, the run-up lever is set, and the quotient and
-      remainder will be set to 0.
+      <p>The quo&shy;tient of a di&shy;vi&shy;sion can be ac&shy;cessed from
+      the prime egress ax&shy;is, and the re&shy;main&shy;der from the main
+      egress ax&shy;is. If the quo&shy;tient is too large for the main
+      ax&shy;is, the run-up lever is set, and the quo&shy;tient and
+      re&shy;main&shy;der will be set to 0.
 
       <div class="example">
-        <p>Compute 10<sup>50</sup> + 1 divided by two. By default, each axis
-        can store a decimal number of fifty digits, so loading 1 into the lower
-        order ingress axis and another 1 into the prime ingress axis represents
-        10<sup>50</sup> + 1.
+        <p>Com&shy;pute 10<sup>50</sup> + 1 di&shy;vid&shy;ed by two. By
+        de&shy;fault, each axis can store a dec&shy;i&shy;mal num&shy;ber of
+        fifty dig&shy;it&shy;s, so load&shy;ing 1 into the low&shy;er
+        or&shy;der ingress axis and an&shy;oth&shy;er 1 into the prime ingress
+        axis rep&shy;re&shy;sents 10<sup>50</sup> + 1.
 
         <pre>
 <span class="card">N1 1</span>
@@ -209,12 +218,13 @@
 <span class="card">P</span></pre>
       </div>
 
-      <p>Performing the same operation twice does not require re-specifying the
-      operation.
+      <p>Per&shy;form&shy;ing the same op&shy;er&shy;a&shy;tion twice does not
+      re&shy;quire re-spec&shy;i&shy;fy&shy;ing the op&shy;er&shy;a&shy;tion.
 
       <div class="example">
-        <p>Multiply two by two, and then multiply that product by two.  Store
-        the result in memory address 1.
+        <p>Mul&shy;ti&shy;ply two by two, and then mul&shy;ti&shy;ply that
+        prod&shy;uct by two. Store the re&shy;sult in mem&shy;o&shy;ry
+        ad&shy;dress 1.
         <pre>
 <span class="card">N1 2</span>
 <span class="card">N2 2</span>
@@ -228,14 +238,16 @@
 <span class="card">S1</span></pre>
       </div>
 
-      <p>Numbers can be printed to the printer by using the <code>P</code>
-      card. To remain historically accurate, the simulator does not print
-      directly to standard output when it encounters a print card; instead, the
-      attendant collects all printed strings and makes them available only
-      after the program has terminated.
+      <p>Num&shy;bers can be print&shy;ed to the print&shy;er by us&shy;ing
+      the <code>P</code> card. To re&shy;main his&shy;tor&shy;i&shy;cal&shy;ly
+      ac&shy;cu&shy;rate, the sim&shy;u&shy;la&shy;tor does not print
+      di&shy;rect&shy;ly to stan&shy;dard out&shy;put when it
+      en&shy;coun&shy;ters a print card; in&shy;stead, the at&shy;ten&shy;dant
+      col&shy;lects all print&shy;ed strings and makes them avail&shy;able only
+      af&shy;ter the pro&shy;gram has ter&shy;mi&shy;nat&shy;ed.
 
       <div class="example">
-        <p>Print the sum of 123 and 456 to the printer.
+        <p>Print the sum of 123 and 456 to the print&shy;er.
         <pre>
 <span class="card">N1 123</span>
 <span class="card">N2 456</span>
@@ -247,17 +259,21 @@
 <span class="card">P</span></pre>
       </div>
 
-      <p>What gives this machine its computational power is conditional
-      execution. A conditional jump card checks whether the run-up lever has
-      been set and either reverses or advances the card chain by a specified
-      number of cards.
+      <p>What gives this ma&shy;chine its com&shy;pu&shy;ta&shy;tion&shy;al
+      pow&shy;er is con&shy;di&shy;tion&shy;al ex&shy;e&shy;cu&shy;tion. A
+      con&shy;di&shy;tion&shy;al jump card checks whether the run-up lever has
+      been set and ei&shy;ther re&shy;vers&shy;es or ad&shy;vances the card
+      chain by a spec&shy;i&shy;fied num&shy;ber of card&shy;s.
 
       <div class="example">
-        <p>In this example, the Engine computes a factorial by accumulating the
-        product of <em>n</em> with (<em>n</em> - 1)! iteratively. At the end of
-        each iteration, the conditional jump card decides whether to perform
-        another iteration of the loop or to terminate and print the result
-        based on whether the run-up lever has been set.
+        <p>In this ex&shy;am&shy;ple, the En&shy;gine com&shy;putes a
+        fac&shy;to&shy;r&shy;i&shy;al by ac&shy;cu&shy;mu&shy;lat&shy;ing the
+        prod&shy;uct of <em>n</em> with (<em>n</em> - 1)!
+        it&shy;er&shy;a&shy;tive&shy;ly. At the end of each
+        it&shy;er&shy;a&shy;tion, the con&shy;di&shy;tion&shy;al jump card
+        de&shy;cides whether to per&shy;form an&shy;oth&shy;er
+        it&shy;er&shy;a&shy;tion of the loop or to ter&shy;mi&shy;nate and
+        print the re&shy;sult based on whether the run-up lever has been set.
 
         <pre>
 <span class="comment">  Computes 6! using a loop.</span>
@@ -310,15 +326,19 @@
       col&shy;lect&shy;ed by the at&shy;ten&shy;dant and can be ac&shy;cessed
       via the <code>Attendant.finalReport()</code> method.
 
-      <p>The <code>AnalyticalEngine</code> must be programmatically assembled
-      before it can execute a program. The Engine needs a mill, a store, a card
-      reader, etc., each of which can be set using the appropriately named
-      setter methods.
+      <p>The <code>&shy;An&shy;a&shy;lyt&shy;i&shy;calEngine</code> must be
+      pro&shy;gram&shy;mat&shy;i&shy;cal&shy;ly as&shy;sem&shy;bled be&shy;fore
+      it can ex&shy;e&shy;cute a pro&shy;gram. The En&shy;gine needs a
+      mil&shy;l, a store, a card read&shy;er, etc., each of which can be set
+      us&shy;ing the ap&shy;pro&shy;pri&shy;ate&shy;ly named set&shy;ter
+      meth&shy;od&shy;s.
 
-      <p>The code is designed that each component can be easily reimplemented
-      and replaced. For example, one might replace the default
-      <code>HashMap</code>-based implementation of <code>Store</code> with one
-      backed by a remote key-value data store:
+      <p>The code is de&shy;signed that each com&shy;po&shy;nent can be
+      eas&shy;i&shy;ly reim&shy;ple&shy;ment&shy;ed and re&shy;placed. For
+      ex&shy;am&shy;ple, one might re&shy;place the
+      de&shy;fault <code>HashMap</code>-based
+      im&shy;ple&shy;men&shy;ta&shy;tion of <code>&shy;S&shy;tore</code> with
+      one backed by a re&shy;mote key-&shy;val&shy;ue data store:
 
       <pre class="java">package mycoolpackage;
 
@@ -342,25 +362,30 @@ public class RedisStore implements Store {
 </pre>
 
       <p>This new store can then be set on an <code>AnalyticalEngine</code>
-      instance <code>engine</code> via <code>engine.setStore(new RedisStor())</code>.
+      in&shy;stance <code>engine</code> via <code>engine.setStore(new
+      RedisStor())</code>.
 
     </section>
 
     <section id="copyright">
       <h2>Copyright license</h2>
 
-      <p>Copyright 2014&ndash;2016 Jeffrey&nbsp;Finkelstein.
+      <p>Copy&shy;right 2014&ndash;2016 Jeffrey&nbsp;Finkelstein.
 
-      <p>The code is distributed under the terms of the <abbr>GNU</abbr>
-      General Public License version 3. It is derived from
-      the <a href="//www.fourmilab.ch/babbage/contents.html">original code</a>
-      by John&nbsp;Walker, which was
-      <a href="//www.fourmilab.ch/babbage/cmdline.html">dedicated to the public
-      domain</a>.
+      <p>The code is dis&shy;trib&shy;uted un&shy;der the terms of the GNU
+      Gen&shy;er&shy;al Pub&shy;lic Li&shy;cense ver&shy;sion 3. It is
+      de&shy;rived from
+      the <a href="//www.fourmilab.ch/babbage/contents.html">orig&shy;i&shy;nal
+      code</a> by John&nbsp;Walker, which
+      was <a href="//www.fourmilab.ch/babbage/cmdline.html">ded&shy;i&shy;cat&shy;ed
+      to the pub&shy;lic do&shy;main</a>.
 
-      <p>This document is distributed under the terms of the
-      <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
-      Creative Commons Attribution-ShareAlike 4.0 International license</a>.
+      <p>This doc&shy;u&shy;ment is dis&shy;trib&shy;uted un&shy;der the terms
+      of the <a rel="license"
+      href="http://creativecommons.org/licenses/by-sa/4.0/">Cre&shy;ative
+      Com&shy;mons At&shy;tri&shy;bu&shy;tion-Share&shy;Alike 4.0
+      In&shy;ter&shy;na&shy;tion&shy;al li&shy;cense</a>.
+
     </section>
 
   </div>
