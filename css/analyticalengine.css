@@ -173,7 +173,7 @@ div.example:before {
 div.example pre {
   counter-reset: line;
   font-size: 80%;
-  padding-left: 2.5rem;
+  padding-left: 2rem;
 }
 
 div.example pre:last-child {
@@ -191,7 +191,7 @@ div.example pre > span:before {
   margin-left: 0;
   position: absolute;
   text-align: right;
-  width: 2em;
+  width: 1rem;
   -webkit-user-select: none;
 }
 
