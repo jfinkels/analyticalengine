@@ -331,16 +331,16 @@
       it can ex&shy;e&shy;cute a pro&shy;gram. The En&shy;gine needs a
       mil&shy;l, a store, a card read&shy;er, etc., each of which can be set
       us&shy;ing the ap&shy;pro&shy;pri&shy;ate&shy;ly named set&shy;ter
-      meth&shy;od&shy;s.
+      meth&shy;od&shy;s. The code is de&shy;signed so that each
+      com&shy;po&shy;nent can be eas&shy;i&shy;ly reim&shy;ple&shy;ment&shy;ed
+      and re&shy;placed.
 
-      <p>The code is de&shy;signed that each com&shy;po&shy;nent can be
-      eas&shy;i&shy;ly reim&shy;ple&shy;ment&shy;ed and re&shy;placed. For
-      ex&shy;am&shy;ple, one might re&shy;place the
-      de&shy;fault <code>HashMap</code>-based
-      im&shy;ple&shy;men&shy;ta&shy;tion of <code>&shy;S&shy;tore</code> with
-      one backed by a re&shy;mote key-&shy;val&shy;ue data store:
+      <div class="example">
+        <p>One might re&shy;place the de&shy;fault <code>HashMap</code>-based
+        im&shy;ple&shy;men&shy;ta&shy;tion of <code>&shy;S&shy;tore</code> with
+        one backed by a re&shy;mote key-&shy;val&shy;ue data store:
 
-      <pre class="java">package mycoolpackage;
+        <pre class="java-code">package mycoolpackage;
 
 import analyticalengine.components.Store;
 import ???.redis.???;

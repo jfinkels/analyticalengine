@@ -122,11 +122,6 @@ aside p {
   margin: 0;
 }
 
-pre.java {
-  font-size: 80%;
-  padding-left: 1em;
-}
-
 pre.command-line {
   font-size: 80%;
   margin-left: 1rem;
