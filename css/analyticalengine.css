@@ -31,6 +31,14 @@ body > * {
 }
 }
 
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 /**
  * TODO Hanging punctuation in CSS 3 is not currently supported by any
  * browser.
