@@ -75,8 +75,9 @@ header p {
 }
 
 header + p::first-letter {
-    font-size: 60px;
+    font-size: 56px;
     float: left;
+    margin-top: 0.2rem;
 }
 
 b {
