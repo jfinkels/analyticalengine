@@ -122,6 +122,11 @@ aside p {
   margin: 0;
 }
 
+pre {
+    overflow: auto;
+}
+
+/* These styles are for the command-line code blocks. */
 pre.command-line {
   font-size: 80%;
   margin-left: 1rem;
@@ -187,6 +192,7 @@ div.example pre > span {
 }
 
 div.example pre > span:before {
+  background-color: white;
   color: #666;
   content: counter(line);
   left: 0px;
