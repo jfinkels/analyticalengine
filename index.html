@@ -343,35 +343,63 @@
       and re&shy;placed.
 
       <div class="example">
+
         <h3>Example</h3>
+
         <p>One might re&shy;place the de&shy;fault <code>HashMap</code>-based
         im&shy;ple&shy;men&shy;ta&shy;tion of <code>&shy;S&shy;tore</code> with
-        one backed by a re&shy;mote key-&shy;val&shy;ue data store:
+        one backed by a re&shy;mote key-&shy;val&shy;ue data store. In this
+        ex&shy;am&shy;ple, we
+        use <a href="https://github.com/xetorthio/jedis">Jedis</a>, a
+        Re&shy;dis client for the Java pro&shy;gram&shy;ming lan&shy;guage:
 
-        <pre class="java-code">package mycoolpackage;
-
-import analyticalengine.components.Store;
-import ???.redis.???;
-import java.math.BigInteger;
-
-public class RedisStore implements Store {
-    public BigInteger get(long address) {
-        return redis.get(address);
-    }
-
-    public BigInteger put(long address, BigInteger value) {
-        redis.put(address, value);
-    }
-
-    public void reset() {
-        redis.clear();
-    }
-}
+        <pre class="java-code">
+<span>package example;</span>
+<span></span>
+<span>import java.math.BigInteger;</span>
+<span>import java.net.URI;</span>
+<span></span>
+<span>import analyticalengine.components.Store;</span>
+<span>import redis.clients.jedis.Jedis;</span>
+<span></span>
+<span>public class RedisStore implements Store {</span>
+<span></span>
+<span>    private Jedis client = null;</span>
+<span></span>
+<span>    public RedisStore(URI uri) {</span>
+<span>        this.client = new Jedis(uri);</span>
+<span>    }</span>
+<span></span>
+<span>    public BigInteger get(long address) {</span>
+<span>        String addressString = String.valueOf(address);</span>
+<span>        String valueString = this.client.get(addressString);</span>
+<span>        BigInteger value = new BigInteger(valueString);</span>
+<span>        return value;</span>
+<span>    }</span>
+<span></span>
+<span>    public void put(long address, BigInteger value) {</span>
+<span>        String addressString = String.valueOf(address);</span>
+<span>        String valueString = String.valueOf(value)</span>
+<span>        String status = this.client.set(addressString, valueString);</span>
+<span>        if (!status.equals("OK")) {</span>
+<span>            throw new RuntimeException(status);</span>
+<span>        }</span>
+<span>    }</span>
+<span></span>
+<span>    public void reset() {</span>
+<span>        this.client.clear();</span>
+<span>    }</span>
+<span>}</span>
 </pre>
 
-        <p>This new store can then be set on an <code>AnalyticalEngine</code>
-        in&shy;stance <code>engine</code> via <code>engine.setStore(new
-        RedisStor())</code>.
+        <p>Then make your <code>AnalyticalEngine</code> in&shy;stance use this
+        store:
+
+        <pre class="java-code">
+<span>AnalyticalEngine engine = new DefaultAnalyticalEngine();</span>
+<span>engine.setStore(new RedisStore());</span>
+</pre>
+
       </div>
 
     </section>
