@@ -152,14 +152,21 @@ div.example:last-child {
     margin-bottom: 0;
 }
 
-/* TODO Use a font with titling caps; if so, we can remove the text-transform. */
-div.example:before {
-    content: "☞";
+/* TODO Use a font with titling caps; if so, we can remove the
+ * text-transform.
+ */
+div.example h3 {
+    color: #333;
+    font-size: inherit;
     font-variant-caps: titling-caps;
     font-weight: 400;
-    position: absolute;
     text-transform: uppercase;
+}
+
+div.example h3:before {
+    content: "☞";
     margin-left: -1.5rem;
+    padding-right: 0.5rem;
 }
 
 /*!
