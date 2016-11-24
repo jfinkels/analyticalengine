@@ -106,6 +106,9 @@ public final class CardParser {
      *             (essentially, this is a syntax error).
      */
     public static Card toCard(final String cardString) throws UnknownCard {
+        if (cardString.isEmpty()) {
+            return Card.commentCard("");
+        }
         char firstChar = cardString.charAt(0);
         String untrimmedRest = cardString.substring(1);
         String rest = leftTrim(untrimmedRest.trim());
