@@ -36,7 +36,6 @@ import org.junit.Test;
 import analyticalengine.BadCard;
 import analyticalengine.TestUtils;
 import analyticalengine.cards.Card;
-import analyticalengine.io.CardParser;
 import analyticalengine.io.UnknownCard;
 
 /**
@@ -61,7 +60,7 @@ public class DefaultAttendantTest {
         String cardString = "A include from library cards for bogus";
         Card card = null;
         try {
-            card = CardParser.toCard(cardString);
+            card = Card.fromString(cardString);
         } catch (UnknownCard exception) {
             TestUtils.fail(exception);
         }
@@ -109,7 +108,7 @@ public class DefaultAttendantTest {
         String cardString = "A include from library cards for " + baseName;
         Card card = null;
         try {
-            card = CardParser.toCard(cardString);
+            card = Card.fromString(cardString);
         } catch (UnknownCard exception) {
             TestUtils.fail(exception);
         }

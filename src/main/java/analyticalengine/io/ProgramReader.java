@@ -85,7 +85,7 @@ public final class ProgramReader {
         try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
             String currentLine = reader.readLine();
             while (currentLine != null) {
-                cards.add(CardParser.toCard(currentLine));
+                cards.add(Card.fromString(currentLine));
                 currentLine = reader.readLine();
             }
         }
@@ -127,7 +127,7 @@ public final class ProgramReader {
             final String lineSeparator) throws UnknownCard {
         List<Card> cards = new ArrayList<Card>();
         for (String line : input.split(lineSeparator)) {
-            cards.add(CardParser.toCard(line));
+            cards.add(Card.fromString(line));
         }
         return cards;
     }

@@ -25,18 +25,15 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
 
-import analyticalengine.attendant.Library;
 import analyticalengine.attendant.LibraryLookupException;
 import analyticalengine.cards.Card;
 import analyticalengine.components.DefaultMill;
 import analyticalengine.components.HashMapStore;
-import analyticalengine.io.CardParser;
 import analyticalengine.io.UnknownCard;
 
 /**
@@ -172,7 +169,7 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
                 List<Card> cards = null;
                 try {
                     String badCard = operator + "1.1" + prime;
-                    cards = Arrays.asList(CardParser.toCard(badCard));
+                    cards = Arrays.asList(Card.fromString(badCard));
                     this.attendant().loadProgram(cards);
                 } catch (BadCard | IOException | UnknownCard
                         | LibraryLookupException e) {
@@ -290,7 +287,7 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
                 List<Card> cards = null;
                 try {
                     String badCard = operator + number;
-                    cards = Arrays.asList(CardParser.toCard(badCard));
+                    cards = Arrays.asList(Card.fromString(badCard));
                     this.attendant().loadProgram(cards);
                 } catch (BadCard | IOException | UnknownCard
                         | LibraryLookupException e) {
@@ -452,7 +449,7 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     public void testShouldHaveBeenRemoved() {
         List<Card> cards = null;
         try {
-            cards = Arrays.asList(CardParser.toCard("}{"));
+            cards = Arrays.asList(Card.fromString("}{"));
             this.attendant().loadProgram(cards);
         } catch (BadCard | IOException | UnknownCard
                 | LibraryLookupException e) {
