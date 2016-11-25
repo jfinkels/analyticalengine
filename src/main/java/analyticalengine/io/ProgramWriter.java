@@ -69,7 +69,7 @@ public final class ProgramWriter {
     public static void write(final List<Card> cards, final PrintStream stream)
             throws UnknownCard {
         for (Card card : cards) {
-            stream.println(CardParser.toString(card));
+            stream.println(card.toText());
         }
     }
 

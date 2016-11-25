@@ -382,6 +382,113 @@ public class Card {
     }
 
     /**
+     * Returns the string representation of the specified card (with any
+     * terminal comments intact).
+     * 
+     * @param card
+     *            The card to convert to a string.
+     * @return The string representation of the specified card.
+     * @throws UnknownCard
+     *             if the specified card is of an unrecognized type.
+     */
+    public String toText() throws UnknownCard {
+        // TODO account for comments after the instructions
+        switch (this.type()) {
+        case ADD:
+            return "+";
+        case ALTERNATION:
+            return "}{";
+        case ANNOTATE:
+            return "A write annotation " + this.argument(0);
+        case BACKEND:
+            return ")";
+        case BACKSTART:
+            return "(";
+        case BACKWARD:
+            return "CB+" + this.argument(0);
+        case BELL:
+            return "B";
+        case CBACKSTART:
+            return "(?";
+        case CBACKWARD:
+            return "CB?" + this.argument(0);
+        case CFORWARD:
+            return "CF?" + this.argument(0);
+        case CFORWARDSTART:
+            return "{?";
+        case COMMENT:
+            return "  " + this.argument(0);
+        case DECIMALEXPAND:
+            return "A set decimal places to " + this.argument(0);
+        case DIVIDE:
+            return "/";
+        case DRAW:
+            return "D+";
+        case FORWARD:
+            return "CF+" + this.argument(0);
+        case FORWARDEND:
+            return "}";
+        case FORWARDSTART:
+            return "{";
+        case HALT:
+            return "H";
+        case INCLUDE:
+            return "A include cards " + this.argument(0);
+        case INCLUDELIB:
+            return "A include from library cards for " + this.argument(0);
+        case LOAD:
+            return "L" + this.argument(0);
+        case LOADPRIME:
+            return "L" + this.argument(0) + ";";
+        case LSHIFT:
+            return "<";
+        case LSHIFTN:
+            return "<" + this.argument(0);
+        case MOVE:
+            return "D-";
+        case MULTIPLY:
+            return "*";
+        case NEWLINE:
+            return "A write new line";
+        case NUMBER:
+            return "N" + this.argument(0) + " " + this.argument(1);
+        case PRINT:
+            return "P";
+        case RSHIFT:
+            return ">";
+        case RSHIFTN:
+            return ">" + this.argument(0);
+        case SETX:
+            return "DX";
+        case SETY:
+            return "DY";
+        case STORE:
+            return "S" + this.argument(0);
+        case STOREPRIME:
+            return "S" + this.argument(0) + "'";
+        case SUBTRACT:
+            return "-";
+        case TRACEOFF:
+            return "T0";
+        case TRACEON:
+            return "T1";
+        case WRITECOLUMNS:
+            return "A write in columns";
+        case WRITEDECIMAL:
+            return "A write numbers with decimal point";
+        case WRITEPICTURE:
+            return "A write numbers as " + this.argument(0);
+        case WRITEROWS:
+            return "A write in rows";
+        case ZLOAD:
+            return "Z" + this.argument(0);
+        case ZLOADPRIME:
+            return "Z" + this.argument(0) + "'";
+        default:
+            throw new UnknownCard("Unable to parse: " + this);
+        }
+    }
+    /**
      * Returns the type of instruction this card represents.
      * 
      * @return The type of instruction this card represents.
