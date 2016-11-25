@@ -30,7 +30,6 @@ import org.junit.Test;
 
 import analyticalengine.BadCard;
 import analyticalengine.TestUtils;
-import analyticalengine.cards.Card;
 import analyticalengine.cards.UnknownCard;
 
 /**

@@ -22,21 +22,13 @@ package analyticalengine;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 
 import analyticalengine.attendant.AttendantTestBase;
 import analyticalengine.attendant.LibraryLookupException;
-import analyticalengine.cards.Card;
 import analyticalengine.cards.UnknownCard;
-import analyticalengine.components.ArrayListCardReader;
-import analyticalengine.components.CardReader;
 import analyticalengine.components.DefaultMill;
 import analyticalengine.components.HashMapStore;
 import analyticalengine.components.Mill;
