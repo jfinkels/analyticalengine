@@ -26,9 +26,6 @@ import java.math.BigInteger;
 
 import org.junit.Test;
 
-import analyticalengine.components.HashMapStore;
-import analyticalengine.components.Store;
-
 /**
  * Tests for the HashMapStore class.
  * 
