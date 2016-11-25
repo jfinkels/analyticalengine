@@ -27,7 +27,6 @@ import analyticalengine.cards.BadCard;
 import analyticalengine.cards.Card;
 import analyticalengine.cards.UnknownCard;
 import analyticalengine.components.CardReader;
-import analyticalengine.components.Printer;
 
 /**
  * The operator of the Analytical Engine.
@@ -36,8 +35,8 @@ import analyticalengine.components.Printer;
  * attendant
  * <ul>
  * <li>loads the program into the {@link CardReader}</li>
- * <li>
- * receives, formats, and annotates the output from the {@link Printer}</li>
+ * <li>receives, formats, and annotates the output from the
+ * {@link analyticalengine.components.Printer}</li>
  * <li>maintains a library of functions</li>
  * </ul>
  * 
@@ -95,8 +94,8 @@ public interface Attendant {
      * @throws LibraryLookupException
      *             if a request to load a function from a library file fails.
      */
-    void loadProgram(List<Card> cards) throws BadCard, IOException,
-            UnknownCard, LibraryLookupException;
+    void loadProgram(List<Card> cards)
+            throws BadCard, IOException, UnknownCard, LibraryLookupException;
 
     /**
      * Instructs the attendant to record the printed output from the Engine's
@@ -124,8 +123,8 @@ public interface Attendant {
      * Instructs the attendant to record output from the printer in a specific
      * format.
      * 
-     * The currently accepted format string is specified (informally) <a
-     * href="http://fourmilab.ch/babbage/cards.html#numeric">here</a>.
+     * The currently accepted format string is specified (informally)
+     * <a href="http://fourmilab.ch/babbage/cards.html#numeric">here</a>.
      * 
      * @param argument
      *            The format in which to write the ouput from the printer.
