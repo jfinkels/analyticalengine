@@ -26,7 +26,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.converters.IParameterSplitter;
 
 /**
  * Stores arguments parsed from the command-line.
@@ -40,6 +42,32 @@ import com.beust.jcommander.Parameter;
 public class Arguments {
 
     /**
+     * Splits a colon-separated string on the colons.
+     * 
+     * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
+     * @since 0.0.1
+     */
+    public static class ColonSplit implements IParameterSplitter {
+        @Override
+        public List<String> split(final String value) {
+            return Arrays.asList(value.split(":"));
+        }
+    }
+
+    /**
+     * Converts a string containing a path to a path object.
+     * 
+     * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
+     * @since 0.0.1
+     */
+    public static class PathConverter implements IStringConverter<Path> {
+        @Override
+        public Path convert(final String value) {
+            return Paths.get(value);
+        }
+    }
+
+    /**
      * The list of all positional command-line arguments.
      * 
      * We expect that there is only one command-line argument (other than the
@@ -49,8 +77,7 @@ public class Arguments {
     private List<String> args = new ArrayList<String>();
 
     /** Whether to run the program in headless mode. */
-    @Parameter(
-            names = { "-X", "--headless" },
+    @Parameter(names = { "-X", "--headless" },
             description = "run the program without displaying curve printer output")
     private boolean headless = false;
 
