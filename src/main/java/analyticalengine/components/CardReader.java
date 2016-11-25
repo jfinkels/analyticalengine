@@ -22,8 +22,8 @@ package analyticalengine.components;
 
 import java.util.List;
 
-import analyticalengine.Halt;
 import analyticalengine.cards.Card;
+import analyticalengine.cards.Halt;
 
 /**
  * A device through which a sequence of cards is provided to the Engine.

@@ -27,8 +27,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import analyticalengine.Halt;
 import analyticalengine.cards.Card;
+import analyticalengine.cards.Halt;
 
 /**
  * A card reader backed by an {@link java.util.ArrayList} of cards.

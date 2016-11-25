@@ -32,6 +32,7 @@ import java.util.List;
 import org.junit.Test;
 
 import analyticalengine.attendant.LibraryLookupException;
+import analyticalengine.cards.BadCard;
 import analyticalengine.cards.Card;
 import analyticalengine.cards.UnknownCard;
 import analyticalengine.components.DefaultMill;

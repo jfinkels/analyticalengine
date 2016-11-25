@@ -31,7 +31,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 
-import analyticalengine.BadCard;
+import analyticalengine.cards.BadCard;
 import analyticalengine.cards.Card;
 import analyticalengine.cards.UnknownCard;
 import analyticalengine.components.ArrayListCardReader;

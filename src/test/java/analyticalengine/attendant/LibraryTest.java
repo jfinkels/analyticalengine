@@ -29,8 +29,8 @@ import java.net.URISyntaxException;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import analyticalengine.BadCard;
 import analyticalengine.EngineTestBase;
+import analyticalengine.cards.BadCard;
 import analyticalengine.cards.UnknownCard;
 
 /**

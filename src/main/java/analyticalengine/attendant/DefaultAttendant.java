@@ -31,7 +31,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import analyticalengine.BadCard;
+import analyticalengine.cards.BadCard;
 import analyticalengine.cards.Card;
 import analyticalengine.cards.CardType;
 import analyticalengine.cards.UnknownCard;

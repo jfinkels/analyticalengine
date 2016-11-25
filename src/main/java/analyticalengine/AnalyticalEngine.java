@@ -21,6 +21,7 @@
 package analyticalengine;
 
 import analyticalengine.attendant.Attendant;
+import analyticalengine.cards.BadCard;
 import analyticalengine.components.CardReader;
 import analyticalengine.components.CurvePrinter;
 import analyticalengine.components.Mill;

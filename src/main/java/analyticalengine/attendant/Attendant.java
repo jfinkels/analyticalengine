@@ -23,7 +23,7 @@ package analyticalengine.attendant;
 import java.io.IOException;
 import java.util.List;
 
-import analyticalengine.BadCard;
+import analyticalengine.cards.BadCard;
 import analyticalengine.cards.Card;
 import analyticalengine.cards.UnknownCard;
 import analyticalengine.components.CardReader;

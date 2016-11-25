@@ -28,6 +28,7 @@ import org.junit.Before;
 
 import analyticalengine.attendant.AttendantTestBase;
 import analyticalengine.attendant.LibraryLookupException;
+import analyticalengine.cards.BadCard;
 import analyticalengine.cards.UnknownCard;
 import analyticalengine.components.DefaultMill;
 import analyticalengine.components.HashMapStore;

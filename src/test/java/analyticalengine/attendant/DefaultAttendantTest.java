@@ -28,8 +28,8 @@ import java.nio.file.Path;
 
 import org.junit.Test;
 
-import analyticalengine.BadCard;
 import analyticalengine.TestUtils;
+import analyticalengine.cards.BadCard;
 import analyticalengine.cards.UnknownCard;
 
 /**

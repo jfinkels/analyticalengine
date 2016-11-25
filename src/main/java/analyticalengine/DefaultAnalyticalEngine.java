@@ -28,7 +28,10 @@ import org.slf4j.LoggerFactory;
 
 import analyticalengine.attendant.Attendant;
 import analyticalengine.attendant.WriteDirection;
+import analyticalengine.cards.BadCard;
+import analyticalengine.cards.Bell;
 import analyticalengine.cards.Card;
+import analyticalengine.cards.Halt;
 import analyticalengine.components.CardReader;
 import analyticalengine.components.CurvePrinter;
 import analyticalengine.components.Mill;

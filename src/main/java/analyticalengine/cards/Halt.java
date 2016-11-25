@@ -1,5 +1,5 @@
 /**
- * CardException.java - exception that stores the card that caused it
+ * Halt.java - exception raised when engine indicates halt (or no more cards)
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -18,24 +18,22 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
-
-import analyticalengine.cards.Card;
+package analyticalengine.cards;
 
 /**
- * Base class for exceptions that are caused by cards.
+ * This exception is raised when the Analytical Engine stops executing its
+ * program, either because the program includes a "halt" instruction, or the
+ * card reader has read every available card.
  * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
-public abstract class CardException extends Exception {
+public class Halt extends CardException {
+
     /**
      * Default generated serial version UID.
      */
-    private static final long serialVersionUID = -590810062640328181L;
-
-    /** The card that caused this exception. */
-    private Card card = null;
+    private static final long serialVersionUID = -8026821124810632777L;
 
     /**
      * Instantiates this exception with the specified error message.
@@ -43,39 +41,8 @@ public abstract class CardException extends Exception {
      * @param message
      *            The error message.
      */
-    public CardException(final String message) {
+    public Halt(final String message) {
         super(message);
-    }
-
-    /**
-     * Instantiates this exception with the specified error message and the
-     * specified card that caused the exception.
-     * 
-     * @param message
-     *            The error message.
-     * @param cause
-     *            The card that caused this exception.
-     */
-    public CardException(final String message, final Card cause) {
-        super(message);
-        this.card = cause;
-    }
-
-    /**
-     * Instantiates this exception with the specified error message, card that
-     * caused the exception, and exception that caused the exception.
-     * 
-     * @param message
-     *            The error message.
-     * @param cardCause
-     *            The card that caused the exception.
-     * @param throwableCause
-     *            The throwable that caused this exception.
-     */
-    public CardException(final String message, final Card cardCause,
-            final Throwable throwableCause) {
-        super(message, throwableCause);
-        this.card = cardCause;
     }
 
     /**
@@ -87,16 +54,21 @@ public abstract class CardException extends Exception {
      * @param cause
      *            The throwable that caused this exception.
      */
-    public CardException(final String message, final Throwable cause) {
+    public Halt(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Gets the card that caused this exception.
+     * Instantiates this exception with the specified error message and the
+     * specified card that caused the exception.
      * 
-     * @return The card that caused this exception.
+     * @param message
+     *            The error message.
+     * @param cause
+     *            The card that caused this exception.
      */
-    public Card card() {
-        return this.card;
+    public Halt(final String message, final Card cause) {
+        super(message, cause);
     }
+
 }

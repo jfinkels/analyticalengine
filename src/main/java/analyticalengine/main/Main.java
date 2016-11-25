@@ -33,13 +33,13 @@ import org.slf4j.LoggerFactory;
 import com.beust.jcommander.JCommander;
 
 import analyticalengine.AnalyticalEngine;
-import analyticalengine.BadCard;
 import analyticalengine.DefaultAnalyticalEngine;
 import analyticalengine.attendant.Attendant;
 import analyticalengine.attendant.DefaultAttendant;
 import analyticalengine.attendant.DefaultLibrary;
 import analyticalengine.attendant.Library;
 import analyticalengine.attendant.LibraryLookupException;
+import analyticalengine.cards.BadCard;
 import analyticalengine.cards.Card;
 import analyticalengine.cards.UnknownCard;
 import analyticalengine.components.ArrayListCardReader;

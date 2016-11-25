@@ -1,5 +1,5 @@
 /**
- * BadCard.java - exception raised when attendant finds a bad instruction
+ * Bell.java - exception raised when attendant's attention is required
  * 
  * Copyright 2014 Jeffrey Finkelstein.
  * 
@@ -18,25 +18,21 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine;
-
-import analyticalengine.cards.Card;
+package analyticalengine.cards;
 
 /**
- * This exception is raised when the attendant discovers an incorrectly used
- * card.
- * 
- * This is essentially a syntax error.
+ * Represents a bell that rings on the Analytical Engine, attracting the
+ * attention of the attendant.
  * 
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;
  * @since 0.0.1
  */
-public class BadCard extends CardException {
+public class Bell extends CardException {
 
     /**
-     * A default generated serial version UID.
+     * Default generated serial version UID.
      */
-    private static final long serialVersionUID = -3311831632309378417L;
+    private static final long serialVersionUID = 505374666147267503L;
 
     /**
      * Instantiates this exception with the specified error message and the
@@ -47,24 +43,8 @@ public class BadCard extends CardException {
      * @param cause
      *            The card that caused this exception.
      */
-    public BadCard(final String message, final Card cause) {
+    public Bell(final String message, final Card cause) {
         super(message, cause);
-    }
-
-    /**
-     * Instantiates this exception with the specified error message, card that
-     * caused the exception, and exception that caused the exception.
-     * 
-     * @param message
-     *            The error message.
-     * @param cardCause
-     *            The card that caused the exception.
-     * @param throwableCause
-     *            The throwable that caused this exception.
-     */
-    public BadCard(final String message, final Card cardCause,
-            final Throwable throwableCause) {
-        super(message, cardCause, throwableCause);
     }
 
 }
