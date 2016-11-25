@@ -21,8 +21,10 @@
 package analyticalengine.main;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -39,6 +41,7 @@ import analyticalengine.attendant.DefaultLibrary;
 import analyticalengine.attendant.Library;
 import analyticalengine.attendant.LibraryLookupException;
 import analyticalengine.cards.Card;
+import analyticalengine.cards.UnknownCard;
 import analyticalengine.components.ArrayListCardReader;
 import analyticalengine.components.CardReader;
 import analyticalengine.components.DefaultMill;
@@ -46,8 +49,6 @@ import analyticalengine.components.HashMapStore;
 import analyticalengine.components.NullCurvePrinter;
 import analyticalengine.components.StringPrinter;
 import analyticalengine.gui.JFrameCurvePrinter;
-import analyticalengine.io.ProgramReader;
-import analyticalengine.io.UnknownCard;
 
 /**
  * A command-line driver for the Analytical Engine simulation.
@@ -100,8 +101,8 @@ public final class Main {
         // The attendant has access to a library of built-in functions, and
         // access to the card reader used by the engine.
         Attendant attendant = new DefaultAttendant();
-        CardReader reader = new ArrayListCardReader();
-        attendant.setCardReader(reader);
+        CardReader cardReader = new ArrayListCardReader();
+        attendant.setCardReader(cardReader);
         Library library = new DefaultLibrary();
         attendant.setLibrary(library);
 
@@ -113,7 +114,7 @@ public final class Main {
 
         AnalyticalEngine engine = new DefaultAnalyticalEngine();
         engine.setAttendant(attendant);
-        engine.setCardReader(reader);
+        engine.setCardReader(cardReader);
         engine.setMill(new DefaultMill());
         engine.setPrinter(new StringPrinter());
         engine.setStore(new HashMapStore());
@@ -125,15 +126,17 @@ public final class Main {
         }
 
         // load the file specified in the command-line argument
-        List<Card> cards;
+        Path program = Paths.get(arguments.args().get(0));
+        List<Card> cards = new ArrayList<Card>();
         try {
-            Path program = Paths.get(arguments.args().get(0));
-            cards = ProgramReader.fromPath(program);
+            for (String line : Files.readAllLines(program)) {
+                cards.add(Card.fromString(line));
+            }
         } catch (IOException e) {
-            LOG.error("Failed to load specified program", e);
+            LOG.error("Could not open file", e);
             return;
         } catch (UnknownCard e) {
-            LOG.error("Unknown card in file", e);
+            LOG.error("Unknown card", e);
             return;
         }
 
@@ -156,7 +159,7 @@ public final class Main {
 
         if (arguments.listOnly()) {
             try {
-                for (Card card : reader.cards()) {
+                for (Card card : cardReader.cards()) {
                     System.out.println(card.toText());
                 }
             } catch (UnknownCard e) {

@@ -35,8 +35,7 @@ import java.util.List;
 import java.util.Optional;
 
 import analyticalengine.cards.Card;
-import analyticalengine.io.ProgramReader;
-import analyticalengine.io.UnknownCard;
+import analyticalengine.cards.UnknownCard;
 
 /**
  * A basic implementation of a library of built-in functions.
@@ -131,7 +130,9 @@ public class DefaultLibrary implements Library {
                 Path programPath = Paths.get(uri);
                 List<Card> result = new ArrayList<Card>();
                 result.add(initialComment);
-                result.addAll(ProgramReader.fromPath(programPath));
+                for (String line : Files.readAllLines(programPath)) {
+                    result.add(Card.fromString(line));
+                }
                 result.add(terminalComment);
                 return result;
             }
@@ -142,7 +143,9 @@ public class DefaultLibrary implements Library {
         Path programPath = Paths.get(new URI(scheme, spec, null));
         List<Card> result = new ArrayList<Card>();
         result.add(initialComment);
-        result.addAll(ProgramReader.fromPath(programPath));
+        for (String line : Files.readAllLines(programPath)) {
+            result.add(Card.fromString(line));
+        }
         result.add(terminalComment);
         return result;
     }
@@ -211,11 +214,16 @@ public class DefaultLibrary implements Library {
 
         // If the file was found somewhere in one of the library paths, load
         // the program directly from that file.
+        Path path = filePath.get();
+        List<Card> cards = new ArrayList<Card>();
         try {
-            return ProgramReader.fromPath(filePath.get());
+            for (String line : Files.readAllLines(path)) {
+                cards.add(Card.fromString(line));
+            }
         } catch (IOException | UnknownCard e) {
             throw new LibraryLookupException("Failed to load library file", e);
         }
+        return cards;
     }
 
     /**

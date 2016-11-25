@@ -36,7 +36,7 @@ import org.junit.Test;
 import analyticalengine.BadCard;
 import analyticalengine.TestUtils;
 import analyticalengine.cards.Card;
-import analyticalengine.io.UnknownCard;
+import analyticalengine.cards.UnknownCard;
 
 /**
  * @author Jeffrey Finkelstein &lt;jeffrey.finkelstein@gmail.com&gt;

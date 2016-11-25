@@ -25,9 +25,9 @@ import java.util.List;
 
 import analyticalengine.BadCard;
 import analyticalengine.cards.Card;
+import analyticalengine.cards.UnknownCard;
 import analyticalengine.components.CardReader;
 import analyticalengine.components.Printer;
-import analyticalengine.io.UnknownCard;
 
 /**
  * The operator of the Analytical Engine.

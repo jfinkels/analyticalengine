@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License along with
  * analyticalengine. If not, see <http://www.gnu.org/licenses/>.
  */
-package analyticalengine.io;
+package analyticalengine.cards;
 
 /**
  * This exception is raised when an attempt to parse a string into a card

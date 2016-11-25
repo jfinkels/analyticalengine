@@ -22,8 +22,10 @@ package analyticalengine;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -35,6 +37,7 @@ import analyticalengine.attendant.DefaultLibrary;
 import analyticalengine.attendant.Library;
 import analyticalengine.attendant.LibraryLookupException;
 import analyticalengine.cards.Card;
+import analyticalengine.cards.UnknownCard;
 import analyticalengine.components.ArrayListCardReader;
 import analyticalengine.components.CardReader;
 import analyticalengine.components.DefaultMill;
@@ -43,8 +46,6 @@ import analyticalengine.components.Mill;
 import analyticalengine.components.NullCurvePrinter;
 import analyticalengine.components.Store;
 import analyticalengine.components.StringPrinter;
-import analyticalengine.io.ProgramReader;
-import analyticalengine.io.UnknownCard;
 
 /**
  * Base class for tests that use an Analytical Engine.
@@ -101,7 +102,10 @@ public class EngineTestBase {
         try {
             Path program = Paths
                     .get(this.getClass().getResource("/" + filename).toURI());
-            List<Card> cards = ProgramReader.fromPath(program);
+            List<Card> cards = new ArrayList<Card>();
+            for (String line : Files.readAllLines(program)) {
+                cards.add(Card.fromString(line));
+            }
             this.attendant.loadProgram(cards);
             this.engine.run();
         } catch (BadCard | IOException | UnknownCard | URISyntaxException
@@ -127,7 +131,10 @@ public class EngineTestBase {
      */
     protected void runProgramString(final String program)
             throws UnknownCard, BadCard, IOException, LibraryLookupException {
-        List<Card> cards = ProgramReader.fromString(program);
+        List<Card> cards = new ArrayList<Card>();
+        for (String line : program.split(System.lineSeparator())) {
+            cards.add(Card.fromString(line));
+        }
         this.attendant.loadProgram(cards);
         this.engine.run();
     }

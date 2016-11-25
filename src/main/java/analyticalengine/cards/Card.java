@@ -22,8 +22,6 @@ package analyticalengine.cards;
 
 import java.util.Arrays;
 
-import analyticalengine.io.UnknownCard;
-
 /**
  * Provides an instruction for the Analytical Engine.
  * 

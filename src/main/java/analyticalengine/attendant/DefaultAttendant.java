@@ -34,9 +34,8 @@ import org.slf4j.LoggerFactory;
 import analyticalengine.BadCard;
 import analyticalengine.cards.Card;
 import analyticalengine.cards.CardType;
+import analyticalengine.cards.UnknownCard;
 import analyticalengine.components.CardReader;
-import analyticalengine.io.ProgramReader;
-import analyticalengine.io.UnknownCard;
 
 /**
  * A basic implementation of the Attendant interface.
@@ -681,7 +680,9 @@ public class DefaultAttendant implements Attendant {
 
                 result.add(Card.commentCard("Begin interpolation of " + card
                         + " by attendant"));
-                result.addAll(ProgramReader.fromPath(path));
+                for (String line : Files.readAllLines(path)) {
+                    result.add(Card.fromString(line));
+                }
                 result.add(Card.commentCard("Endinterpolation of " + card
                         + " by attendant"));
                 /*

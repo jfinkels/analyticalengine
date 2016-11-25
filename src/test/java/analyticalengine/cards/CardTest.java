@@ -26,7 +26,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import analyticalengine.TestUtils;
-import analyticalengine.io.UnknownCard;
 
 /**
  * Tests for {@link analyticalengine.cards.Card}.
