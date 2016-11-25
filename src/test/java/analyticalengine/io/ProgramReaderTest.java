@@ -153,20 +153,26 @@ public class ProgramReaderTest {
         List<Card> cards = ProgramReader.fromString(STRING);
 
         // write from list of cards to print stream
-        OutputStream stream = new ByteArrayOutputStream();
-        ProgramWriter.write(cards, new PrintStream(stream));
+        OutputStream outstream = new ByteArrayOutputStream();
+        PrintStream stream = new PrintStream(outstream);
+        for (Card card : cards) {
+            stream.println(card.toText());
+        }
 
         // compare string to string
-        assertEquals(STRING, stream.toString());
+        assertEquals(STRING, outstream.toString());
 
         // second: cards -> string -> cards
         //
         // write from list of cards to string
-        stream = new ByteArrayOutputStream();
-        ProgramWriter.write(CARDS, new PrintStream(stream));
+        outstream = new ByteArrayOutputStream();
+        stream = new PrintStream(outstream);
+        for (Card card : cards) {
+            stream.println(card.toText());
+        }
 
         // read from string to list of cards
-        cards = ProgramReader.fromString(stream.toString());
+        cards = ProgramReader.fromString(outstream.toString());
 
         // compare cards to cards
         assertCardsEqual(CARDS, cards);
@@ -180,8 +186,11 @@ public class ProgramReaderTest {
      */
     @Test
     public void testToStream() throws UnknownCard {
-        OutputStream stream = new ByteArrayOutputStream();
-        ProgramWriter.write(CARDS, new PrintStream(stream));
-        assertEquals(STRING, stream.toString());
+        OutputStream outstream = new ByteArrayOutputStream();
+        PrintStream stream = new PrintStream(outstream);
+        for (Card card : CARDS) {
+            stream.println(card.toText());
+        }
+        assertEquals(STRING, outstream.toString());
     }
 }

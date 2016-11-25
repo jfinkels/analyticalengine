@@ -28,6 +28,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.JCommander;
+
 import analyticalengine.AnalyticalEngine;
 import analyticalengine.BadCard;
 import analyticalengine.DefaultAnalyticalEngine;
@@ -45,10 +47,7 @@ import analyticalengine.components.NullCurvePrinter;
 import analyticalengine.components.StringPrinter;
 import analyticalengine.gui.JFrameCurvePrinter;
 import analyticalengine.io.ProgramReader;
-import analyticalengine.io.ProgramWriter;
 import analyticalengine.io.UnknownCard;
-
-import com.beust.jcommander.JCommander;
 
 /**
  * A command-line driver for the Analytical Engine simulation.
@@ -157,7 +156,9 @@ public final class Main {
 
         if (arguments.listOnly()) {
             try {
-                ProgramWriter.write(reader.cards());
+                for (Card card : reader.cards()) {
+                    System.out.println(card.toText());
+                }
             } catch (UnknownCard e) {
                 LOG.error("Encountered unknown card", e);
             }
