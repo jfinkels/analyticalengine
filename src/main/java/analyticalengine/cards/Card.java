@@ -153,8 +153,8 @@ public class Card {
                 return new Card(CardType.ANNOTATE,
                         new String[] { untrimmedRest.substring(18) });
             } else {
-                throw new UnknownCard("Unknown attendant request: "
-                        + cardString);
+                throw new UnknownCard(
+                        "Unknown attendant request: " + cardString);
             }
         case '(':
             if (!rest.isEmpty() && rest.charAt(0) == '?') {
@@ -179,8 +179,8 @@ public class Card {
             } else if (rest.charAt(0) == '0') {
                 return new Card(CardType.TRACEOFF);
             } else {
-                throw new UnknownCard("Expected T0 or T1 but got: "
-                        + cardString);
+                throw new UnknownCard(
+                        "Expected T0 or T1 but got: " + cardString);
             }
         case ' ':
         case '.':
@@ -193,8 +193,8 @@ public class Card {
     /**
      * Trim whitespace from the left of the specified string.
      * 
-     * <a
-     * href="//fromdev.com/2009/07/playing-with-java-string-trim-basics.html">
+     * <a href=
+     * "//fromdev.com/2009/07/playing-with-java-string-trim-basics.html">
      * Source.</a>
      * 
      * @param value
@@ -380,14 +380,12 @@ public class Card {
     }
 
     /**
-     * Returns the string representation of the specified card (with any
-     * terminal comments intact).
+     * Returns the string representation of this card (with any terminal
+     * comments intact).
      * 
-     * @param card
-     *            The card to convert to a string.
      * @return The string representation of the specified card.
      * @throws UnknownCard
-     *             if the specified card is of an unrecognized type.
+     *             if this card is of an unrecognized type.
      */
     public String toText() throws UnknownCard {
         // TODO account for comments after the instructions
@@ -486,6 +484,7 @@ public class Card {
             throw new UnknownCard("Unable to parse: " + this);
         }
     }
+
     /**
      * Returns the type of instruction this card represents.
      * 
