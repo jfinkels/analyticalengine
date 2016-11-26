@@ -1,7 +1,7 @@
 /**
  * BadCard.java - exception raised when attendant finds a bad instruction
  * 
- * Copyright 2014 Jeffrey Finkelstein.
+ * Copyright 2014-2016 Jeffrey Finkelstein.
  * 
  * This file is part of analyticalengine.
  * 

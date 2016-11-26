@@ -1,7 +1,7 @@
 /**
  * LibraryLookupException.java - raised when including library file fails
  * 
- * Copyright 2014 Jeffrey Finkelstein.
+ * Copyright 2014-2016 Jeffrey Finkelstein.
  * 
  * This file is part of analyticalengine.
  * 

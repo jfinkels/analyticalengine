@@ -1,7 +1,7 @@
 /**
  * DefaultMill.java - basic implementation of mill (the arithmetic logic unit)
  * 
- * Copyright 2014 Jeffrey Finkelstein.
+ * Copyright 2014-2016 Jeffrey Finkelstein.
  * 
  * This file is part of analyticalengine.
  * 

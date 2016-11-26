@@ -1,7 +1,7 @@
 /**
  * Polyline.java - a sequence of line segments with adjoining endpoints
  * 
- * Copyright 2014 Jeffrey Finkelstein.
+ * Copyright 2014-2016 Jeffrey Finkelstein.
  * 
  * This file is part of analyticalengine.
  * 

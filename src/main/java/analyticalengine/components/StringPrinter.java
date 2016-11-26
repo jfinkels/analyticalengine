@@ -1,7 +1,7 @@
 /**
  * StringPrinter.java - converts output from the engine to Java String objects
  * 
- * Copyright 2014 Jeffrey Finkelstein.
+ * Copyright 2014-2016 Jeffrey Finkelstein.
  * 
  * This file is part of analyticalengine.
  * 

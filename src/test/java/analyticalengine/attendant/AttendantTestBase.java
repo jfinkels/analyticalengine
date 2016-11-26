@@ -1,7 +1,7 @@
 /**
  * AttendantTestBase.java - base class for tests that use an Analytical Engine
  * 
- * Copyright 2014 Jeffrey Finkelstein.
+ * Copyright 2014-2016 Jeffrey Finkelstein.
  * 
  * This file is part of analyticalengine.
  * 

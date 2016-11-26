@@ -1,7 +1,7 @@
 /**
  * HashMapStoreTest.java - tests for the HashMapStore class
  * 
- * Copyright 2014 Jeffrey Finkelstein.
+ * Copyright 2014-2016 Jeffrey Finkelstein.
  * 
  * This file is part of analyticalengine.
  * 

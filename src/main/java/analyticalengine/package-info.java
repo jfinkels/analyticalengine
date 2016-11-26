@@ -1,7 +1,7 @@
 /**
  * package-info.java - package-level documentation
  * 
- * Copyright 2014 Jeffrey Finkelstein.
+ * Copyright 2014-2016 Jeffrey Finkelstein.
  * 
  * This file is part of analyticalengine.
  * 

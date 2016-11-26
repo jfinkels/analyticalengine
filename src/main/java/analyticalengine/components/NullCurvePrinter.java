@@ -1,7 +1,7 @@
 /**
  * NullCurvePrinter.java - a plotter that does nothing
  * 
- * Copyright 2014 Jeffrey Finkelstein.
+ * Copyright 2014-2016 Jeffrey Finkelstein.
  * 
  * This file is part of analyticalengine.
  * 

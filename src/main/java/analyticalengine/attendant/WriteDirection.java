@@ -1,7 +1,7 @@
 /**
  * WriteDirection.java - whether the attendant writes in rows or columns
  * 
- * Copyright 2014 Jeffrey Finkelstein.
+ * Copyright 2014-2016 Jeffrey Finkelstein.
  * 
  * This file is part of analyticalengine.
  * 
