@@ -579,7 +579,8 @@ public class DefaultAttendant implements Attendant {
      * Subclasses that wish to perform some action on a bell ring should
      * override and reimplement this method.
      * 
-     * @card {@inheritDoc}
+     * @param card
+     *            {@inheritDoc}
      */
     @Override
     public void onBell(Card card) {
