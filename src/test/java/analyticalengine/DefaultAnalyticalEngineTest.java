@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import analyticalengine.attendant.DefaultAttendant;
 import analyticalengine.attendant.LibraryLookupException;
 import analyticalengine.cards.BadCard;
 import analyticalengine.cards.Card;
@@ -352,8 +353,24 @@ public class DefaultAnalyticalEngineTest extends EngineTestBase {
     @Test
     public void testBell()
             throws BadCard, UnknownCard, IOException, LibraryLookupException {
-        runProgramString("B");
-        // TODO assert that standard output contains indication of bell
+
+        /**
+         * An attendant that records the number of bells rung by the Engine.
+         */
+        final class RecordingAttendant extends DefaultAttendant {
+
+            private int numBells = 0;
+
+            @Override
+            public void onBell(Card card) {
+                this.numBells += 1;
+            }
+        }
+
+        RecordingAttendant attendant = new RecordingAttendant();
+        this.engine().setAttendant(attendant);
+        runProgramString("B\nB\n");
+        assertEquals(2, attendant.numBells);
     }
 
     /**

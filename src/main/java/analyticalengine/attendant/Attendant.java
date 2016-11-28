@@ -98,6 +98,16 @@ public interface Attendant {
             throws BadCard, IOException, UnknownCard, LibraryLookupException;
 
     /**
+     * Act on a bell rung by the Analytical Engine.
+     * 
+     * A bell may be rung on the Engine if it encounters a
+     * {@link analyticalengine.cards.CardType#BELL} card.
+     * 
+     * @param card The card that caused the bell to be rung.
+     */
+    void onBell(Card card);
+
+    /**
      * Instructs the attendant to record the printed output from the Engine's
      * printer.
      * 

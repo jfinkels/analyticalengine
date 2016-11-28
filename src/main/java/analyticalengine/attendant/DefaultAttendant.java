@@ -62,7 +62,8 @@ public class DefaultAttendant implements Attendant {
      *         {@code start} matches the cycle end specified by type {code
      *         end}.
      */
-    private static boolean cyclesMatch(final CardType start, final CardType end) {
+    private static boolean cyclesMatch(final CardType start,
+            final CardType end) {
         switch (start) {
         case BACKSTART:
         case CBACKSTART:
@@ -130,7 +131,8 @@ public class DefaultAttendant implements Attendant {
      * @return {@code true} if and only if the element is found somewhere in
      *         the given array.
      */
-    private static boolean isIn(final Object needle, final Object... haystack) {
+    private static boolean isIn(final Object needle,
+            final Object... haystack) {
         for (Object element : haystack) {
             if (element.equals(needle)) {
                 return true;
@@ -253,8 +255,8 @@ public class DefaultAttendant implements Attendant {
                 }
 
                 if (!this.stripComments) {
-                    replacement = Card.commentCard("A set decimal places to "
-                            + card.argument(0));
+                    replacement = Card.commentCard(
+                            "A set decimal places to " + card.argument(0));
                     result.add(replacement);
                 }
                 decimalPlace = d;
@@ -363,11 +365,12 @@ public class DefaultAttendant implements Attendant {
         // Append the decimal part to fixed part from card
         String newNumber = number.substring(0, decimalIndex) + afterDecimal;
         if (this.stripComments) {
-            return new Card(CardType.NUMBER, new String[] { card.argument(0),
-                    newNumber });
+            return new Card(CardType.NUMBER,
+                    new String[] { card.argument(0), newNumber });
         }
-        return new Card(CardType.NUMBER, new String[] { card.argument(0),
-                newNumber }, "Decimal expansion by attendant");
+        return new Card(CardType.NUMBER,
+                new String[] { card.argument(0), newNumber },
+                "Decimal expansion by attendant");
     }
 
     /**
@@ -479,7 +482,8 @@ public class DefaultAttendant implements Attendant {
                     break;
 
                 case ',': // Comma if digits remain to output
-                    if (this.formatString.indexOf('9') >= 0 || s.length() > 0) {
+                    if (this.formatString.indexOf('9') >= 0
+                            || s.length() > 0) {
                         o = c + o;
                     }
                     break;
@@ -549,8 +553,8 @@ public class DefaultAttendant implements Attendant {
      *             {@inheritDoc}
      */
     @Override
-    public void loadProgram(final List<Card> cards) throws BadCard,
-            IOException, UnknownCard, LibraryLookupException {
+    public void loadProgram(final List<Card> cards)
+            throws BadCard, IOException, UnknownCard, LibraryLookupException {
         LOG.debug("Examining cards before loading: " + cards);
         List<Card> result = cards;
         // Note: "A write numbers as ..." cards remain in the card chain.
@@ -567,6 +571,19 @@ public class DefaultAttendant implements Attendant {
         translateCombinatorics(result);
         LOG.debug("Mounting cards in reader: " + result);
         this.cardReader.mountCards(result);
+    }
+
+    /**
+     * Log that a bell has been rung.
+     * 
+     * Subclasses that wish to perform some action on a bell ring should
+     * override and reimplement this method.
+     * 
+     * @card {@inheritDoc}
+     */
+    @Override
+    public void onBell(Card card) {
+        LOG.info("Bell! Caused by card: %s", card);
     }
 
     /**
@@ -678,13 +695,13 @@ public class DefaultAttendant implements Attendant {
                     throw new BadCard("Could not find file: " + path, card);
                 }
 
-                result.add(Card.commentCard("Begin interpolation of " + card
-                        + " by attendant"));
+                result.add(Card.commentCard(
+                        "Begin interpolation of " + card + " by attendant"));
                 for (String line : Files.readAllLines(path)) {
                     result.add(Card.fromString(line));
                 }
-                result.add(Card.commentCard("Endinterpolation of " + card
-                        + " by attendant"));
+                result.add(Card.commentCard(
+                        "Endinterpolation of " + card + " by attendant"));
                 /*
                  * The analyst can request the inclusion of a set of cards from
                  * the machine's library with the request to the attendant:
@@ -725,7 +742,8 @@ public class DefaultAttendant implements Attendant {
      *             combinatorial cards (for example, if a start card has no
      *             corresponding end card).
      */
-    private void translateCombinatorics(final List<Card> cards) throws BadCard {
+    private void translateCombinatorics(final List<Card> cards)
+            throws BadCard {
         for (int i = 0; i < cards.size(); i++) {
             if (isCycleStart(cards.get(i).type())) {
                 LOG.debug("Translating cycle starting from " + cards.get(i)
@@ -849,20 +867,18 @@ public class DefaultAttendant implements Attendant {
                             if (!uType.equals(CardType.FORWARDEND)
                                     && !uType.equals(CardType.ALTERNATION)) {
                                 throw new BadCard(
-                                        "End of else cycle does not match "
-                                                + c + " beginning on card "
-                                                + i, u);
+                                        "End of else cycle does not match " + c
+                                                + " beginning on card " + i,
+                                        u);
                             }
                             cards.remove(j);
                             if (!this.stripComments) {
-                                cards.add(
-                                        j,
-                                        Card.commentCard(u
-                                                + " Translated by attendant"));
+                                cards.add(j, Card.commentCard(
+                                        u + " Translated by attendant"));
                             }
                             CardType newType2 = CardType.FORWARD;
-                            String[] newArgs2 = { Integer.toString(Math.abs(j
-                                    - i) - 1) };
+                            String[] newArgs2 = {
+                                    Integer.toString(Math.abs(j - i) - 1) };
                             int location = i;
                             if (this.stripComments) {
                                 location += 1;
