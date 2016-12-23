@@ -448,7 +448,7 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
                 try {
                     this.executeCard(currentCard);
                 } catch (Bell bell) {
-                    this.attendant.onBell(currentCard);;
+                    this.attendant.onBell(currentCard);
                 }
             }
         } catch (BadCard e) {
