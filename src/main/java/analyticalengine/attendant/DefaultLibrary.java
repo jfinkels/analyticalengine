@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import analyticalengine.cards.Card;
@@ -112,40 +113,41 @@ public class DefaultLibrary implements Library {
         // requested library file is contained within the JAR, do some black
         // magic to open the JAR file and read the program from a file
         // contained within it.
+        //
+        // A jar:// scheme URL looks like
+        //
+        // jar:///path/to/jarfile!/path/within/jarfile
+        //
+        // The part before the "!/" is the path to the JAR file (which is just
+        // a zipped directory). The part after the "!/" is the path to the
+        // requested file relative to the root of the JAR file.
+        List<Card> result = new ArrayList<Card>();
         if (scheme.equals("jar")) {
-
-            // The part after the "!/" is the path to the requested file
-            // relative to the root of the JAR file (which is just a zipped
-            // directory).
             int sep = spec.indexOf("!/");
-
             if (sep == -1) {
                 throw new IllegalArgumentException(
                         "Cannot load a JAR file directly.");
             }
             URI zipUri = new URI(scheme, spec.substring(0, sep), null);
-
-            try (FileSystem zipFs = FileSystems.newFileSystem(zipUri,
-                    Collections.<String, Object> emptyMap())) {
+            Map<String, Object> env = Collections.<String, Object> emptyMap();
+            try (FileSystem zipFs = FileSystems.newFileSystem(zipUri, env)) {
                 Path programPath = Paths.get(uri);
-                List<Card> result = new ArrayList<Card>();
-                result.add(initialComment);
                 for (String line : Files.readAllLines(programPath)) {
                     result.add(Card.fromString(line));
                 }
-                result.add(terminalComment);
-                return result;
+            }
+        } else {
+            // The scheme did not indicate a JAR file, so we get the path to
+            // the file as usual, without any black magic.
+            // Path programPath = Paths.get(new URI(scheme, spec, null));
+            Path programPath = Paths.get(uri);
+            for (String line : Files.readAllLines(programPath)) {
+                result.add(Card.fromString(line));
             }
         }
 
-        // The scheme did not indicate a JAR file, so we get the path to the
-        // file as usual, without any black magic.
-        Path programPath = Paths.get(new URI(scheme, spec, null));
-        List<Card> result = new ArrayList<Card>();
-        result.add(initialComment);
-        for (String line : Files.readAllLines(programPath)) {
-            result.add(Card.fromString(line));
-        }
+        // Surround the cards from the resource with delimiting comment cards.
+        result.add(0, initialComment);
         result.add(terminalComment);
         return result;
     }
@@ -196,8 +198,8 @@ public class DefaultLibrary implements Library {
             try {
                 return this.cardsFromResource(fileurl);
             } catch (URISyntaxException | IOException | UnknownCard e) {
-                throw new LibraryLookupException(
-                        "Failed to load library file", e);
+                throw new LibraryLookupException("Failed to load library file",
+                        e);
             }
         }
 
@@ -208,8 +210,8 @@ public class DefaultLibrary implements Library {
         // Raise an exception if the requested library file could not be found
         // in any of the known paths.
         if (!filePath.isPresent()) {
-            throw new LibraryLookupException("Could not find library file: "
-                    + fileWithExt);
+            throw new LibraryLookupException(
+                    "Could not find library file: " + fileWithExt);
         }
 
         // If the file was found somewhere in one of the library paths, load
