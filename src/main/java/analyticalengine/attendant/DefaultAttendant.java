@@ -26,6 +26,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -44,6 +47,17 @@ import analyticalengine.components.CardReader;
  * @since 0.0.1
  */
 public class DefaultAttendant implements Attendant {
+
+    /** Combinatorial card types that start a cycle. */
+    private static final Collection<CardType> CYCLE_START_TYPES = Collections
+            .unmodifiableCollection(
+                    Arrays.asList(CardType.BACKSTART, CardType.CBACKSTART,
+                            CardType.FORWARDSTART, CardType.CFORWARDSTART));
+
+    /** Combinatorial card types that end a cycle. */
+    private static final Collection<CardType> CYCLE_END_TYPES = Collections
+            .unmodifiableCollection(Arrays.asList(CardType.BACKEND,
+                    CardType.ALTERNATION, CardType.FORWARDEND));
 
     /** The logger for this class. */
     private static final transient Logger LOG = LoggerFactory
@@ -89,75 +103,6 @@ public class DefaultAttendant implements Attendant {
                     "Cannot check cycle matching for cards " + start + " and "
                             + end);
         }
-    }
-
-    /**
-     * Returns {@code true} if and only if the card type indicates the end of a
-     * cycle block (including an alternation).
-     * 
-     * @param type
-     *            The type of card.
-     * @return {@code true} if and only if the card type indicates the end of a
-     *         cycle block (including an alternation).
-     */
-    private static boolean isCycleEnd(final CardType type) {
-        return isIn(type, CardType.BACKEND, CardType.ALTERNATION,
-                CardType.FORWARDEND);
-    }
-
-    /**
-     * Returns {@code true} if and only if the card type indicates the start of
-     * a cycle block.
-     * 
-     * @param type
-     *            The type of card.
-     * @return {@code true} if and only if the card type indicates the start of
-     *         a cycle block.
-     */
-    private static boolean isCycleStart(final CardType type) {
-        return isIn(type, CardType.BACKSTART, CardType.CBACKSTART,
-                CardType.FORWARDSTART, CardType.CFORWARDSTART);
-    }
-
-    /**
-     * Returns {@code true} if and only if any of the elements of
-     * {@code haystack} are equal to {@code needle}, according to the
-     * {@link Object#equals(Object)} method.
-     * 
-     * @param needle
-     *            The element to look for.
-     * @param haystack
-     *            The array in which to search for the element.
-     * @return {@code true} if and only if the element is found somewhere in
-     *         the given array.
-     */
-    private static boolean isIn(final Object needle,
-            final Object... haystack) {
-        for (Object element : haystack) {
-            if (element.equals(needle)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Returns a new {@link java.util.List} containing only those cards that
-     * are not comments.
-     * 
-     * @param cards
-     *            The list of cards to filter.
-     * @return A new {@link java.util.List} containing only those cards that
-     *         are not comments.
-     */
-    private static List<Card> strippedComments(final List<Card> cards) {
-        List<Card> result = new ArrayList<Card>();
-        for (Card card : cards) {
-            if (card.type() != CardType.COMMENT) {
-                result.add(card);
-            }
-        }
-        return result;
     }
 
     /** The device in which the attendant loads the requested program. */
@@ -562,7 +507,7 @@ public class DefaultAttendant implements Attendant {
         result = this.transcludeLibraryCards(result);
         if (this.stripComments) {
             LOG.debug("Remove comment cards");
-            result = strippedComments(result);
+            result.removeIf(c -> c.type().equals(CardType.COMMENT));
         }
         LOG.debug("Making requested decimal expansions");
         result = this.expandDecimal(result);
@@ -746,7 +691,7 @@ public class DefaultAttendant implements Attendant {
     private void translateCombinatorics(final List<Card> cards)
             throws BadCard {
         for (int i = 0; i < cards.size(); i++) {
-            if (isCycleStart(cards.get(i).type())) {
+            if (CYCLE_START_TYPES.contains(cards.get(i).type())) {
                 LOG.debug("Translating cycle starting from " + cards.get(i)
                         + " at index " + i);
                 this.translateCycle(cards, i);
@@ -794,11 +739,11 @@ public class DefaultAttendant implements Attendant {
         for (int i = start + 1; i < cards.size(); i++) {
             Card u = cards.get(i);
             LOG.debug("looking at card " + u);
-            if (isCycleStart(u.type())) {
+            if (CYCLE_START_TYPES.contains(u.type())) {
                 LOG.debug("Making a recursive call from new start index " + i);
                 translateCycle(cards, i);
             }
-            if (isCycleEnd(u.type())) {
+            if (CYCLE_END_TYPES.contains(u.type())) {
                 LOG.debug("  Found end of cycle starting with " + c);
 
                 if (!cyclesMatch(c.type(), u.type())) {
@@ -861,10 +806,10 @@ public class DefaultAttendant implements Attendant {
                     for (j = i + 1; j < cards.size(); j++) {
                         u = cards.get(j);
                         CardType uType = u.type();
-                        if (isCycleStart(uType)) {
+                        if (CYCLE_START_TYPES.contains(uType)) {
                             translateCycle(cards, j);
                         }
-                        if (isCycleEnd(uType)) {
+                        if (CYCLE_END_TYPES.contains(uType)) {
                             if (!uType.equals(CardType.FORWARDEND)
                                     && !uType.equals(CardType.ALTERNATION)) {
                                 throw new BadCard(
