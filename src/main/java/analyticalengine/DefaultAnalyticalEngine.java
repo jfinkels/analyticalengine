@@ -376,9 +376,9 @@ public class DefaultAnalyticalEngine implements AnalyticalEngine {
      *             if the card is not a memory access card.
      */
     private void handleMemoryAccess(final Card card) throws BadCard {
-        long address;
+        int address;
         try {
-            address = Long.parseLong(card.argument(0));
+            address = Integer.parseInt(card.argument(0));
         } catch (NumberFormatException e) {
             throw new BadCard("Illegal number format", card, e);
         }

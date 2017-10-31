@@ -50,7 +50,7 @@ public class HashMapStore implements Store {
     public static final BigInteger MIN_VALUE = MAX_VALUE.negate();
 
     /** The hash map that provides the addressable, random-access storage. */
-    private final DefaultHashMap<Long, BigInteger> rack = new DefaultHashMap<Long, BigInteger>();
+    private final DefaultHashMap<Integer, BigInteger> rack = new DefaultHashMap<Integer, BigInteger>();
 
     /**
      * Instantiates this object and initializes the underlying hash map.
@@ -70,7 +70,7 @@ public class HashMapStore implements Store {
      *             {@inheritDoc}
      */
     @Override
-    public void put(final long address, final BigInteger value) {
+    public void put(final int address, final BigInteger value) {
         if (address < 0 || address > MAX_ADDRESS) {
             throw new IndexOutOfBoundsException("Address " + address
                     + " must be between " + 0 + " and " + MAX_ADDRESS);
@@ -92,7 +92,7 @@ public class HashMapStore implements Store {
      *             {@inheritDoc}
      */
     @Override
-    public BigInteger get(final long address) {
+    public BigInteger get(final int address) {
         if (address < 0 || address > MAX_ADDRESS) {
             throw new IndexOutOfBoundsException("Bad address: " + address);
         }

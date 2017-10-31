@@ -37,7 +37,7 @@ public interface Store {
      * @throws IndexOutOfBoundsException
      *             if the address is negative or too large for the store.
      */
-    BigInteger get(long address);
+    BigInteger get(int address);
 
     /**
      * Stores {@code value} in the memory location specified by {@code address}
@@ -50,7 +50,7 @@ public interface Store {
      * @throws IndexOutOfBoundsException
      *             if the address is negative or too large for the store.
      */
-    void put(long address, BigInteger value);
+    void put(int address, BigInteger value);
 
     /**
      * Clears all values in the store.
